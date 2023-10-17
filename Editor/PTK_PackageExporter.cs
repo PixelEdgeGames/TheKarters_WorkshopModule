@@ -355,7 +355,7 @@ public class PTK_PackageExporter : EditorWindow
     /// Addressables
     ///
 
-    CPTK_ModeInfoFile modInfoFile = null;
+    CPTK_ModInfoFile modInfoFile = null;
     private void ExportToAddressables()
     {
         if(currentMod == null)
@@ -381,7 +381,7 @@ public class PTK_PackageExporter : EditorWindow
 
         Dictionary<AddressableAssetEntry, AddressableAssetGroup> entries = new Dictionary<AddressableAssetEntry, AddressableAssetGroup>();
 
-        modInfoFile = new CPTK_ModeInfoFile();
+        modInfoFile = new CPTK_ModInfoFile();
 
         modInfoFile.strModName = currentMod.ModName;
         modInfoFile.strModAuthor = currentMod.ModAuthor;

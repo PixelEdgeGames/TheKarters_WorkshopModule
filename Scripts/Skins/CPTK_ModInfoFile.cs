@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class CPTK_ModeInfoFile 
+public class CPTK_ModInfoFile 
 {
     public string strModName;
     public string strModAuthor;
@@ -87,7 +87,7 @@ public class CPTK_ModeInfoFile
         File.WriteAllText(path, jsonString);
     }
 
-    public static CPTK_ModeInfoFile LoadFromFile(string path)
+    public static CPTK_ModInfoFile LoadFromFile(string path)
     {
         if (!File.Exists(path))
         {
@@ -95,7 +95,7 @@ public class CPTK_ModeInfoFile
         }
 
         string jsonString = File.ReadAllText(path);
-        CPTK_ModeInfoFile infoFile = JsonUtility.FromJson<CPTK_ModeInfoFile>(jsonString);
+        CPTK_ModInfoFile infoFile = JsonUtility.FromJson<CPTK_ModInfoFile>(jsonString);
 
         return infoFile;
     }
