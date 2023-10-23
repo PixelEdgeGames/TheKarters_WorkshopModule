@@ -259,9 +259,17 @@ public class PTK_PackageExporter : EditorWindow
 
         GUILayout.Space(30);
 
+
+        // Draw the progress bar
+    //    EditorGUI.ProgressBar(new Rect(3, GUILayoutUtility.GetLastRect().yMax + 5, position.width - 6, 20), fExportProgress, "Export Progress");
+
+        GUILayout.Space(25);  // Add space after the progress bar
+
         GUI.enabled = currentMod != null;
-        if (GUILayout.Button("Export"))
+
+        if (GUILayout.Button("Export & generate only new thumbnails (fast)"))
         {
+            bRegenerateThumbnails = false;
             foreach (var dirName in treeView.GetCheckedItems())
             {
                 OptimizeTextureSizesInDirectory(dirName);
@@ -269,6 +277,24 @@ public class PTK_PackageExporter : EditorWindow
 
             ExportToAddressables();
         }
+
+        GUILayout.Space(20);
+        GUI.color = new Color(255/255.0f, 78/255.0f, 51/255.0f);
+
+        if (GUILayout.Button("Export & Regenerate all thumbnails (slow)"))
+        {
+            bRegenerateThumbnails = true;
+
+            foreach (var dirName in treeView.GetCheckedItems())
+            {
+                OptimizeTextureSizesInDirectory(dirName);
+            }
+
+            ExportToAddressables();
+        }
+
+        GUI.color = Color.white;
+
         GUI.enabled = true;
 
         GUILayout.Space(20);
@@ -290,6 +316,8 @@ public class PTK_PackageExporter : EditorWindow
 
         GUILayout.EndScrollView();
     }
+
+    bool bRegenerateThumbnails = false;
 
     public static void OptimizeTextureSizesInDirectory(string directoryPath)
     {
@@ -332,13 +360,9 @@ public class PTK_PackageExporter : EditorWindow
 
             // Display progress bar
             float progress = (float)i / materialPaths.Length;
-            if (EditorUtility.DisplayCancelableProgressBar("Optimizing Textures", path, progress))
-            {
-                break; // Stop the operation if the user cancels the progress
-            }
+           
         }
 
-        EditorUtility.ClearProgressBar();
     }
 
     private static void SetTextureMaxSize(string texturePath, int maxSize)
@@ -354,11 +378,16 @@ public class PTK_PackageExporter : EditorWindow
     ////
     /// Addressables
     ///
-
+    string buildPathModDir;
     CPTK_ModInfoFile modInfoFile = null;
+
+    BoundingBoxCalculator boundingBoxCalculator;
+
+    float fExportProgress = 0.0f;
     private void ExportToAddressables()
     {
-        if(currentMod == null)
+        fExportProgress = 0.0f;
+        if (currentMod == null)
         {
             return;
         }
@@ -379,6 +408,10 @@ public class PTK_PackageExporter : EditorWindow
             settings.RemoveGroup(group);
         }
 
+        boundingBoxCalculator = GameObject.FindObjectOfType<BoundingBoxCalculator>();
+        boundingBoxCalculator.RefreshOffsets();
+        boundingBoxCalculator.gameObject.SetActive(false);
+
         Dictionary<AddressableAssetEntry, AddressableAssetGroup> entries = new Dictionary<AddressableAssetEntry, AddressableAssetGroup>();
 
         modInfoFile = new CPTK_ModInfoFile();
@@ -389,8 +422,20 @@ public class PTK_PackageExporter : EditorWindow
 
         string strUserCOnfigured_ModName = currentMod.ModName;
         string projectPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, ".."));
-        string buildPathModDir = System.IO.Path.Combine(projectPath, "Mods", strUserCOnfigured_ModName);
+        buildPathModDir = System.IO.Path.Combine(projectPath, "Mods", strUserCOnfigured_ModName);
         string buildPath = System.IO.Path.Combine(buildPathModDir, "[BuildTarget]");
+
+        int totalDirectories = treeView.GetCheckedItems().Count;
+        int totalAssets = 0;
+
+        foreach (var dirName in treeView.GetCheckedItems())
+        {
+            totalAssets += GetAssetsInDirectoryNonRecursive(dirName).Length;
+        }
+
+        int totalSteps = totalDirectories + totalAssets;
+
+        int currentStep = 0;
         foreach (var dirName in treeView.GetCheckedItems())
         {
             // Create a group for the directory
@@ -416,6 +461,8 @@ public class PTK_PackageExporter : EditorWindow
                 string strDirectoryOfMod = System.IO.Path.Combine(Application.dataPath, "..", "Mods", strUserCOnfigured_ModName, EditorUserBuildSettings.selectedStandaloneTarget.ToString());
                 if(System.IO.Directory.Exists(strDirectoryOfMod))
                     System.IO.Directory.Delete(strDirectoryOfMod ,true);
+
+                Directory.CreateDirectory(strDirectoryOfMod);
 
                 settings.profileSettings.CreateValue(buildPathVariableName, buildPath);
                 settings.profileSettings.SetValue(settings.activeProfileId, buildPathVariableName, buildPath);
@@ -448,6 +495,11 @@ public class PTK_PackageExporter : EditorWindow
             // Fetch all asset paths from the directory
             string[] assetPathsInDir = GetAssetsInDirectoryNonRecursive(dirName);
 
+            string[] filteredPaths = assetPathsInDir.Where(path => path.Contains("PTK_Workshop_Char Anim Config")).ToArray();
+            string strAnimConfigFilePath = filteredPaths.FirstOrDefault();
+
+            PTK_Workshop_CharAnimConfig animConfig = AssetDatabase.LoadAssetAtPath<PTK_Workshop_CharAnimConfig>(strAnimConfigFilePath);
+           
             foreach (string assetPath in assetPathsInDir)
             {
                 var fullPath = assetPath;
@@ -470,25 +522,36 @@ public class PTK_PackageExporter : EditorWindow
                 string strAddressFileKey = ConstructName(fullPath, groupName);
                 entry.SetAddress(strAddressFileKey, false);
 
-                UpdateModFileInfo(fullPath, groupName, strAddressFileKey);
+                UpdateModFileInfo(fullPath, groupName, strAddressFileKey, animConfig);
 
                 entries[entry] = newGroup;
+
+                currentStep++;
+                fExportProgress = (float)currentStep / totalSteps;
+                EditorUtility.DisplayProgressBar("Exporting", "Exporting...", fExportProgress);
+                Repaint();
             }
         }
 
+        EditorUtility.ClearProgressBar();
         SimplifyAddresses(entries);
 
-        modInfoFile.SaveToFile(buildPathModDir + "modInfoFile.json");
+        modInfoFile.SaveToFile(Path.Combine(buildPathModDir , "modInfoFile.json"));
+
+        AddressableAssetSettings.BuildPlayerContent();
 
         EditorUtility.SetDirty(settings); 
         AssetDatabase.SaveAssets();
         treeView.SaveStateToPrefs();  // Save state after changes
+
+        if(boundingBoxCalculator != null)
+            boundingBoxCalculator.gameObject.SetActive(true);
     }
 
     private  Regex Pattern_Character = new Regex(@"Skins_Workshop/Characters/(?<characterName>[^/]+)/Outfits/(?<outfit>[^/]+)/Color Variations/(?<materialVar>[^/]+)");
     private static readonly Regex Pattern_AnimConfig = new Regex(@"Skins_Workshop/Characters/(?<characterName>[^/]+)");
 
-    void UpdateModFileInfo(string strFullPath, string strGroupName, string strFileKey)
+    void UpdateModFileInfo(string strFullPath, string strGroupName, string strFileKey, PTK_Workshop_CharAnimConfig animConfig)
     {
         if(strFullPath.Contains("PTK_Workshop_Char Anim Config") == true)
         {
@@ -515,6 +578,33 @@ public class PTK_PackageExporter : EditorWindow
                 string strMaterialVar = match.Groups["materialVar"].Value;
 
                 modInfoFile.GetCharacterFromName(strCharacterName, true).GetOutfitFromName(strCharacterOutfit, true).GetMatVariantFromName(strMaterialVar, true).strPrefabFileName = strFileKey;
+
+                string strTargetDirectory = Path.Combine(buildPathModDir,"Thumbnails", strCharacterName, strCharacterOutfit, strFileKey.Replace(".prefab", ".png"));
+
+                // we dont want to generate again
+                if (File.Exists(strTargetDirectory) == true && bRegenerateThumbnails == false)
+                {
+                }
+                else
+                {
+                    if (Directory.Exists(Path.GetDirectoryName(strTargetDirectory)) == false)
+                        Directory.CreateDirectory(Path.GetDirectoryName(strTargetDirectory));
+
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(strFullPath);
+                    GameObject instance = Instantiate(prefab);
+
+                    animConfig.CharacterA.Menu[0].SampleAnimation(instance, 0.0f);
+
+                    var childWithBestPath = boundingBoxCalculator.GetChildWithBestPath(strFullPath);
+
+                    instance.transform.position = childWithBestPath.vPosition;
+                    instance.transform.rotation = childWithBestPath.qRotation;
+                    instance.transform.localScale = childWithBestPath.vLoosyScale;
+
+                    ThumbnailGenerate.TakeScreenshoot(2048, 2048, Camera.main, true, strTargetDirectory);
+
+                    GameObject.DestroyImmediate(instance.gameObject);
+                }
             }
         }
     }

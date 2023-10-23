@@ -71,6 +71,8 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
                         taregtChar.Driving.Add(clip);
                     else if (animCategory == "Events")
                         taregtChar.Events.Add(clip);
+                    else if (animCategory == "Menu")
+                        taregtChar.Menu.Add(clip);
                     else if (animCategory == "ItemsModelAnim")
                         taregtChar.ItemsModelAnim.Add(clip);
                     else if (animCategory == "JumpTricks")

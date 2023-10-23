@@ -9,6 +9,7 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
     {
         public List<AnimationClip> Driving = new List<AnimationClip>();
         public List<AnimationClip> Events = new List<AnimationClip>();
+        public List<AnimationClip> Menu = new List<AnimationClip>();
         public List<AnimationClip> ItemsModelAnim = new List<AnimationClip>();
         public List<AnimationClip> JumpTricks = new List<AnimationClip>();
         public List<AnimationClip> ItemUsage = new List<AnimationClip>();
@@ -21,6 +22,10 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
                     return clip;
 
             foreach (var clip in Events)
+                if (clip.name.Contains(namePart))
+                    return clip;
+
+            foreach (var clip in Menu)
                 if (clip.name.Contains(namePart))
                     return clip;
 
