@@ -45,6 +45,14 @@ public class PTK_ModVehicle : MonoBehaviour
     public AnimationClip strongHitBack;
     public AnimationClip strongHitFront;
 
+    public PTK_SimpleSuspension[] suspensions;
+    // Start is called before the first frame update
+    void Awake()
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +75,8 @@ public class PTK_ModVehicle : MonoBehaviour
         InitSkinnedMeshRenderers();
 
         InitBonesReferences();
+
+        suspensions = this.GetComponentsInChildren<PTK_SimpleSuspension>();
     }
     void EnsureCorrectRigSetup()
     {
