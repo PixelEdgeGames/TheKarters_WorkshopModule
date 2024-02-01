@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class PTK_ModVehicle : MonoBehaviour
 {
+    [Header("Add Model inside and click init button below")]
+    public Animator vehicleAnimator;
+
     public Renderer[] vehicleRenderers;
 
     [Header("Base")]
@@ -45,12 +48,16 @@ public class PTK_ModVehicle : MonoBehaviour
     public AnimationClip strongHitBack;
     public AnimationClip strongHitFront;
 
-    public PTK_SimpleSuspension[] suspensions;
+    public PTK_SuspensionSetupParent suspensionParent;
     // Start is called before the first frame update
     void Awake()
     {
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+
+        vehicleAnimator.transform.localPosition = Vector3.zero;
+        vehicleAnimator.transform.localRotation = Quaternion.identity;
+
     }
 
     // Start is called before the first frame update
@@ -76,7 +83,7 @@ public class PTK_ModVehicle : MonoBehaviour
 
         InitBonesReferences();
 
-        suspensions = this.GetComponentsInChildren<PTK_SimpleSuspension>();
+        EditorUtility.SetDirty(this.gameObject);
     }
     void EnsureCorrectRigSetup()
     {
@@ -104,6 +111,17 @@ public class PTK_ModVehicle : MonoBehaviour
         modelImporter.sourceAvatar = null; // Set this to use the model's own avatar
 
         AssignCorrectAnimationClips(path, modelImporter);
+
+
+        vehicleAnimator = skinnedMeshRenderer.transform.parent.GetComponent<Animator>();
+        if(vehicleAnimator == null)
+        {
+            Debug.LogError("Something is wrong! Vehicle doesnt have animator?");
+        }else
+        {
+            vehicleAnimator.transform.localPosition = Vector3.zero;
+            vehicleAnimator.transform.localRotation = Quaternion.identity;
+        }
     }
 
     void AssignCorrectAnimationClips(string strModelPath, ModelImporter modelImporter)
@@ -132,6 +150,7 @@ public class PTK_ModVehicle : MonoBehaviour
         SetAnimLoopMode(new string[] { defaultAnim.name, idleHighSpeed.name, idleNormal.name }, modelImporter);
 
         modelImporter.SaveAndReimport();
+
     }
 
     void SetAnimLoopMode(string[] namesForLoop, ModelImporter modelImporter)
