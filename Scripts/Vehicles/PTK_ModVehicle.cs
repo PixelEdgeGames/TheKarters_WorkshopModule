@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class PTK_ModVehicle : MonoBehaviour
 { 
-	public bool bHideDebugMeshes = false;
+	public bool bShowDebugMeshes = true;
     [Header("Config Per Vehicle -30,30")]
     [Tooltip("Increase vehicle angle after boostpad/3rd boost/boost landing.")]
     public float fBoostTiltIncreaseAngle = 5.0f;
@@ -18,7 +18,8 @@ public class PTK_ModVehicle : MonoBehaviour
         E_FOUR_WHEELS,
         E_THREE_WHEELS_SINGLE_IN_FRONT,
         E_THREE_WHEELS_SINGLE_IN_BACK,
-        E_TWO_WHEELS
+        E_TWO_WHEELS_FRONT_BACK,
+        E_TWO_WHEELS_LEFT_RIGHT
     }
     public EVehicleType eVehicleType = EVehicleType.E_FOUR_WHEELS;
     public float fl_WheelSize = 1.0f;
