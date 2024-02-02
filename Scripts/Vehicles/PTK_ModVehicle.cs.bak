@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class PTK_ModVehicle : MonoBehaviour
 { 
-	public bool bHideDebugMeshes = false;
+public bool bHideDebugMeshes = false;
     [Header("Config Per Vehicle -30,30")]
     [Tooltip("Increase vehicle angle after boostpad/3rd boost/boost landing.")]
     public float fBoostTiltIncreaseAngle = 5.0f;
