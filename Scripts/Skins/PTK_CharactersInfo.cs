@@ -9,8 +9,8 @@ public class PTK_CharactersInfo
     public class CharInfo
     {
         public string strCharacterDirectoryName;
-        public string strCharacterName;
-        public float fCharacterHeight;
+        public string strCharacterName = "Default Name";
+        public float fCharacterHeight = 1.5f;
     }
 
     public CharInfo GetInfoForCharacterDirName(string strCharDirName)
