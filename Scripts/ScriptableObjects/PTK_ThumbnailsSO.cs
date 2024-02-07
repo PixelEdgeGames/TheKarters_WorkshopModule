@@ -1,20 +1,9 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ModInfo", menuName = "PixelTools/ModInfo", order = 0)]
-public class PTK_ModInfo : ScriptableObject
+public class PTK_ThumbnailsSO : ScriptableObject
 {
-    public string ModName;
-    public string ModAuthor;
-    public List<string> SelectedPaths = new List<string>();
-    public DateTime LastBuildDate;
-    public int UserModVersion;
-    public float GameModVersion = 1.0f;
-
-    public CPTK_ModContentInfoFile modContentInfo = new CPTK_ModContentInfoFile();
-
-    [System.Serializable]
     public class CThumbForObject
     {
         public string strObjDirName = "";
@@ -31,5 +20,4 @@ public class PTK_ModInfo : ScriptableObject
 
         return null;
     }
-
 }

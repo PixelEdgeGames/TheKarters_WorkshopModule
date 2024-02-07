@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 
 [System.Serializable]
-public class CPTK_ModInfoFile 
+public class CPTK_ModContentInfoFile 
 {
     [HideInInspector]
     public string strOriginalModName = ""; // directory mod name can be changed by user but we still want to have original name cached
@@ -18,8 +18,11 @@ public class CPTK_ModInfoFile
     [System.Serializable]
     public class CCharacter
     {
-        public string strCharacterName = "TemplateName_Name";
+        public string strCharacterDirName = "TemplateName_Name";
         public string strCharacterAnimConfigFileName = "";
+
+        public PTK_CharacterInfoSO.CCharInfo inGameCharacterInfo = new PTK_CharacterInfoSO.CCharInfo();
+
 
         public List<CCharacterOutfit> outfits = new List<CCharacterOutfit>();
 
@@ -70,15 +73,15 @@ public class CPTK_ModInfoFile
         }
     }
 
-    public CCharacter GetCharacterFromName(string strName, bool bCreateIfNotFound)
+    public CCharacter GetCharacterFromDirectoryName(string strName, bool bCreateIfNotFound)
     {
         foreach(var character in characters)
         {
-            if (character.strCharacterName == strName)
+            if (character.strCharacterDirName == strName)
                 return character;
         }
 
-        var created = new CCharacter() { strCharacterName = strName };
+        var created = new CCharacter() { strCharacterDirName = strName };
         characters.Add(created);
         return created;
     }
@@ -90,7 +93,7 @@ public class CPTK_ModInfoFile
         File.WriteAllText(path, jsonString);
     }
 
-    public static CPTK_ModInfoFile LoadFromFile(string path)
+    public static CPTK_ModContentInfoFile LoadFromFile(string path)
     {
         if (!File.Exists(path))
         {
@@ -98,7 +101,7 @@ public class CPTK_ModInfoFile
         }
 
         string jsonString = File.ReadAllText(path);
-        CPTK_ModInfoFile infoFile = JsonUtility.FromJson<CPTK_ModInfoFile>(jsonString);
+        CPTK_ModContentInfoFile infoFile = JsonUtility.FromJson<CPTK_ModContentInfoFile>(jsonString);
 
         return infoFile;
     }
