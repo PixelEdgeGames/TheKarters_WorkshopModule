@@ -28,6 +28,47 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
 
     }
 
+
+    void MakeAnimationLooping(AnimationClip clip)
+    {
+        if (clip != null)
+        {
+            string strClipPath = AssetDatabase.GetAssetPath(clip); ;
+
+            // Get the current animation clip settings
+            AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
+
+            // Set the loop time to true
+            settings.loopTime = true;
+
+            // Apply the modified settings to the clip
+            ModelImporter importer = AssetImporter.GetAtPath(strClipPath) as ModelImporter;
+            if (importer != null)
+            {
+                AnimationUtility.SetAnimationClipSettings(clip, settings);
+                EditorUtility.SetDirty(clip);
+                AssetDatabase.SaveAssets();
+            }
+            else // animation clip was extracted
+            {
+                // Retrieve the current settings of the clip
+
+                // Modify settings
+                settings.loopTime = true;
+
+                // Apply modified settings back to the clip
+                AnimationUtility.SetAnimationClipSettings(clip, settings);
+
+                // Mark clip as dirty to ensure changes are saved
+                EditorUtility.SetDirty(clip);
+                AssetDatabase.SaveAssets();
+
+            }
+        }
+        else
+        {
+        }
+    }
     private void InitializeFromDirectory(PTK_Workshop_CharAnimConfig config)
     {
         string path = AssetDatabase.GetAssetPath(config);
@@ -66,6 +107,9 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
                 {
                     if (clip.name.Contains("_preview") == true)
                         continue;
+
+                    if (clip.name.ToLower().Contains("idle") == true)
+                        MakeAnimationLooping(clip);
 
                     if (animCategory == "Driving")
                         taregtChar.Driving.Add(clip);

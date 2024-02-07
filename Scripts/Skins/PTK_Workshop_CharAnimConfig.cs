@@ -17,32 +17,33 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
         public AnimationClip GetClipByNamePart(string namePart)
         {
+            namePart = namePart.ToLower();
             foreach (var clip in Driving)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             foreach (var clip in Events)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             foreach (var clip in Menu)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             foreach (var clip in ItemsModelAnim)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             foreach (var clip in JumpTricks)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             foreach (var clip in ItemUsage)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             foreach (var clip in WeaponTargeting)
-                if (clip.name.Contains(namePart))
+                if (clip.name.ToLower().Contains(namePart))
                     return clip;
 
             return null; // If no clip is found with the name part
