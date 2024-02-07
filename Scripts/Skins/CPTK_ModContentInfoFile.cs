@@ -7,12 +7,6 @@ using UnityEngine;
 [System.Serializable]
 public class CPTK_ModContentInfoFile 
 {
-    [HideInInspector]
-    public string strOriginalModName = ""; // directory mod name can be changed by user but we still want to have original name cached
-    public string strModName;
-    public string strModAuthor;
-    public DateTime modLastUpdateDate;
-
     public List<CCharacter> characters = new List<CCharacter>();
 
     [System.Serializable]

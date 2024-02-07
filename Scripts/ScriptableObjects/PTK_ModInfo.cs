@@ -5,12 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ModInfo", menuName = "PixelTools/ModInfo", order = 0)]
 public class PTK_ModInfo : ScriptableObject
 {
+    public string LastBuildDateTime = "";
     public string ModName;
     public string ModAuthor;
     public List<string> SelectedPaths = new List<string>();
-    public DateTime LastBuildDate;
     public int UserModVersion;
-    public float GameModVersion = 1.0f;
+    [SerializeField]
+    public const float GameModPluginVersion = 1.0f;
 
     public CPTK_ModContentInfoFile modContentInfo = new CPTK_ModContentInfoFile();
 
