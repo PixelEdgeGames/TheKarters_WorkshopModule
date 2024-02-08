@@ -108,7 +108,7 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
                     if (clip.name.Contains("_preview") == true)
                         continue;
 
-                    if (clip.name.ToLower().Contains("idle") == true)
+                    if (clip.name.ToLower().Contains("idle") == true || clip.name.ToLower().Contains("loop") == true)
                         MakeAnimationLooping(clip);
 
                     if (animCategory == "Driving")

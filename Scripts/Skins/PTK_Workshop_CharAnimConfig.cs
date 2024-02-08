@@ -18,7 +18,7 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
         Dictionary<string, AnimationClip> nameToClip = new Dictionary<string, AnimationClip>();
 
-        public AnimationClip GetClipByNamePart(string namePart)
+        public AnimationClip GetClipByNameFull(string namePart)
         {
             if(nameToClip.Count == 0)
             {
