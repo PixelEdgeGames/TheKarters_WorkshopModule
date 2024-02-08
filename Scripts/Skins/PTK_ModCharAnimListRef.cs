@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_ModCharacterAnimListRef : MonoBehaviour
+public class PTK_ModCharAnimListRef : MonoBehaviour
 {
     public PTK_Workshop_CharAnimConfig charAnimationsListSO;
 

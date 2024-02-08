@@ -11,42 +11,50 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
         public List<AnimationClip> Events = new List<AnimationClip>();
         public List<AnimationClip> Menu = new List<AnimationClip>();
         public List<AnimationClip> ItemsModelAnim = new List<AnimationClip>();
-        public List<AnimationClip> JumpTricks = new List<AnimationClip>();
+        public List<AnimationClip> JumpTricks_SuperLong = new List<AnimationClip>();
+        public List<AnimationClip> JumpTricks_NormalShort = new List<AnimationClip>();
         public List<AnimationClip> ItemUsage = new List<AnimationClip>();
         public List<AnimationClip> WeaponTargeting = new List<AnimationClip>();
 
+        Dictionary<string, AnimationClip> nameToClip = new Dictionary<string, AnimationClip>();
+
         public AnimationClip GetClipByNamePart(string namePart)
         {
+            if(nameToClip.Count == 0)
+            {
+                foreach (var clip in Driving)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in Events)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in Menu)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in ItemsModelAnim)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in JumpTricks_SuperLong)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in JumpTricks_NormalShort)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in ItemUsage)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+
+                foreach (var clip in WeaponTargeting)
+                    nameToClip.Add(clip.name.ToLower(), clip);
+            }
+
             namePart = namePart.ToLower();
-            foreach (var clip in Driving)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
 
-            foreach (var clip in Events)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
+            if (nameToClip.ContainsKey(namePart))
+                return nameToClip[namePart];
 
-            foreach (var clip in Menu)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
+            Debug.LogError("Clip not found: " + namePart);
 
-            foreach (var clip in ItemsModelAnim)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
-
-            foreach (var clip in JumpTricks)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
-
-            foreach (var clip in ItemUsage)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
-
-            foreach (var clip in WeaponTargeting)
-                if (clip.name.ToLower().Contains(namePart))
-                    return clip;
-
-            return null; // If no clip is found with the name part
+            return null;
         }
     }
 

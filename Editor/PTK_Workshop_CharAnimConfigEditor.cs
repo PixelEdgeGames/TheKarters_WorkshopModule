@@ -120,7 +120,12 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
                     else if (animCategory == "ItemsModelAnim")
                         taregtChar.ItemsModelAnim.Add(clip);
                     else if (animCategory == "JumpTricks")
-                        taregtChar.JumpTricks.Add(clip);
+                    {
+                        if(clip.name.ToLower().Contains("super_long"))
+                            taregtChar.JumpTricks_SuperLong.Add(clip);
+                        else
+                            taregtChar.JumpTricks_NormalShort.Add(clip);
+                    }
                     else if (animCategory == "ItemUsage")
                         taregtChar.ItemUsage.Add(clip);
                     else if (animCategory == "WeaponTargetting")
