@@ -7,20 +7,16 @@ using System.Collections.Generic;
 [CustomEditor(typeof(PTK_Workshop_CharAnimConfig))]
 public class PTK_Workshop_CharAnimConfigEditor : Editor
 {
-    string strLastInitializationTime = "";
-    int iLastInitializationElementsCount = 0;
     public override void OnInspectorGUI()
     {
         PTK_Workshop_CharAnimConfig config = (PTK_Workshop_CharAnimConfig)target;
 
-        if(strLastInitializationTime != "")
+        if(config.strLastInitializationTime != "")
         {
-            GUILayout.Label("lastInitTime: " + strLastInitializationTime + " items count: " + iLastInitializationElementsCount + "");
+            GUILayout.Label("lastInitTime: " + config.strLastInitializationTime + " items count: " + config.iLastInitializationElementsCount + "");
         }
         if (GUILayout.Button("Initialize From Directory " ))
         {
-            iLastInitializationElementsCount = 0;
-            strLastInitializationTime = System.DateTime.Now.ToLongTimeString();
             InitializeFromDirectory(config);
         }
 
@@ -29,7 +25,7 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
     }
 
 
-    void MakeAnimationLooping(AnimationClip clip)
+    static void MakeAnimationLooping(AnimationClip clip)
     {
         if (clip != null)
         {
@@ -69,8 +65,11 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
         {
         }
     }
-    private void InitializeFromDirectory(PTK_Workshop_CharAnimConfig config)
+    public static void InitializeFromDirectory(PTK_Workshop_CharAnimConfig config)
     {
+        config.iLastInitializationElementsCount = 0;
+        config.strLastInitializationTime = System.DateTime.Now.ToLongTimeString();
+
         string path = AssetDatabase.GetAssetPath(config);
         string directory = System.IO.Path.GetDirectoryName(path);
 
@@ -133,7 +132,7 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
                     else
                         Debug.LogError("Unknown Category " + animCategory);
 
-                    iLastInitializationElementsCount++;
+                    config.iLastInitializationElementsCount++;
                 }
             }
         }

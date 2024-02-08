@@ -4,6 +4,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PTK_Workshop/CharacterAnimationConfig")]
 public class PTK_Workshop_CharAnimConfig : ScriptableObject
 {
+    [HideInInspector]
+    public string strLastInitializationTime = "";
+    [HideInInspector]
+    public int iLastInitializationElementsCount = 0;
+
     [System.Serializable]
     public class AnimationCategory
     {
