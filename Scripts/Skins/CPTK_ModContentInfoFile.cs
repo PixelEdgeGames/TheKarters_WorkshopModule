@@ -46,6 +46,7 @@ public class CPTK_ModContentInfoFile
                 public string strOutfitMaterialDirName = "TemplateName_Outfitmat";
 
                 public string strPrefabFileName = "EmptyPrefabName";
+                public int iGeneratedTargetUniqueConfigID = -1;
             }
 
 
