@@ -23,8 +23,7 @@ public class PTK_CharacterInfoSO : ScriptableObject
     public void CopyInfoTo(CPTK_ModContentInfoFile modInfo,string strCharacterDirectoryName)
     {
        var character =  modInfo.GetCharacterFromDirectoryName(strCharacterDirectoryName,true);
-        CopyInfoTo(character.inGameCharacterInfo);
-      
+       character.inGameCharacterInfo = this;
     }
 
     public void CopyInfoTo(CCharInfo copyTo)

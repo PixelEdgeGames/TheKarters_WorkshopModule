@@ -15,6 +15,10 @@ public class PTK_ModInfo : ScriptableObject
 
     public CPTK_ModContentInfoFile modContentInfo = new CPTK_ModContentInfoFile();
 
+    // we need to load elements from mods Addressables.LoadAssetAsync<PTK_ModInfo>(strModAddressableName + objectToLoad);
+    [HideInInspector]
+    public string strModAddressableName = "";
+
     [System.Serializable]
     public class CThumbForObject
     {

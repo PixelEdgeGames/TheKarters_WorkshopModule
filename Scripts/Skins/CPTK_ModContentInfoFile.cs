@@ -15,7 +15,7 @@ public class CPTK_ModContentInfoFile
         public string strCharacterDirName = "TemplateName_Name";
         public string strCharacterAnimConfigFileName = "";
 
-        public PTK_CharacterInfoSO.CCharInfo inGameCharacterInfo = new PTK_CharacterInfoSO.CCharInfo();
+        public PTK_CharacterInfoSO inGameCharacterInfo ;
 
 
         public List<CCharacterOutfit> outfits = new List<CCharacterOutfit>();
