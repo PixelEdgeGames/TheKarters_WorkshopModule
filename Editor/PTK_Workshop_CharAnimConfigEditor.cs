@@ -34,6 +34,10 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
             // Get the current animation clip settings
             AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
 
+            // already set
+            if (settings.loopTime == true)
+                return;
+
             // Set the loop time to true
             settings.loopTime = true;
 
@@ -43,7 +47,6 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
             {
                 AnimationUtility.SetAnimationClipSettings(clip, settings);
                 EditorUtility.SetDirty(clip);
-                AssetDatabase.SaveAssets();
             }
             else // animation clip was extracted
             {
@@ -57,7 +60,6 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
 
                 // Mark clip as dirty to ensure changes are saved
                 EditorUtility.SetDirty(clip);
-                AssetDatabase.SaveAssets();
 
             }
         }
@@ -138,6 +140,7 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
         }
 
         EditorUtility.SetDirty(config);
+        AssetDatabase.SaveAssets();
     }
 }
 #endif
