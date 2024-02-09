@@ -24,12 +24,12 @@ public class CPTK_ModContentInfoFile
         {
             foreach (var outfit in outfits)
             {
-                if (outfit.strOutfitName == strName)
+                if (outfit.strOutfitDirName == strName)
                     return outfit;
             }
 
 
-            var created = new CCharacterOutfit() { strOutfitName = strName };
+            var created = new CCharacterOutfit() { strOutfitDirName = strName };
             outfits.Add(created);
             return created;
         }
@@ -37,13 +37,13 @@ public class CPTK_ModContentInfoFile
         [System.Serializable]
         public class CCharacterOutfit
         {
-            public string strOutfitName = "TemplateName_Outfit";
+            public string strOutfitDirName = "TemplateName_Outfit";
             public List<CCharacterOutfit_Material> materialVariants = new List<CCharacterOutfit_Material>();
 
             [System.Serializable]
             public class CCharacterOutfit_Material
             {
-                public string strOutfitMaterialName = "TemplateName_Outfitmat";
+                public string strOutfitMaterialDirName = "TemplateName_Outfitmat";
 
                 public string strPrefabFileName = "EmptyPrefabName";
             }
@@ -53,12 +53,12 @@ public class CPTK_ModContentInfoFile
             {
                 foreach (var matVariant in materialVariants)
                 {
-                    if (matVariant.strOutfitMaterialName == strName)
+                    if (matVariant.strOutfitMaterialDirName == strName)
                         return matVariant;
                 }
 
 
-                var created = new CCharacterOutfit_Material() { strOutfitMaterialName = strName };
+                var created = new CCharacterOutfit_Material() { strOutfitMaterialDirName = strName };
                 materialVariants.Add(created);
                 return created;
                 
