@@ -11,6 +11,7 @@ public class PTK_ModInfo : ScriptableObject
     public string UniqueModNameHashToGenerateItemsKeys = "";
     public string ModAuthor = "";
     public string strModDescription = "";
+    public string strModTag = "";
     public List<string> SelectedPaths = new List<string>();
     public int UserModVersion;
     [SerializeField]
