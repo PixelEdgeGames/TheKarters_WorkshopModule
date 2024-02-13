@@ -9,7 +9,8 @@ public class PTK_ModInfo : ScriptableObject
     public string ModName;
     [Header("Used to generate constant uqnique IDs for your items! Important to avoid conflicts with other mods.")]
     public string UniqueModNameHashToGenerateItemsKeys = "";
-    public string ModAuthor;
+    public string ModAuthor = "";
+    public string strModDescription = "";
     public List<string> SelectedPaths = new List<string>();
     public int UserModVersion;
     [SerializeField]
