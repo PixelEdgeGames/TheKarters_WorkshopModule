@@ -11,7 +11,8 @@ public class PTK_ModInfo : ScriptableObject
     public string UniqueModNameHashToGenerateItemsKeys = "";
     public string ModAuthor = "";
     public string strModDescription = "";
-    public string strModTag = "";
+    public string strModTag = ""; // update!
+    public string strModServerUniqueDirName_UsedToUploadAsNewOrUpdate = ""; // update! // used to detect if we need to upload it as new mod or update our current mod
     public List<string> SelectedPaths = new List<string>();
     public int UserModVersion;
     [SerializeField]
