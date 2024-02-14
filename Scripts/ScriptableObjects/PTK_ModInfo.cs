@@ -10,11 +10,14 @@ public class PTK_ModInfo : ScriptableObject
     [Header("Used to generate constant uqnique IDs for your items! Important to avoid conflicts with other mods.")]
     public string UniqueModNameHashToGenerateItemsKeys = "";
     public string ModAuthor = "";
+    public bool bUploadModDescriptionToServer = true;
     public string strModDescription = "";
     public string strModTag = ""; // update!
     public string strModServerUniqueDirName_UsedToUploadAsNewOrUpdate = ""; // update! // used to detect if we need to upload it as new mod or update our current mod
     public List<string> SelectedPaths = new List<string>();
-    public int UserModVersion;
+    public float UserModVersion;
+    public string strModChangelog = "";
+
     [SerializeField]
     public const float GameModPluginVersion = 1.0f;
 
