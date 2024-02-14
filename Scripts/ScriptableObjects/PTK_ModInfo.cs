@@ -13,7 +13,7 @@ public class PTK_ModInfo : ScriptableObject
     public bool bUploadModDescriptionToServer = true;
     public string strModDescription = "";
     public string strModTag = ""; // update!
-    public string strModServerUniqueDirName_UsedToUploadAsNewOrUpdate = ""; // update! // used to detect if we need to upload it as new mod or update our current mod
+    public string strUniqueModServerUpdateKEY = ""; // update! // used to detect if we need to upload it as new mod or update our current mod
     public List<string> SelectedPaths = new List<string>();
     public float UserModVersion;
     public string strModChangelog = "";
