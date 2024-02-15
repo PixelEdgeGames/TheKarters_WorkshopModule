@@ -48,4 +48,8 @@ public class PTK_ModInfo : ScriptableObject
         return null;
     }
 
+
+    public const string strUploadKey_FileName = "UploadPasswordNotShared.txt"; // do not change name! we are looking for it in the game
+    public const string strNameToDecrypt_UploadPassword = "PixelReUploadProtector";// do not change name! we are looking for it in the game
+
 }
