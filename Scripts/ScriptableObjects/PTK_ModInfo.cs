@@ -11,6 +11,7 @@ public class PTK_ModInfo : ScriptableObject
     public string UniqueModNameHashToGenerateItemsKeys = "";
     public string ModAuthor = "";
     public bool bUploadModDescriptionToServer = true;
+    public bool bUploadAndReplaceScreenshootsOnServer = true;
     public string strModDescription = "";
     public string strModTag = ""; // update!
     public string strVisibility = ""; //  "Public", "FriendsOnly", "Unlisted", "Private"
