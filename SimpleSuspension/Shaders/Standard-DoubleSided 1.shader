@@ -1,4 +1,4 @@
-Shader "Standard-DoubleSided"
+Shader "Standard-DoubleSidedSuspension"
 {
 	Properties
 	{

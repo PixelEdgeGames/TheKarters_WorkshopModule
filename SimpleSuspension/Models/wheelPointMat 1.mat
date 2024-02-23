@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wheelPointMat 1
-  m_Shader: {fileID: 4800000, guid: 60434f351bfb48146901dd12cfea7dec, type: 3}
+  m_Shader: {fileID: 4800000, guid: 979a010c40352a641bac0f0a5f1e5f9d, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
