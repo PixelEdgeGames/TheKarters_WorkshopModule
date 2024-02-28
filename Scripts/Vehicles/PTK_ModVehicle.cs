@@ -27,7 +27,9 @@ public class PTK_ModVehicle : MonoBehaviour
     public float bl_WheelSize = 1.26f;
     public float br_WheelSize = 1.26f;
 
+
     [Header("Click init button below to init")]
+    public PTK_VehicleStickerInfo[] vehicleStickers;
     public Animator vehicleAnimator;
 
     public Renderer[] vehicleRenderers;
@@ -195,6 +197,7 @@ public class PTK_ModVehicle : MonoBehaviour
     private void InitSkinnedMeshRenderers()
     {
         vehicleRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+
     }
 
     void InitBonesReferences()
