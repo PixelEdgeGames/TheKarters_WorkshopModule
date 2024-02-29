@@ -39,6 +39,7 @@ public class PTK_ModVehicle : MonoBehaviour
     public Transform ikRigRootBone;
     public Transform drivingWheelBone;
     public Transform characterSocketBone;
+    public Transform engineBone;
 
     [Header("Wheels")]
     public Transform fl_Bone;
@@ -78,8 +79,26 @@ public class PTK_ModVehicle : MonoBehaviour
         vehicleAnimator.transform.localPosition = Vector3.zero;
         vehicleAnimator.transform.localRotation = Quaternion.identity;
 
+        for(int i=0;i< vehicleStickers.Length;i++)
+        {
+            if (vehicleStickers[i].eAttachType == PTK_VehicleStickerInfo.EAttachType.E_ENGINE && engineBone != null)
+                vehicleStickers[i].transform.parent = engineBone.transform;
+            else
+                vehicleStickers[i].transform.parent = kartRoot.transform;
+        }
     }
 
+    public int GetAvailableStickersCountFrontAndBack()
+    {
+        int iStickerCount = 0;
+        for(int i=0;i< vehicleStickers.Length;i++)
+        {
+            if (vehicleStickers[i].IsStickerMeshAvailable() == true)
+                iStickerCount++;
+        }
+
+        return iStickerCount*2;// x2 because front and back (back is created runtime)
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -205,6 +224,7 @@ public class PTK_ModVehicle : MonoBehaviour
       Transform[] childTransforms =  this.transform.GetComponentsInChildren<Transform>();
 
          kartRoot = GetChildTransform("Root_SCRIPT", childTransforms);
+        engineBone = GetChildTransform("Engine", childTransforms);
         ikRigRootBone = GetChildTransform("Body", childTransforms);
         drivingWheelBone = GetChildTransform("Driving_Wheel", childTransforms);
         characterSocketBone = GetChildTransform("Body", childTransforms);

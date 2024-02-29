@@ -23,50 +23,69 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     public Material stickerMaterialReference;
 
     [HideInInspector]
-    public MeshFilter[] stickerMeshFilters;
-    public MeshFilter[] stickerMeshFiltersSecondLayerCreated;
+    public MeshRenderer[] stickerMeshRenderers;
+    [HideInInspector]
+    public MeshRenderer[] stickerMeshRenderersSecondLayerCreated;
 
 
     private int iStickerSettings_FirstLayer;
+    private Texture2D stickerTexture_wrapMode_Repeat_FristLayer;
+    private Texture2D stickerTexture_wrapMode_Clamp_FirstLayer;
+
     private int iStickerSettings_SecondLayer;
-    private Texture2D stickerTexture_wrapMode_Repeat;
-    private Texture2D stickerTexture_wrapMode_Clamp;
+    private Texture2D stickerTexture_wrapMode_Repeat_SecondLayer;
+    private Texture2D stickerTexture_wrapMode_Clamp_SecondLayer;
 
-    private Material firstLayerMaterial;
-    private Material secondLayerMaterial;
+    private Material firstLayerMaterial_Back;
+    private Material secondLayerMaterial_Top;
 
+    public bool IsStickerMeshAvailable()
+    {
+        return stickerMeshRenderers.Length > 0;
+    }
     // Start is called before the first frame update
     void Awake()
     {
-        stickerMeshFilters = this.GetComponentsInChildren<MeshFilter>();
+        stickerMeshRenderers = this.GetComponentsInChildren<MeshRenderer>();
         Collider[] colliders = this.GetComponentsInChildren<Collider>();
 
         for(int i=0;i< colliders.Length;i++)
             GameObject.DestroyImmediate(colliders[i]);
 
-        stickerMeshFiltersSecondLayerCreated = new MeshFilter[stickerMeshFilters.Length];
+        stickerMeshRenderersSecondLayerCreated = new MeshRenderer[stickerMeshRenderers.Length];
 
-        for (int i=0;i< stickerMeshFilters.Length;i++)
+        GameObject SecondLayer_Top = new GameObject("SecondLayer - TOP");
+        SecondLayer_Top.transform.parent = transform;
+        SecondLayer_Top.transform.localPosition = Vector3.zero;
+        SecondLayer_Top.transform.localRotation = Quaternion.identity;
+        SecondLayer_Top.transform.localScale = Vector3.one;
+        SecondLayer_Top.transform.SetSiblingIndex(0);
+
+
+        for (int i=0;i< stickerMeshRenderers.Length;i++)
         {
-            MeshRenderer firstLayerMeshREnderer = stickerMeshFilters[i].GetComponent<MeshRenderer>();
-            firstLayerMaterial = new Material(stickerMaterialReference);
-            firstLayerMeshREnderer.material = firstLayerMaterial;
+            MeshRenderer firstLayerMeshREnderer = stickerMeshRenderers[i].GetComponent<MeshRenderer>();
+            firstLayerMaterial_Back = new Material(stickerMaterialReference);
+            firstLayerMeshREnderer.material = firstLayerMaterial_Back;
+            firstLayerMaterial_Back.renderQueue = 3000;
 
             firstLayerMeshREnderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
-            stickerMeshFilters[i].gameObject.SetActive(false);
+            stickerMeshRenderers[i].gameObject.SetActive(false);
 
 
-            stickerMeshFiltersSecondLayerCreated[i] = new GameObject(stickerMeshFilters[i].gameObject.name + "_2ndLayer").GetComponent<MeshFilter>();
-            stickerMeshFiltersSecondLayerCreated[i].transform.parent = stickerMeshFilters[i].gameObject.transform.parent;
-            stickerMeshFiltersSecondLayerCreated[i].transform.localPosition = stickerMeshFilters[i].gameObject.transform.localPosition;
-            stickerMeshFiltersSecondLayerCreated[i].transform.localRotation = stickerMeshFilters[i].gameObject.transform.localRotation;
-            stickerMeshFiltersSecondLayerCreated[i].transform.localScale = stickerMeshFilters[i].gameObject.transform.localScale;
+            stickerMeshRenderersSecondLayerCreated[i] = GameObject.Instantiate(stickerMeshRenderers[i].gameObject, SecondLayer_Top.transform, false).GetComponent<MeshRenderer>();
+          
+            stickerMeshRenderersSecondLayerCreated[i].name = (stickerMeshRenderers[i].gameObject.name + "_2ndLayer");
+            stickerMeshRenderersSecondLayerCreated[i].transform.localPosition = stickerMeshRenderers[i].gameObject.transform.localPosition;
+            stickerMeshRenderersSecondLayerCreated[i].transform.localRotation = stickerMeshRenderers[i].gameObject.transform.localRotation;
+            stickerMeshRenderersSecondLayerCreated[i].transform.localScale = stickerMeshRenderers[i].gameObject.transform.localScale;
 
             // we need seperate material to set material params
-            MeshRenderer secondLayerMeshREnderer = stickerMeshFiltersSecondLayerCreated[i].GetComponent<MeshRenderer>();
-            secondLayerMaterial = new Material(stickerMaterialReference);
-            secondLayerMeshREnderer.material = secondLayerMaterial;
+            MeshRenderer secondLayerMeshREnderer = stickerMeshRenderersSecondLayerCreated[i].GetComponent<MeshRenderer>();
+            secondLayerMaterial_Top = new Material(stickerMaterialReference);
+            secondLayerMaterial_Top.renderQueue = 3005;
+            secondLayerMeshREnderer.material = secondLayerMaterial_Top;
 
         }
     }
@@ -76,16 +95,16 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     {
 
     }
-    internal void SetStickerData(Texture2D _stickerTexture_wrapMode_Repeat, Texture2D _stickerTexture_wrapMode_Clamp, int _iStickerSettingPaacked,bool bIsFirstLayer)
+    internal void SetStickerData(Texture2D texRepeat, Texture2D texClamp, int _iStickerSettingPaacked,bool bIsFirstLayer)
     {
-        SetStickerTextures(stickerTexture_wrapMode_Repeat, stickerTexture_wrapMode_Clamp, bIsFirstLayer);
+        SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
         SetStickerSetting(_iStickerSettingPaacked, bIsFirstLayer);
 
     }
 
-    internal void SetStickerData(Texture2D _stickerTexture_wrapMode_Repeat, Texture2D _stickerTexture_wrapMode_Clamp, bool bIsFirstLayer)
+    internal void SetStickerData(Texture2D texRepeat, Texture2D texClamp, bool bIsFirstLayer)
     {
-        SetStickerTextures(_stickerTexture_wrapMode_Repeat, _stickerTexture_wrapMode_Clamp, bIsFirstLayer);
+        SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
     }
 
     private void SetStickerSetting(int _iStickerSettingPaacked, bool bIsFirstLayer)
@@ -93,37 +112,72 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
     }
 
-    private void SetStickerTextures(Texture2D _stickerTexture_wrapMode_Repeat, Texture2D _stickerTexture_wrapMode_Clamp, bool bIsFirstLayer)
+    private void SetStickerTextures(Texture2D texRepeat, Texture2D texClamp, bool bIsFirstLayer)
     {
         // texture removed - set invisible
-        if (stickerTexture_wrapMode_Repeat != null && _stickerTexture_wrapMode_Repeat == null)
+        if (texRepeat == null)
         {
             SetStickerVisible(false, bIsFirstLayer);
         }
 
         // current texture was empty but new one is full - set visible
-        if (stickerTexture_wrapMode_Clamp == null && _stickerTexture_wrapMode_Clamp != null)
+        if (texRepeat != null)
         {
             SetStickerVisible(true, bIsFirstLayer);
         }
 
-        stickerTexture_wrapMode_Repeat = _stickerTexture_wrapMode_Repeat;
-        stickerTexture_wrapMode_Clamp = _stickerTexture_wrapMode_Clamp;
+        if(bIsFirstLayer == true)
+        {
+            bool bTextureChanged = stickerTexture_wrapMode_Repeat_FristLayer != texRepeat;
+
+            stickerTexture_wrapMode_Repeat_FristLayer = texRepeat;
+            stickerTexture_wrapMode_Clamp_FirstLayer = texClamp;
+
+            if (bTextureChanged)
+            {
+                TextureChanged(bIsFirstLayer);
+            }
+        }else
+        {
+            bool bTextureChanged = stickerTexture_wrapMode_Repeat_SecondLayer != texRepeat;
+
+            stickerTexture_wrapMode_Repeat_SecondLayer = texRepeat;
+            stickerTexture_wrapMode_Clamp_SecondLayer = texClamp;
+
+            if (bTextureChanged)
+            {
+                TextureChanged(bIsFirstLayer);
+            }
+        }
+
+    }
+
+    void TextureChanged(bool bIsFirstLayer)
+    {
+        // choose if repeat or wrap should be from setting
+        if (bIsFirstLayer)
+        {
+            firstLayerMaterial_Back.mainTexture = stickerTexture_wrapMode_Repeat_FristLayer;
+        }
+        else
+        {
+            secondLayerMaterial_Top.mainTexture = stickerTexture_wrapMode_Repeat_SecondLayer;
+        }
     }
 
     void SetStickerVisible(bool bVisible, bool bIsFirstLayer)
     {
-        for (int i = 0; i < stickerMeshFilters.Length; i++)
+        for (int i = 0; i < stickerMeshRenderers.Length; i++)
         {
             if (bIsFirstLayer == true)
             {
-                if (stickerMeshFilters[i].gameObject.activeInHierarchy != bVisible)
-                    stickerMeshFilters[i].gameObject.SetActive(bVisible);
+                if (stickerMeshRenderers[i].gameObject.activeInHierarchy != bVisible)
+                    stickerMeshRenderers[i].gameObject.SetActive(bVisible);
             }
             else
             {
-                if (stickerMeshFiltersSecondLayerCreated[i].gameObject.activeInHierarchy != bVisible)
-                    stickerMeshFiltersSecondLayerCreated[i].gameObject.SetActive(bVisible);
+                if (stickerMeshRenderersSecondLayerCreated[i].gameObject.activeInHierarchy != bVisible)
+                    stickerMeshRenderersSecondLayerCreated[i].gameObject.SetActive(bVisible);
             }
         }
     }
