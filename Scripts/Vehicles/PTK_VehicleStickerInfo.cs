@@ -29,6 +29,11 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
         for(int i=0;i< colliders.Length;i++)
             GameObject.DestroyImmediate(colliders[i]);
+
+        for(int i=0;i< stickerMeshFilters.Length;i++)
+        {
+            stickerMeshFilters[i].GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
     }
 
     // Update is called once per frame
