@@ -6,5 +6,4 @@ using UnityEngine;
 public class PTK_StickerTexures : ScriptableObject
 {
     public Texture2D textureClamp;
-    public Texture2D textureRepeat;
 }

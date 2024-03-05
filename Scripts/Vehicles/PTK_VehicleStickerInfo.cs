@@ -24,12 +24,10 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
 
     private int iStickerSettings_FirstLayer;
-    private Texture2D stickerTexture_wrapMode_Repeat_FristLayer;
-    private Texture2D stickerTexture_wrapMode_Clamp_FirstLayer;
+    private Texture2D stickerTexture_FristLayer;
 
     private int iStickerSettings_SecondLayer;
-    private Texture2D stickerTexture_wrapMode_Repeat_SecondLayer;
-    private Texture2D stickerTexture_wrapMode_Clamp_SecondLayer;
+    private Texture2D stickerTexture_SecondLayer;
 
     private Material material_FirstLayer_Back;
     private Material material_SecondLayer_Front;
@@ -156,21 +154,20 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     {
 
     }
-    internal void SetStickerData(Texture2D texRepeat, Texture2D texClamp, int _iStickerSettingPaacked,bool bIsFirstLayer)
+    internal void SetStickerData(Texture2D tex, int _iStickerSettingPaacked,bool bIsFirstLayer)
     {
         SetStickerSetting(_iStickerSettingPaacked, bIsFirstLayer);
-        SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
+        SetStickerTextures(tex, bIsFirstLayer);
 
     }
 
-    internal void SetStickerData(Texture2D texRepeat, Texture2D texClamp, bool bIsFirstLayer)
+    internal void SetStickerData(Texture2D tex, bool bIsFirstLayer)
     {
-        SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
+        SetStickerTextures(tex, bIsFirstLayer);
     }
 
     CStickerIntBitVariable stickerIntVariablePacker = new CStickerIntBitVariable();
 
-    bool bShouldUseRepeatTexture = true;
 
     public void SetStickerSetting(int _iStickerSettingPaacked, bool bIsFirstLayer)
     {
@@ -193,27 +190,18 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
         stickerIntVariablePacker.UnpackVariables(_iStickerSettingPaacked);
 
-
-        bool bRepeat = stickerIntVariablePacker.repeat_BitVar_0_1.Value == 0;
-
-        if(bShouldUseRepeatTexture != bRepeat)
-        {
-            bShouldUseRepeatTexture = bRepeat;
-            TextureChanged(bIsFirstLayer);
-        }
-
         CVariable variableUnpacked = null;
         float fValueNormalizedX = 0;
         float fValueNormalizedY = 0;
 
-        variableUnpacked = stickerIntVariablePacker.positionX_BitVar_0_15;
+        variableUnpacked = stickerIntVariablePacker.positionX_BitVar_0_31;
 
         fValueNormalizedX = (variableUnpacked.Value + 1) / (float)(variableUnpacked.GetMaxValue() + 1); // +1 so we get 0.5 for middle
         fValueNormalizedX -= 0.5f; // default is 8/16, so we want to show it as 0
         fValueNormalizedX *= 2.0f; // -1 : 1
 
 
-        variableUnpacked = stickerIntVariablePacker.positionY_BitVar_0_15;
+        variableUnpacked = stickerIntVariablePacker.positionY_BitVar_0_31;
 
         fValueNormalizedY = (variableUnpacked.Value + 1) / (float)(variableUnpacked.GetMaxValue() + 1); // +1 so we get 0.5 for middle
         fValueNormalizedY -= 0.5f; // default is 8/16, so we want to show it as 0
@@ -223,30 +211,42 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
         materialToSetParams.SetFloat("_Angle", stickerIntVariablePacker.AngleDegreesFromRotationValueIndex());
 
-        int iColorIndex = stickerIntVariablePacker.color_BitVar_0_7.Value;
+        int iColorIndex = stickerIntVariablePacker.color_BitVar_0_15.Value;
         if(iColorIndex == 0 )
         {
             materialToSetParams.SetFloat("_Hue", 0);
             materialToSetParams.SetFloat("_InverseCol", 0);
             materialToSetParams.SetFloat("_Grayscale", 0);
+            materialToSetParams.SetColor("_Color", Color.white);
         }
         else if(iColorIndex == 1) // colorful to dark and white
         {
             materialToSetParams.SetFloat("_Hue", 0);
             materialToSetParams.SetFloat("_Grayscale", 1);
             materialToSetParams.SetFloat("_InverseCol", 0);
+            materialToSetParams.SetColor("_Color", Color.white);
         }
         else if (iColorIndex == 2) // white to opposite dark
         {
             materialToSetParams.SetFloat("_Hue", 0);
             materialToSetParams.SetFloat("_Grayscale", 1);
             materialToSetParams.SetFloat("_InverseCol", 1);
+            materialToSetParams.SetColor("_Color", Color.white);
+        }
+        else if (iColorIndex == 3 || iColorIndex == 4 || iColorIndex == 5 || iColorIndex == 6 || iColorIndex == 7 || iColorIndex == 8) // color multiply + hue
+        {
+            float fHueAngle = (iColorIndex - 3) * 60.0f;
+            materialToSetParams.SetFloat("_Hue", fHueAngle);
+            materialToSetParams.SetFloat("_Grayscale", 0);
+            materialToSetParams.SetFloat("_InverseCol", 0);
+            materialToSetParams.SetColor("_Color", Color.red);
         }
         else
         {
-            materialToSetParams.SetFloat("_Hue", (iColorIndex-2) * 60.0f);
+            materialToSetParams.SetFloat("_Hue", (iColorIndex-9) * 51.0f);
             materialToSetParams.SetFloat("_Grayscale", 0);
             materialToSetParams.SetFloat("_InverseCol", 0);
+            materialToSetParams.SetColor("_Color", Color.white);
         }
 
 
@@ -263,7 +263,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         materialToSetParams.SetFloat("_Transparency", fTransparencyNormalized);
     }
 
-    private void SetStickerTextures(Texture2D texRepeat, Texture2D texClamp, bool bIsFirstLayer)
+    private void SetStickerTextures(Texture2D tex, bool bIsFirstLayer)
     {
         if (bIsInitialized == false)
             Initialize();
@@ -277,10 +277,9 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
         if (bIsFirstLayer == true)
         {
-            bool bTextureChanged = stickerTexture_wrapMode_Repeat_FristLayer != texRepeat;
+            bool bTextureChanged = stickerTexture_FristLayer != tex;
 
-            stickerTexture_wrapMode_Repeat_FristLayer = texRepeat;
-            stickerTexture_wrapMode_Clamp_FirstLayer = texClamp;
+            stickerTexture_FristLayer = tex;
 
             if (bTextureChanged)
             {
@@ -288,10 +287,9 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             }
         }else
         {
-            bool bTextureChanged = stickerTexture_wrapMode_Repeat_SecondLayer != texRepeat;
+            bool bTextureChanged = stickerTexture_SecondLayer != tex;
 
-            stickerTexture_wrapMode_Repeat_SecondLayer = texRepeat;
-            stickerTexture_wrapMode_Clamp_SecondLayer = texClamp;
+            stickerTexture_SecondLayer = tex;
 
             if (bTextureChanged)
             {
@@ -306,23 +304,17 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         // choose if repeat or wrap should be from setting
         if (bIsFirstLayer)
         {
-            if(bShouldUseRepeatTexture == true)
-                material_FirstLayer_Back.mainTexture = stickerTexture_wrapMode_Repeat_FristLayer;
-            else
-                material_FirstLayer_Back.mainTexture = stickerTexture_wrapMode_Clamp_FirstLayer;
+            material_FirstLayer_Back.mainTexture = stickerTexture_FristLayer;
         }
         else
         {
-            if (bShouldUseRepeatTexture == true)
-                material_SecondLayer_Front.mainTexture = stickerTexture_wrapMode_Repeat_SecondLayer;
-            else
-                material_SecondLayer_Front.mainTexture = stickerTexture_wrapMode_Clamp_SecondLayer;
+            material_SecondLayer_Front.mainTexture = stickerTexture_SecondLayer;
         }
     }
 
     void RefreshStickerVisibility( bool bIsFirstLayer)
     {
-        bool bContainsTexture = bIsFirstLayer ? stickerTexture_wrapMode_Repeat_FristLayer != null : stickerTexture_wrapMode_Repeat_SecondLayer != null;
+        bool bContainsTexture = bIsFirstLayer ? stickerTexture_FristLayer != null : stickerTexture_SecondLayer != null;
         bool bIsVisibilityForcedForOutline = bIsFirstLayer ? bOutlineIsCurrentlyPresented_ForceMeshVisible_FirstLayerBack : bOutlineIsCurrentlyPresented_ForceMeshVisible_SecondLayerTop ;
 
         for (int i = 0; i < stickerMeshRenderers_FirstLayer_Back.Length; i++)
@@ -374,4 +366,38 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             }
         }
     }
+}
+
+
+public class CStickerIntBitVariable : PixelSDK_IntVariablePacker    
+{
+    public const float fMaxSizePercentage = 400.0f;
+
+    // cant exceed 32 bits
+    public CVariable size_BitVar_0_15 = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, iMaxSizePercentage100PercentDefaultVal);  // change sizeVariableBitCount if bit count changes
+    public CVariable positionX_BitVar_0_31 = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 15);
+    public CVariable positionY_BitVar_0_31 = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 15);
+    public CVariable rotation_BitVar_0_15 = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+    public CVariable color_BitVar_0_15 = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+    public CVariable transparency_BitVar_0_3 = new CVariable(CVariable.EType.E_2_BIT_4_CHOICES, 0);
+
+    public CStickerIntBitVariable()
+    {
+        AddVariable(size_BitVar_0_15);
+        AddVariable(positionX_BitVar_0_31);
+        AddVariable(positionY_BitVar_0_31);
+        AddVariable(rotation_BitVar_0_15);
+        AddVariable(color_BitVar_0_15);
+        AddVariable(transparency_BitVar_0_3);
+    }
+
+    public int AngleDegreesFromRotationValueIndex()
+    {
+        float fAnglePerValue = (360.0f / (rotation_BitVar_0_15.GetMaxValue() + 1.0f));
+        return (int)(rotation_BitVar_0_15.Value * fAnglePerValue);
+    }
+
+    const int sizeVariableBitCount = 16; // CHANGE ME if variable bit count is higer
+    const float fSingleStepPercent = (fMaxSizePercentage * (1.0f / sizeVariableBitCount));
+    const int iMaxSizePercentage100PercentDefaultVal = ((int)(100.0f / fSingleStepPercent)) - 1;
 }
