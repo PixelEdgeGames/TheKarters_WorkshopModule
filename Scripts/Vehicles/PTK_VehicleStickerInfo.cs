@@ -217,21 +217,21 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             materialToSetParams.SetFloat("_Hue", 0);
             materialToSetParams.SetFloat("_InverseCol", 0);
             materialToSetParams.SetFloat("_Grayscale", 0);
-            materialToSetParams.SetColor("_Color", Color.white);
+            materialToSetParams.SetColor("_Color", new Color(1.0F,1.0F,1.0F, materialToSetParams.color.a));
         }
         else if(iColorIndex == 1) // colorful to dark and white
         {
             materialToSetParams.SetFloat("_Hue", 0);
             materialToSetParams.SetFloat("_Grayscale", 1);
             materialToSetParams.SetFloat("_InverseCol", 0);
-            materialToSetParams.SetColor("_Color", Color.white);
+            materialToSetParams.SetColor("_Color", new Color(1.0F, 1.0F, 1.0F, materialToSetParams.color.a));
         }
         else if (iColorIndex == 2) // white to opposite dark
         {
             materialToSetParams.SetFloat("_Hue", 0);
             materialToSetParams.SetFloat("_Grayscale", 1);
             materialToSetParams.SetFloat("_InverseCol", 1);
-            materialToSetParams.SetColor("_Color", Color.white);
+            materialToSetParams.SetColor("_Color", new Color(1.0F, 1.0F, 1.0F, materialToSetParams.color.a));
         }
         else if (iColorIndex == 3 || iColorIndex == 4 || iColorIndex == 5 || iColorIndex == 6 || iColorIndex == 7 || iColorIndex == 8) // color multiply + hue
         {
@@ -239,14 +239,14 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             materialToSetParams.SetFloat("_Hue", fHueAngle);
             materialToSetParams.SetFloat("_Grayscale", 0);
             materialToSetParams.SetFloat("_InverseCol", 0);
-            materialToSetParams.SetColor("_Color", Color.red);
+            materialToSetParams.SetColor("_Color", new Color(1.0F, 0.0F, 0.0F, materialToSetParams.color.a));
         }
         else
         {
             materialToSetParams.SetFloat("_Hue", (iColorIndex-9) * 51.0f);
             materialToSetParams.SetFloat("_Grayscale", 0);
             materialToSetParams.SetFloat("_InverseCol", 0);
-            materialToSetParams.SetColor("_Color", Color.white);
+            materialToSetParams.SetColor("_Color", new Color(1.0F, 1.0F, 1.0F, materialToSetParams.color.a));
         }
 
 
