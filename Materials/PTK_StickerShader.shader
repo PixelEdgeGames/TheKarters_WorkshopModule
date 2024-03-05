@@ -7,8 +7,11 @@ Shader "PTK/PTK_StickerShader"
         _Glossiness("Smoothness", Range(0,1)) = 0.5
         _Metallic("Metallic", Range(0,1)) = 0.0
         _Angle("Angle", Range(0,360)) = 0.0
-            
+
+        _Transparency("Transparency", Range(0,1)) = 0.0
         _Hue("Hue", Range(0, 360)) = 0.
+        _Grayscale("_Grayscale", Range(0,1)) = 0.0
+        _InverseCol("InverseCol", Range(0,1)) = 0.0
     } 
         
         SubShader
@@ -34,9 +37,10 @@ Shader "PTK/PTK_StickerShader"
             half _Metallic;
             fixed4 _Color;
             float2 MainTexRotUV;
-
+            float _Transparency;
             float _Hue;
-
+            float _InverseCol;
+            float _Grayscale;
             void vert(inout appdata_full v ,out Input o) {
 
                 UNITY_INITIALIZE_OUTPUT(Input, o);
@@ -70,14 +74,18 @@ Shader "PTK/PTK_StickerShader"
             {
                 // apply the tiling and offset (_MainTex_ST) you would normally get from using uv_MainTex
                 float2 uv = IN.MainTexRotUV;// TRANSFORM_TEX(IN.MainTexRotUV, _MainTex);
-                fixed4 c = tex2D(_MainTex, uv);// *_Color;
+                fixed4 c = tex2D(_MainTex, uv) *_Color;
+
+                float luminance = dot(c.rgb, float3(0.2126, 0.7152, 0.0722));
+                c.rgb = lerp(c.rgb, pow( luminance,2.0f), _Grayscale);
+                c.rgb = lerp(c.rgb, 1.0f - c.rgb, _InverseCol);
 
                 o.Albedo = applyHue(c, _Hue);
 
 
                 o.Metallic = _Metallic;
                 o.Smoothness = _Glossiness;
-                o.Alpha = c.a;
+                o.Alpha = c.a * (1.0f- _Transparency)* _Color.a;
               
 
             }

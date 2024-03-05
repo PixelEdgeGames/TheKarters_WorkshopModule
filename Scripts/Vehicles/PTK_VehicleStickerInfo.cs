@@ -70,12 +70,25 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Initialize();
+    }
+
+    bool bIsInitialized = false;
+
+    private void Initialize()
+    {
+        if (bIsInitialized == true)
+            return;
+
+        bIsInitialized = true;
+
+
         stickerMeshRenderers_FirstLayer_Back = this.GetComponentsInChildren<MeshRenderer>();
 
         vMeshAvgLocalPositions = new Vector3[stickerMeshRenderers_FirstLayer_Back.Length];
 
 
-        for (int iMeshRenderer=0;iMeshRenderer< stickerMeshRenderers_FirstLayer_Back.Length;iMeshRenderer++)
+        for (int iMeshRenderer = 0; iMeshRenderer < stickerMeshRenderers_FirstLayer_Back.Length; iMeshRenderer++)
         {
             var meshFilter = stickerMeshRenderers_FirstLayer_Back[iMeshRenderer].GetComponent<MeshFilter>();
 
@@ -83,7 +96,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             int iStep = Mathf.CeilToInt(meshFilter.sharedMesh.vertexCount / (float)iStepsToMakeMax);
 
             int iAvgCount = 0;
-            for(int iVertex = 0; iVertex < meshFilter.sharedMesh.vertexCount; iVertex += iStep)
+            for (int iVertex = 0; iVertex < meshFilter.sharedMesh.vertexCount; iVertex += iStep)
             {
                 vMeshAvgLocalPositions[iMeshRenderer] += meshFilter.sharedMesh.vertices[iVertex];
                 iAvgCount++;
@@ -94,7 +107,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
         Collider[] colliders = this.GetComponentsInChildren<Collider>();
 
-        for(int i=0;i< colliders.Length;i++)
+        for (int i = 0; i < colliders.Length; i++)
             GameObject.DestroyImmediate(colliders[i]);
 
         stickerMeshRenderers_SecondLayer_Front = new MeshRenderer[stickerMeshRenderers_FirstLayer_Back.Length];
@@ -107,14 +120,14 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         stickersParent_SecondLayerFront.transform.SetSiblingIndex(0);
 
 
-        for (int i=0;i< stickerMeshRenderers_FirstLayer_Back.Length;i++)
+        for (int i = 0; i < stickerMeshRenderers_FirstLayer_Back.Length; i++)
         {
             MeshRenderer firstLayerMeshREnderer_FirstLayerBack = stickerMeshRenderers_FirstLayer_Back[i].GetComponent<MeshRenderer>();
 
             material_FirstLayer_Back = new Material(stickerMaterialReference);
             material_FirstLayer_Back.mainTexture = null;
-            firstLayerMeshREnderer_FirstLayerBack.material = material_FirstLayer_Back;
             material_FirstLayer_Back.renderQueue = 3000;
+            firstLayerMeshREnderer_FirstLayerBack.material = material_FirstLayer_Back;
 
             firstLayerMeshREnderer_FirstLayerBack.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
@@ -122,7 +135,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
 
             stickerMeshRenderers_SecondLayer_Front[i] = GameObject.Instantiate(stickerMeshRenderers_FirstLayer_Back[i].gameObject, stickersParent_SecondLayerFront.transform, false).GetComponent<MeshRenderer>();
-          
+
             stickerMeshRenderers_SecondLayer_Front[i].name = (stickerMeshRenderers_FirstLayer_Back[i].gameObject.name + "_2ndLayerFront");
             stickerMeshRenderers_SecondLayer_Front[i].transform.localPosition = stickerMeshRenderers_FirstLayer_Back[i].gameObject.transform.localPosition;
             stickerMeshRenderers_SecondLayer_Front[i].transform.localRotation = stickerMeshRenderers_FirstLayer_Back[i].gameObject.transform.localRotation;
@@ -145,8 +158,8 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     }
     internal void SetStickerData(Texture2D texRepeat, Texture2D texClamp, int _iStickerSettingPaacked,bool bIsFirstLayer)
     {
-        SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
         SetStickerSetting(_iStickerSettingPaacked, bIsFirstLayer);
+        SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
 
     }
 
@@ -157,8 +170,17 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
     CStickerIntBitVariable stickerIntVariablePacker = new CStickerIntBitVariable();
 
-    private void SetStickerSetting(int _iStickerSettingPaacked, bool bIsFirstLayer)
+    bool bShouldUseRepeatTexture = true;
+
+    public void SetStickerSetting(int _iStickerSettingPaacked, bool bIsFirstLayer)
     {
+        if (bIsInitialized == false)
+            Initialize();
+
+        // no mesh renderers inside sticker
+        if (stickerMeshRenderers_FirstLayer_Back.Length == 0)
+            return;
+
         Material materialToSetParams = null;
         if(bIsFirstLayer == true)
         {
@@ -172,10 +194,84 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         stickerIntVariablePacker.UnpackVariables(_iStickerSettingPaacked);
 
 
+        bool bRepeat = stickerIntVariablePacker.repeat_BitVar_0_1.Value == 0;
+
+        if(bShouldUseRepeatTexture != bRepeat)
+        {
+            bShouldUseRepeatTexture = bRepeat;
+            TextureChanged(bIsFirstLayer);
+        }
+
+        CVariable variableUnpacked = null;
+        float fValueNormalizedX = 0;
+        float fValueNormalizedY = 0;
+
+        variableUnpacked = stickerIntVariablePacker.positionX_BitVar_0_15;
+
+        fValueNormalizedX = (variableUnpacked.Value + 1) / (float)(variableUnpacked.GetMaxValue() + 1); // +1 so we get 0.5 for middle
+        fValueNormalizedX -= 0.5f; // default is 8/16, so we want to show it as 0
+        fValueNormalizedX *= 2.0f; // -1 : 1
+
+
+        variableUnpacked = stickerIntVariablePacker.positionY_BitVar_0_15;
+
+        fValueNormalizedY = (variableUnpacked.Value + 1) / (float)(variableUnpacked.GetMaxValue() + 1); // +1 so we get 0.5 for middle
+        fValueNormalizedY -= 0.5f; // default is 8/16, so we want to show it as 0
+        fValueNormalizedY *= 2.0f; // -1 : 1
+
+        materialToSetParams.SetTextureOffset("_MainTex", new Vector2(-fValueNormalizedX,-fValueNormalizedY) * 3.0f);
+
+        materialToSetParams.SetFloat("_Angle", stickerIntVariablePacker.AngleDegreesFromRotationValueIndex());
+
+        int iColorIndex = stickerIntVariablePacker.color_BitVar_0_7.Value;
+        if(iColorIndex == 0 )
+        {
+            materialToSetParams.SetFloat("_Hue", 0);
+            materialToSetParams.SetFloat("_InverseCol", 0);
+            materialToSetParams.SetFloat("_Grayscale", 0);
+        }
+        else if(iColorIndex == 1) // colorful to dark and white
+        {
+            materialToSetParams.SetFloat("_Hue", 0);
+            materialToSetParams.SetFloat("_Grayscale", 1);
+            materialToSetParams.SetFloat("_InverseCol", 0);
+        }
+        else if (iColorIndex == 2) // white to opposite dark
+        {
+            materialToSetParams.SetFloat("_Hue", 0);
+            materialToSetParams.SetFloat("_Grayscale", 1);
+            materialToSetParams.SetFloat("_InverseCol", 1);
+        }
+        else
+        {
+            materialToSetParams.SetFloat("_Hue", (iColorIndex-2) * 60.0f);
+            materialToSetParams.SetFloat("_Grayscale", 0);
+            materialToSetParams.SetFloat("_InverseCol", 0);
+        }
+
+
+        variableUnpacked = stickerIntVariablePacker.size_BitVar_0_15;
+        float fScaleNormalized = (variableUnpacked.Value + 1) / (float)(variableUnpacked.GetMaxValue() + 1); // +1 so we dont get 0%
+        float fMaxSizePercentage = (CStickerIntBitVariable.fMaxSizePercentage/100.0f); // for max value it will have 200%
+        float fScaleTex = fScaleNormalized * fMaxSizePercentage;
+
+        materialToSetParams.SetTextureScale("_MainTex", new Vector2(1.0f/fScaleTex,1.0f/ fScaleTex));
+
+
+        variableUnpacked = stickerIntVariablePacker.transparency_BitVar_0_3;
+        float fTransparencyNormalized  = (variableUnpacked.Value) / (float)(variableUnpacked.GetMaxValue());
+        materialToSetParams.SetFloat("_Transparency", fTransparencyNormalized);
     }
 
     private void SetStickerTextures(Texture2D texRepeat, Texture2D texClamp, bool bIsFirstLayer)
     {
+        if (bIsInitialized == false)
+            Initialize();
+
+        // no mesh renderers inside sticker
+        if (stickerMeshRenderers_FirstLayer_Back.Length == 0)
+            return;
+
         // texture removed - set invisible
         RefreshStickerVisibility(bIsFirstLayer);
 
@@ -210,11 +306,17 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         // choose if repeat or wrap should be from setting
         if (bIsFirstLayer)
         {
-            material_FirstLayer_Back.mainTexture = stickerTexture_wrapMode_Repeat_FristLayer;
+            if(bShouldUseRepeatTexture == true)
+                material_FirstLayer_Back.mainTexture = stickerTexture_wrapMode_Repeat_FristLayer;
+            else
+                material_FirstLayer_Back.mainTexture = stickerTexture_wrapMode_Clamp_FirstLayer;
         }
         else
         {
-            material_SecondLayer_Front.mainTexture = stickerTexture_wrapMode_Repeat_SecondLayer;
+            if (bShouldUseRepeatTexture == true)
+                material_SecondLayer_Front.mainTexture = stickerTexture_wrapMode_Repeat_SecondLayer;
+            else
+                material_SecondLayer_Front.mainTexture = stickerTexture_wrapMode_Clamp_SecondLayer;
         }
     }
 
