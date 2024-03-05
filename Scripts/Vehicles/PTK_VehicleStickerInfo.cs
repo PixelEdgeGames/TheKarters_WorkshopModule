@@ -12,13 +12,6 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     }
 
     public EAttachType eAttachType = EAttachType.E_BODY;
-    [Header("Change if sticker width is big")]
-    public float fDefaultTileX = 1.0f;
-    [Header("Change if sticker height is big")]
-    public float fDefaultTileY = 1.0f;
-    [Header("Texture offset")]
-    public float fDefaultOffsetX = 0.0f;
-    public float fDefaultOffsetY = 0.0f;
 
     public Material stickerMaterialReference;
 
@@ -162,8 +155,22 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         SetStickerTextures(texRepeat, texClamp, bIsFirstLayer);
     }
 
+    CStickerIntBitVariable stickerIntVariablePacker = new CStickerIntBitVariable();
+
     private void SetStickerSetting(int _iStickerSettingPaacked, bool bIsFirstLayer)
     {
+        Material materialToSetParams = null;
+        if(bIsFirstLayer == true)
+        {
+            materialToSetParams = material_FirstLayer_Back;
+        }
+        else
+        {
+            materialToSetParams = material_SecondLayer_Front;
+        }
+
+        stickerIntVariablePacker.UnpackVariables(_iStickerSettingPaacked);
+
 
     }
 
