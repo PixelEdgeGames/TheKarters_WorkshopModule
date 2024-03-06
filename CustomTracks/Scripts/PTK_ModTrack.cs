@@ -46,18 +46,4 @@ public class PTK_ModTrack : MonoBehaviour
     }
 
 
-#if UNITY_EDITOR
-    [EasyButtons.Button]
-     void CreatePathPoints()
-    {
-        modPathsCreator.CreatePathPointsEditor();
-    }
-
-    [EasyButtons.Button]
-    void GeneratePaths()
-    {
-        modPathsCreator.GeneratePathsEditor();
-    }
-
-#endif
 }

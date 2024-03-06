@@ -2,72 +2,54 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using CurveLib.Curves;
 
 [CustomEditor(typeof(PTK_ModPathsCreator))]
 public class PTK_ModPathCreatorEditor : Editor
 {
-    private void OnSceneGUI()
-    {
-        PTK_ModPathsCreator pathHolder = target as PTK_ModPathsCreator;
-        if (pathHolder.mainRoadPath.Count < 2)
-        {
-            return; // Need at least two points to draw a line
-        }
-
-        // Set the color and line width for the handles
-        Handles.color = Color.red;
-
-        for (int i = 0; i < pathHolder.mainRoadPath.Count - 1; i++)
-        {
-            Vector3 startPoint = pathHolder.mainRoadPath[i].transform.position;
-            Vector3 endPoint = pathHolder.mainRoadPath[i + 1].transform.position;
-
-            // Calculate tangents
-            Vector3 startTangent, endTangent;
-            if (i == 0)
-            {
-                // For the first segment, the start tangent goes from the start point
-                startTangent = startPoint + (endPoint - startPoint) * 0.5f;
-            }
-            else
-            {
-                // Otherwise, it's directed towards the previous point
-                startTangent = startPoint + (startPoint - pathHolder.mainRoadPath[i - 1].transform.position) * 0.5f;
-            }
-
-            if (i == pathHolder.mainRoadPath.Count - 2)
-            {
-                // For the last segment, the end tangent goes towards the end point
-                endTangent = endPoint - (endPoint - startPoint) * 0.5f;
-            }
-            else
-            {
-                // Otherwise, it's directed towards the next point
-                endTangent = endPoint + (endPoint - pathHolder.mainRoadPath[i + 2].transform.position) * 0.5f;
-            }
-
-            Handles.DrawBezier(startPoint, endPoint, startTangent, endTangent, Color.green, null, 5); // Adjust line width here
-        }
-    }
-
+    bool bAlreadyGenerated = false;
     public override void OnInspectorGUI()
     {
+        PTK_ModPathsCreator pathHolder = (PTK_ModPathsCreator)target;
+
+        EditorGUI.BeginChangeCheck();
+
         // Draw the default inspector
         base.OnInspectorGUI();
 
-        // Add your custom GUI elements here
-        EditorGUILayout.HelpBox("Actions", MessageType.Info);
-
-        PTK_ModPathsCreator pathHolder = (PTK_ModPathsCreator)target;
-
-        // Example of a custom button
-        if (GUILayout.Button("Create Path Points"))
+        if (EditorGUI.EndChangeCheck() == true)
         {
+            pathHolder.GeneratePathsEditor();
+        }
+
+        // Add your custom GUI elements here
+        if (pathHolder.bPathGenerationSuccess == false && bAlreadyGenerated == true)
+        {
+            GUI.color = Color.red;
+            EditorGUILayout.HelpBox("Paths Generation Error - check console", MessageType.Info);
+            GUI.color = Color.white;
+        }
+        else
+        {
+            bAlreadyGenerated = false;
+            EditorGUILayout.HelpBox("Actions", MessageType.Info);
+        }
+
+
+        if (GUILayout.Button("Refresh Path Preview"))
+        {
+            pathHolder.RefreshPathLineRenderer();
+        }
+
+        if (GUILayout.Button("Initialize New Points"))
+        {
+            bAlreadyGenerated = false;
             pathHolder.CreatePathPointsEditor();
         }
 
         if (GUILayout.Button("Generate Paths"))
         {
+            bAlreadyGenerated = true;
             pathHolder.GeneratePathsEditor();
         }
 
@@ -76,5 +58,6 @@ public class PTK_ModPathCreatorEditor : Editor
         {
             EditorUtility.SetDirty(target);
         }
+
     }
 }

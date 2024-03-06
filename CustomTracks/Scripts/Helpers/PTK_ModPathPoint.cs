@@ -12,6 +12,7 @@ public class PTK_ModPathPoint : MonoBehaviour
     public float fDistanceToNextPoint = 0.0f;
     public PTK_ModPathPoint nextPoint;
     public PTK_ModPathPoint prevPoint;
+    public bool bIsMainRoadPoint = false;
     // Start is called before the first frame update
     void Start()
     {
