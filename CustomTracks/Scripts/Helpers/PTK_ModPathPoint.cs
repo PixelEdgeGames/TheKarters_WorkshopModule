@@ -71,4 +71,48 @@ public class PTK_ModPathPoint : MonoBehaviour
 
         return null;
     }
+
+    [EasyButtons.Button]
+    public void MovePointsToLeft()
+    {
+        MovePointRecusive(true);
+    }
+
+
+    [EasyButtons.Button]
+    public void MovePointsToRight()
+    {
+        MovePointRecusive(false);
+    }
+    void MovePointRecusive(bool bLeft)
+    {
+#if UNITY_EDITOR
+        UnityEditor.Undo.RecordObject(transform.parent, "Mod Path Point");
+
+        float fStrength = 1.0f;
+        float fStepPerPoint = 0.1f;
+        MovePointToward(this, fStrength, fStepPerPoint, bLeft, false, false);
+        MovePointToward(this.nextPoint, fStrength, fStepPerPoint, bLeft, true, false);
+        MovePointToward(this.prevPoint, fStrength, fStepPerPoint, bLeft, false, true);
+#endif
+    }
+
+    public void MovePointToward(PTK_ModPathPoint pointToMove,float fCurrentStrength,float fStepPerPoint,bool bLeft,bool bMoveNextPoint,bool bMovePrevPoint)
+    {
+        if (fCurrentStrength <= 0)
+            return;
+
+        if (pointToMove == null)
+            return;
+
+        float fDir = bLeft ? -1.0f : 1.0f;
+        UnityEditor.Undo.RecordObject(pointToMove.transform, "Mod Path Point");
+        pointToMove.transform.position += pointToMove.transform.right * fCurrentStrength* fDir;
+
+        if(bMoveNextPoint == true)
+            MovePointToward(pointToMove.nextPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLeft, bMoveNextPoint, bMovePrevPoint);
+
+        if (bMovePrevPoint == true)
+            MovePointToward(pointToMove.prevPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLeft, bMoveNextPoint, bMovePrevPoint);
+    }
 }

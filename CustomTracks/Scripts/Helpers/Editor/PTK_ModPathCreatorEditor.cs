@@ -17,9 +17,10 @@ public class PTK_ModPathCreatorEditor : Editor
         // Draw the default inspector
         base.OnInspectorGUI();
 
-        if (EditorGUI.EndChangeCheck() == true)
+        if (EditorGUI.EndChangeCheck() == true) 
         {
-            pathHolder.GeneratePathsEditor();
+            if(pathHolder.HavePathPointTransformsForFinishLineAssigned() == true) // to give possibility to assign them and not throw error every frame
+                pathHolder.GeneratePathsEditor();
         }
 
         // Add your custom GUI elements here
@@ -39,12 +40,6 @@ public class PTK_ModPathCreatorEditor : Editor
         if (GUILayout.Button("Refresh Path Preview"))
         {
             pathHolder.RefreshPathLineRenderer();
-        }
-
-        if (GUILayout.Button("Initialize New Points"))
-        {
-            bAlreadyGenerated = false;
-            pathHolder.CreatePathPointsEditor();
         }
 
         if (GUILayout.Button("Generate Paths"))

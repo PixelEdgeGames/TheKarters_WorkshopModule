@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4136998926870668668}
   m_Layer: 0
-  m_Name: SideRoad 7
+  m_Name: Segment 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -593,8 +593,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798620308679020869}
+  - component: {fileID: 8118597360443233874}
   m_Layer: 0
-  m_Name: 'RoadBlockers Active in lap 1/3, 2/3, 3/3 (hidden in lap nr 4+) '
+  m_Name: RoadBlockers Hidden from hud lap nr 4/xx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -614,6 +615,29 @@ Transform:
   m_Father: {fileID: 798620310037919729}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8118597360443233874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798620308679020868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b928979d76cd2f4b936c27b9252b185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iHiddenFromLapNrOnHUD: 4
+  bRoadSegment1_Affected: 0
+  bRoadSegment2_Affected: 0
+  bRoadSegment3_Affected: 0
+  bRoadSegment4_Affected: 0
+  bRoadSegment5_Affected: 0
+  bRoadSegment6_Affected: 0
+  bRoadSegment7_Affected: 0
+  bRoadSegment8_Affected: 0
+  bRoadSegment9_Affected: 0
+  bRoadSegment10_Affected: 0
 --- !u!1 &798620308680819317
 GameObject:
   m_ObjectHideFlags: 0
@@ -7523,8 +7547,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 7840215164678480963}
-  - {fileID: 942496718477513636}
   - {fileID: 1476727336247088336}
   - {fileID: 7924493901381998348}
   m_Father: {fileID: 798620310415162075}
@@ -7542,16 +7564,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d964d9cf8db1445abe4e02bfba95b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bPathGenerationSuccess: 0
-  mainPath_BeforeFinishLinePoint: {fileID: 3395099185800061115}
-  mainPath_AfterFinishLinePoint: {fileID: 7037411731181411784}
+  bPathGenerationSuccess: 1
+  mainPath_BeforeFinishLinePoint: {fileID: 0}
+  mainPath_AfterFinishLinePoint: {fileID: 0}
   alternativeRaceTrackPaths: []
   sourcePointsParent: {fileID: 1476727336247088336}
   raceCalcPathsParent: {fileID: 982022407655721314}
   aiBezierPathsParent: {fileID: 7275720351519152376}
-  mainRoadPath: []
+  mainRoadPath:
+  - {fileID: 0}
+  - {fileID: 0}
   linerRenderer: {fileID: 1081156941225108732}
   mainRoadPathBreachList: []
+  roadBlockerHiddenOnLap2: {fileID: 5053813591487862154}
+  roadBlockerHiddenOnLap3: {fileID: 6698305721934317124}
+  roadBlockerHiddenOnLap4Plus: {fileID: 8118597360443233874}
 --- !u!1 &798620309174881861
 GameObject:
   m_ObjectHideFlags: 0
@@ -15050,8 +15077,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798620309744529038}
+  - component: {fileID: 6698305721934317124}
   m_Layer: 0
-  m_Name: RoadBlockers Active in lap 1/3 , 2/3         (hidden in 3/3)
+  m_Name: RoadBlockers Hidden from hud lap nr 3/3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15071,6 +15099,29 @@ Transform:
   m_Father: {fileID: 798620310037919729}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6698305721934317124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798620309744529037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b928979d76cd2f4b936c27b9252b185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iHiddenFromLapNrOnHUD: 3
+  bRoadSegment1_Affected: 0
+  bRoadSegment2_Affected: 0
+  bRoadSegment3_Affected: 0
+  bRoadSegment4_Affected: 0
+  bRoadSegment5_Affected: 0
+  bRoadSegment6_Affected: 0
+  bRoadSegment7_Affected: 0
+  bRoadSegment8_Affected: 0
+  bRoadSegment9_Affected: 0
+  bRoadSegment10_Affected: 0
 --- !u!1 &798620309746378707
 GameObject:
   m_ObjectHideFlags: 0
@@ -21495,8 +21546,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798620310268561177}
+  - component: {fileID: 5053813591487862154}
   m_Layer: 0
-  m_Name: RoadBlockers Active in lap 1/3                  (hidden in 2/3,3/3)
+  m_Name: RoadBlockers Hidden from hud lap nr 2/3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21516,6 +21568,29 @@ Transform:
   m_Father: {fileID: 798620310037919729}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5053813591487862154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798620310268561176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b928979d76cd2f4b936c27b9252b185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iHiddenFromLapNrOnHUD: 2
+  bRoadSegment1_Affected: 0
+  bRoadSegment2_Affected: 0
+  bRoadSegment3_Affected: 0
+  bRoadSegment4_Affected: 0
+  bRoadSegment5_Affected: 0
+  bRoadSegment6_Affected: 0
+  bRoadSegment7_Affected: 0
+  bRoadSegment8_Affected: 0
+  bRoadSegment9_Affected: 0
+  bRoadSegment10_Affected: 0
 --- !u!1 &798620310274855340
 GameObject:
   m_ObjectHideFlags: 0
@@ -29643,7 +29718,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3540438249812268267}
   m_Layer: 0
-  m_Name: SideRoad 1
+  m_Name: Segment 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29673,7 +29748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8869352388143174731}
   m_Layer: 0
-  m_Name: SideRoad 4
+  m_Name: Segment 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29703,7 +29778,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6010057275354325249}
   m_Layer: 0
-  m_Name: SideRoad 3
+  m_Name: Segment 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29795,8 +29870,12 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
+  - {x: 0, y: 0, z: -5}
+  - {x: 0, y: 0, z: -4}
+  - {x: 0, y: 0, z: -3}
+  - {x: 0, y: 0, z: -1.9999999}
+  - {x: 0, y: 0, z: -0.99999994}
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -29883,7 +29962,7 @@ Transform:
   - {fileID: 7275720351519152376}
   - {fileID: 7948915012465197041}
   m_Father: {fileID: 798620309172612103}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2348498412773192565
 GameObject:
@@ -29895,7 +29974,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5937251127766197463}
   m_Layer: 0
-  m_Name: SideRoad 6
+  m_Name: Segment 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29925,7 +30004,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2647235044175674863}
   m_Layer: 0
-  m_Name: SideRoad 5
+  m_Name: Segment 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29945,106 +30024,6 @@ Transform:
   m_Father: {fileID: 1476727336247088336}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3367549593101134564
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 942496718477513636}
-  - component: {fileID: 7754098590509030088}
-  - component: {fileID: 7404421754204089045}
-  - component: {fileID: 7037411731181411784}
-  m_Layer: 0
-  m_Name: After FinishLinePoint - MoveMe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &942496718477513636
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367549593101134564}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
-  m_Children: []
-  m_Father: {fileID: 798620309172612103}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7754098590509030088
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367549593101134564}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7404421754204089045
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367549593101134564}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7037411731181411784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367549593101134564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73e7db9795dea4c4a9cb3c842b5dcb2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bPointAboveTrackWithoutGroundBelow_PlayerRespawnOnPointDisabled: 0
-  fDistanceFromFinishLine_Global: 0
-  fDistanceToNextPoint: 0
-  nextPoint: {fileID: 0}
-  prevPoint: {fileID: 3395099185800061115}
-  bIsMainRoadPoint: 0
 --- !u!1 &4217547411205974154
 GameObject:
   m_ObjectHideFlags: 0
@@ -30055,7 +30034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 790355188767033114}
   m_Layer: 0
-  m_Name: SideRoad 9
+  m_Name: Segment 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30280,7 +30259,7 @@ Transform:
   - {fileID: 790355188767033114}
   - {fileID: 7045645485988872776}
   m_Father: {fileID: 798620309172612103}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5243411627670052635
 GameObject:
@@ -30292,7 +30271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4892499152758459531}
   m_Layer: 0
-  m_Name: SideRoad 8
+  m_Name: Segment 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30312,106 +30291,6 @@ Transform:
   m_Father: {fileID: 1476727336247088336}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5293795148102423781
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7840215164678480963}
-  - component: {fileID: 6844113568084404673}
-  - component: {fileID: 5771799805072851883}
-  - component: {fileID: 3395099185800061115}
-  m_Layer: 0
-  m_Name: Before FinishLinePoint - MoveMe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7840215164678480963
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5293795148102423781}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
-  m_LocalScale: {x: 5, y: 5, z: 5}
-  m_Children: []
-  m_Father: {fileID: 798620309172612103}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6844113568084404673
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5293795148102423781}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5771799805072851883
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5293795148102423781}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3395099185800061115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5293795148102423781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73e7db9795dea4c4a9cb3c842b5dcb2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bPointAboveTrackWithoutGroundBelow_PlayerRespawnOnPointDisabled: 0
-  fDistanceFromFinishLine_Global: 0
-  fDistanceToNextPoint: 0
-  nextPoint: {fileID: 7037411731181411784}
-  prevPoint: {fileID: 0}
-  bIsMainRoadPoint: 0
 --- !u!1 &5495656374741292553
 GameObject:
   m_ObjectHideFlags: 0
@@ -30514,7 +30393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7045645485988872776}
   m_Layer: 0
-  m_Name: SideRoad 10
+  m_Name: Segment 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30544,7 +30423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4898292308106845502}
   m_Layer: 0
-  m_Name: SideRoad 2
+  m_Name: Segment 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

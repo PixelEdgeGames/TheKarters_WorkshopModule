@@ -9,17 +9,25 @@ public class PTK_ModPathsCreator : MonoBehaviour
 {
     [HideInInspector]
     public bool bPathGenerationSuccess = false;
-    public PTK_ModPathPoint mainPath_BeforeFinishLinePoint;
-    public PTK_ModPathPoint mainPath_AfterFinishLinePoint;
 
-    [Header("Breach Points & Alternative Roads (0 is main)")]
+    [SerializeField]
+    Transform mainPath_BeforeFinishLineTransform;
+    [HideInInspector]
+    public PTK_ModPathPoint mainPath_BeforeFinishLinePathPoint;
+
+    [SerializeField]
+    Transform mainPath_AfterFinishLinePointTransform;
+    [HideInInspector]
+    public PTK_ModPathPoint mainPath_AfterFinishLinePathPoint;
+
+    [Header("Alternative Roads - Enable Preview Inside")]
     public List<CRaceTrackPathAlternative> alternativeRaceTrackPaths = new List<CRaceTrackPathAlternative>();
 
     [System.Serializable]
     public class CRaceTrackPathAlternative
     {
         [System.Serializable]
-        public class CUseBreachSettings
+        public class CUseSegmentSettings
         {
             public bool bUseBreach = false;
             [Header("Entry")]
@@ -32,41 +40,42 @@ public class PTK_ModPathsCreator : MonoBehaviour
             public CMainRoadPathBreach roadPathBreach = null;
         }
 
-        public bool bDisplayPathAlternative = false;
+        public string strName = "Path";
+        public bool bDisplayPathBezierPreview = false;
         [Header("2 - means it will be available from lap 2/3")]
+       [HideInInspector]
         public int iEnabledFromLapVisibleNr = 1;
 
         // cant use array because unity UI system throws errors for some reason
-        [Header("Alternative road Used Breach Paths")]
-        public CUseBreachSettings breach1 = new CUseBreachSettings();
-        public CUseBreachSettings breach2 = new CUseBreachSettings();
-        public CUseBreachSettings breach3 = new CUseBreachSettings();
-        public CUseBreachSettings breach4 = new CUseBreachSettings();
-        public CUseBreachSettings breach5 = new CUseBreachSettings();
-        public CUseBreachSettings breach6 = new CUseBreachSettings();
-        public CUseBreachSettings breach7 = new CUseBreachSettings();
-        public CUseBreachSettings breach8 = new CUseBreachSettings();
-        public CUseBreachSettings breach9 = new CUseBreachSettings();
-        public CUseBreachSettings breach10 = new CUseBreachSettings();
+        [Header("Alternative road Used Breach Paths - Enable inside")]
+        public CUseSegmentSettings segment1 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment2 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment3 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment4 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment5 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment6 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment7 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment8 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment9 = new CUseSegmentSettings();
+        public CUseSegmentSettings segment10 = new CUseSegmentSettings();
 
-        public CUseBreachSettings[] bUseBreachIndex
+        public CUseSegmentSettings[] bUseSegmentIndex
         {
             get
             {
-                return new CUseBreachSettings[] { breach1 , breach2 , breach3 , breach4 , breach5,
-                                                    breach6,breach7,breach8,breach9,breach10};
+                return new CUseSegmentSettings[] { segment1 , segment2 , segment3 , segment4 , segment5,
+                                                    segment6,segment7,segment8,segment9,segment10};
             }
         }
         [HideInInspector]
         public List<PTK_ModPathPoint> roadPath = new List<PTK_ModPathPoint>();
     }
 
-
-
     [System.Serializable]
     public class CMainRoadPathBreach
     {
-        public PTK_ModPathPoint breachRoad_StartPoint;
+        [HideInInspector]
+        public int iEnabledFromLapVisibleNr = -1;
         public List<PTK_ModPathPoint> breachPoints = new List<PTK_ModPathPoint>();
         public CMainRoadPathBreachConnection breach_Entry = new CMainRoadPathBreachConnection();
         public CMainRoadPathBreachConnection breach_Exit = new CMainRoadPathBreachConnection();
@@ -98,14 +107,31 @@ public class PTK_ModPathsCreator : MonoBehaviour
     [HideInInspector]
     public List<CMainRoadPathBreach> mainRoadPathBreachList = new List<CMainRoadPathBreach>();
 
-    [HideInInspector]
-    public List<List<PTK_ModPathPoint>> breachPointsSegments = new List<List<PTK_ModPathPoint>>();
+    public PTK_RoadBlockerInfo roadBlockerHiddenOnLap2;
+    public PTK_RoadBlockerInfo roadBlockerHiddenOnLap3;
+    public PTK_RoadBlockerInfo roadBlockerHiddenOnLap4Plus;
     // Start is called before the first frame update
 
+    public int GetEnabledFromHudLapNrBasedOnSegmentUnlockLapNr(int iSegmentIndex)
+    {
+        if (roadBlockerHiddenOnLap4Plus.roadSegmentsIsAffected[iSegmentIndex] == true)
+            return 4;
+
+        if (roadBlockerHiddenOnLap3.roadSegmentsIsAffected[iSegmentIndex] == true)
+            return 3;
+
+        if (roadBlockerHiddenOnLap2.roadSegmentsIsAffected[iSegmentIndex] == true)
+            return 2;
+
+        return -1;
+    }
     void Start()
     {
-        linerRenderer.enabled = false;
-        sourcePointsParent.gameObject.SetActive(false);
+        if(Application.isPlaying == true)
+        {
+            linerRenderer.enabled = false;
+            sourcePointsParent.gameObject.SetActive(false);
+        }
     }
 
     Vector3 vLastPointPos = Vector3.zero;
@@ -132,6 +158,11 @@ public class PTK_ModPathsCreator : MonoBehaviour
     CRaceTrackPathAlternative lastRenderedAlternativePath = null;
     public void RefreshPathLineRenderer()
     {
+        if (Application.isPlaying == true)
+        {
+            return;
+        }
+        
         Color colorLine = Color.white;
 
         List<PTK_ModPathPoint> pointsToPresent = mainRoadPath;
@@ -142,7 +173,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
         {
             CRaceTrackPathAlternative alternativeRoad = alternativeRaceTrackPaths[iAlternativeRoadIndex];
 
-            if (alternativeRoad.bDisplayPathAlternative == true)
+            if (alternativeRoad.bDisplayPathBezierPreview == true)
             {
 
                 iAlternativePathToShowCount++;
@@ -163,9 +194,11 @@ public class PTK_ModPathsCreator : MonoBehaviour
         {
             CRaceTrackPathAlternative alternativeRoad = alternativeRaceTrackPaths[iAlternativeRoadIndex];
 
-            if(alternativeRoad != alternativePathToShow)
+            alternativeRoad.strName = "Path " + iAlternativeRoadIndex;
+
+            if (alternativeRoad != alternativePathToShow)
             {
-                alternativeRoad.bDisplayPathAlternative = false;
+                alternativeRoad.bDisplayPathBezierPreview = false;
             }
         }
 
@@ -173,6 +206,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
         {
             pointsToPresent = alternativePathToShow.roadPath;
             lastRenderedAlternativePath = alternativePathToShow;
+            alternativePathToShow.strName +=  " - Preview ENABLED";
             colorLine = Color.blue;
         }
 
@@ -191,18 +225,27 @@ public class PTK_ModPathsCreator : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    public void CreatePathPointsEditor()
+     void CreatePathPointsEditor()
     {
-        breachPointsSegments.Clear();
+        if (Application.isPlaying == true)
+        {
+            return;
+        }
+
+
+        List<List<PTK_ModPathPoint>> breachPointsSegments = new List<List<PTK_ModPathPoint>>();
+        List<int> breachEnabledFromHUDLapNr = new List<int>();
 
         mainRoadPath = new List<PTK_ModPathPoint>();
-        mainRoadPath.Add(mainPath_BeforeFinishLinePoint);
 
         for (int iPath=0;iPath< sourcePointsParent.childCount;iPath++)
         {
             if(iPath > 0)
             {
                 breachPointsSegments.Add(new List<PTK_ModPathPoint>());
+
+                // brach is numbered from path 1 (we are not including 0 which is main path
+                breachEnabledFromHUDLapNr.Add(GetEnabledFromHudLapNrBasedOnSegmentUnlockLapNr(iPath - 1));
             }
 
             Transform pointsParent = sourcePointsParent.GetChild(iPath);
@@ -214,6 +257,9 @@ public class PTK_ModPathsCreator : MonoBehaviour
             for (int iPathPointNr = 0; iPathPointNr < pointsParent.childCount;iPathPointNr++)
             {
                 Transform childPathPoint = pointsParent.GetChild(iPathPointNr);
+
+                childPathPoint.name = "Point " + iPathPointNr;
+
                 PTK_ModPathPoint pathPointCurrent = childPathPoint.GetComponent<PTK_ModPathPoint>();
 
                 if (pathPointCurrent == null)
@@ -261,11 +307,14 @@ public class PTK_ModPathsCreator : MonoBehaviour
             if(breachPointsSegments[i].Count == 0)
             {
                 breachPointsSegments.RemoveAt(i);
+                breachEnabledFromHUDLapNr.RemoveAt(i);
                 i--;
             }
         }
 
-        mainRoadPath.Add(mainPath_AfterFinishLinePoint);
+        mainPath_AfterFinishLinePointTransform.name += " AfterFinishLine";
+        mainPath_BeforeFinishLineTransform.name += " BeforeFinishLine";
+
 
         mainRoadPathBreachList.Clear();
 
@@ -273,7 +322,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
         {
             CMainRoadPathBreach breachInfo = new CMainRoadPathBreach();
 
-            breachInfo.breachRoad_StartPoint = breachPointsSegments[i][0];
+            breachInfo.iEnabledFromLapVisibleNr = breachEnabledFromHUDLapNr[i];
             breachInfo.breachPoints = breachPointsSegments[i];
             breachInfo.breach_Entry.breachRoad_Point = breachPointsSegments[i][0];
             breachInfo.breach_Exit.breachRoad_Point = breachPointsSegments[i][breachPointsSegments[i].Count-1];
@@ -300,39 +349,54 @@ public class PTK_ModPathsCreator : MonoBehaviour
             }
             mainRoadPathBreachList.Add(breachInfo);
         }
-
-
-        RefreshPathLineRenderer();
     }
 
     [EasyButtons.Button]
     public void GeneratePathsEditor()
     {
+        if (Application.isPlaying == true)
+        {
+            return;
+        }
+
         bPathGenerationSuccess = false;
+
+        if(mainPath_BeforeFinishLineTransform == null || mainPath_AfterFinishLinePointTransform == null)
+        {
+            Debug.LogError("Please assign before finish line and after finish line points from main road");
+            return;
+        }
 
         CreatePathPointsEditor();
 
-        for(int iAlternativeRoadIndex=0;iAlternativeRoadIndex< alternativeRaceTrackPaths.Count;iAlternativeRoadIndex++)
+
+        for (int iAlternativeRoadIndex=0;iAlternativeRoadIndex< alternativeRaceTrackPaths.Count;iAlternativeRoadIndex++)
         {
             CRaceTrackPathAlternative alternativeRoad = alternativeRaceTrackPaths[iAlternativeRoadIndex];
 
+            alternativeRoad.iEnabledFromLapVisibleNr = -1;
+
             alternativeRoad.roadPath.Clear();
 
-            List<CRaceTrackPathAlternative.CUseBreachSettings> usedBreachPoints = new List<CRaceTrackPathAlternative.CUseBreachSettings>();
+            List<CRaceTrackPathAlternative.CUseSegmentSettings> usedBreachPoints = new List<CRaceTrackPathAlternative.CUseSegmentSettings>();
 
             for(int iBreachIndex = 0; iBreachIndex < mainRoadPathBreachList.Count;iBreachIndex++)
             {
-                if(alternativeRoad.bUseBreachIndex.Length > iBreachIndex &&  alternativeRoad.bUseBreachIndex[iBreachIndex].bUseBreach == true)
+                if(alternativeRoad.bUseSegmentIndex.Length > iBreachIndex &&  alternativeRoad.bUseSegmentIndex[iBreachIndex].bUseBreach == true)
                 {
-                    alternativeRoad.bUseBreachIndex[iBreachIndex].roadPathBreach = mainRoadPathBreachList[iBreachIndex];
-                    usedBreachPoints.Add(alternativeRoad.bUseBreachIndex[iBreachIndex]);
+                    int iEnabledInHUDLapNr = GetEnabledFromHudLapNrBasedOnSegmentUnlockLapNr(iBreachIndex);
+
+                    alternativeRoad.iEnabledFromLapVisibleNr = Mathf.Max(alternativeRoad.iEnabledFromLapVisibleNr, iEnabledInHUDLapNr);
+
+                    alternativeRoad.bUseSegmentIndex[iBreachIndex].roadPathBreach = mainRoadPathBreachList[iBreachIndex];
+                    usedBreachPoints.Add(alternativeRoad.bUseSegmentIndex[iBreachIndex]);
                 }
             }
 
             int iCurrentRoadBranch = 0;
 
             PTK_ModPathPoint brachPointExit_SearchForMainPoint = null;
-            CRaceTrackPathAlternative.CUseBreachSettings breachUsedForSearchMainPointExit = null;
+            CRaceTrackPathAlternative.CUseSegmentSettings breachUsedForSearchMainPointExit = null;
 
             List<PTK_ModPathPoint> pointsMarkedForRemoveBecauseOfOffset = new List<PTK_ModPathPoint>();
             List<int> pointRemoveAmountAndDirection = new List<int>();
@@ -366,7 +430,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
 
                 if(usedBreachPoints.Count > iCurrentRoadBranch  && usedBreachPoints[iCurrentRoadBranch].roadPathBreach.breach_Entry.connectedToMain_Point == mainRoadPath[iMainRoadPathIndex])
                 {
-                    CRaceTrackPathAlternative.CUseBreachSettings breachSettings = usedBreachPoints[iCurrentRoadBranch];
+                    CRaceTrackPathAlternative.CUseSegmentSettings breachSettings = usedBreachPoints[iCurrentRoadBranch];
                     
                     if (breachSettings.iEntryRemoveBackward > 0 || breachSettings.iEntryRemoveForward > 0)
                     {
@@ -455,8 +519,29 @@ public class PTK_ModPathsCreator : MonoBehaviour
             }
         }
 
+        if(mainPath_BeforeFinishLineTransform.GetComponent<PTK_ModPathPoint>() == null || mainPath_AfterFinishLinePointTransform.GetComponent<PTK_ModPathPoint>() == null)
+        {
+            Debug.LogError("Before and after finish line points should be points from road path!");
+            return;
+        }
+
+        mainPath_BeforeFinishLinePathPoint = mainPath_BeforeFinishLineTransform.GetComponent<PTK_ModPathPoint>();
+        mainPath_AfterFinishLinePathPoint = mainPath_AfterFinishLinePointTransform.GetComponent<PTK_ModPathPoint>();
+
         bPathGenerationSuccess = true;
         RefreshPathLineRenderer();
+    }
+
+    public bool HavePathPointTransformsForFinishLineAssigned()
+    {
+        if (mainPath_BeforeFinishLineTransform == null)
+            return false;
+
+        if (mainPath_AfterFinishLinePointTransform == null)
+            return false;
+
+        return true;
+
     }
 
 #endif

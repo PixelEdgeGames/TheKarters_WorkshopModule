@@ -27,7 +27,7 @@ public class PTK_ModTrack : MonoBehaviour
 
     [Header("Driving Paths")]
     [SerializeField]
-    PTK_ModPathsCreator modPathsCreator;
+    public PTK_ModPathsCreator modPathsCreator;
     [SerializeField]
     public Transform aiBezierSplinesPaths;
     [Header("RacePositionCalc Paths")]
@@ -45,5 +45,10 @@ public class PTK_ModTrack : MonoBehaviour
         
     }
 
+    [EasyButtons.Button]
+    void GenerateeModTrackDataConfig()
+    {
+        modPathsCreator.GeneratePathsEditor();
+    }
 
 }
