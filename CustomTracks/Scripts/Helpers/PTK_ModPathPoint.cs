@@ -13,6 +13,7 @@ public class PTK_ModPathPoint : MonoBehaviour
     public PTK_ModPathPoint nextPoint;
     public PTK_ModPathPoint prevPoint;
     public bool bIsMainRoadPoint = false;
+    public float fRoadWidthForAI = 30.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -114,5 +115,60 @@ public class PTK_ModPathPoint : MonoBehaviour
 
         if (bMovePrevPoint == true)
             MovePointToward(pointToMove.prevPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLeft, bMoveNextPoint, bMovePrevPoint);
+    }
+
+    [EasyButtons.Button]
+    public void LowerPointsWidth()
+    {
+        ChangePointsWidth(true);
+    }
+
+    [EasyButtons.Button]
+    public void IncreasePointsWidth()
+    {
+        ChangePointsWidth(false);
+    }
+
+
+
+    void ChangePointsWidth(bool bLowerWidth)
+    {
+#if UNITY_EDITOR
+        UnityEditor.Undo.RecordObject(transform.parent, "WidthChange");
+
+        float fStrength = 2.0f;
+        float fStepPerPoint = 0.1f;
+        ChangePointsWidth(this, fStrength, fStepPerPoint, bLowerWidth, false, false);
+        ChangePointsWidth(this.nextPoint, fStrength, fStepPerPoint, bLowerWidth, true, false);
+        ChangePointsWidth(this.prevPoint, fStrength, fStepPerPoint, bLowerWidth, false, true);
+
+        this.gameObject.GetComponentInParent<PTK_ModPathsCreator>().GeneratePathsEditor();
+#endif
+    }
+
+    public void ChangePointsWidth(PTK_ModPathPoint pointToWidthChange, float fCurrentStrength, float fStepPerPoint, bool bLowerWidth, bool bMoveNextPoint, bool bMovePrevPoint)
+    {
+        if (fCurrentStrength <= 0)
+            return;
+
+        if (pointToWidthChange == null)
+            return;
+
+        float fDir = bLowerWidth ? -1.0f : 1.0f;
+        UnityEditor.Undo.RecordObject(pointToWidthChange, "WidthChange");
+
+       pointToWidthChange.fRoadWidthForAI +=  fCurrentStrength * fDir;
+
+        if (pointToWidthChange.fRoadWidthForAI < 9)
+            pointToWidthChange.fRoadWidthForAI = 9;
+
+        if (pointToWidthChange.fRoadWidthForAI > 30)
+            pointToWidthChange.fRoadWidthForAI = 30;
+
+        if (bMoveNextPoint == true)
+            ChangePointsWidth(pointToWidthChange.nextPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLowerWidth, bMoveNextPoint, bMovePrevPoint);
+
+        if (bMovePrevPoint == true)
+            ChangePointsWidth(pointToWidthChange.prevPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLowerWidth, bMoveNextPoint, bMovePrevPoint);
     }
 }

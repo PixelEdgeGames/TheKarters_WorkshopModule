@@ -104,6 +104,8 @@ public class PTK_ModPathsCreator : MonoBehaviour
 
     // UNITY EDITOR - USED FOR GENERATE
     public LineRenderer linerRenderer;
+    public LineRenderer linerRendererTrackWidth_Right;
+    public LineRenderer linerRendererTrackWidth_Left;
     [HideInInspector]
     public List<CMainRoadPathBreach> mainRoadPathBreachList = new List<CMainRoadPathBreach>();
 
@@ -130,11 +132,14 @@ public class PTK_ModPathsCreator : MonoBehaviour
         if(Application.isPlaying == true)
         {
             linerRenderer.enabled = false;
+            linerRendererTrackWidth_Right.enabled = false;
+            linerRendererTrackWidth_Left.enabled = false;
             sourcePointsParent.gameObject.SetActive(false);
         }
     }
 
     Vector3 vLastPointPos = Vector3.zero;
+    float fLastWidth = -1.0f;
     // Update is called once per frame
     void Update()
     {
@@ -145,6 +150,13 @@ public class PTK_ModPathsCreator : MonoBehaviour
 
             if (selectedGameObject != null && selectedGameObject.GetComponentInParent<PTK_ModPathsCreator>())
             {
+                PTK_ModPathPoint modPathPoint = selectedGameObject.GetComponent<PTK_ModPathPoint>();
+                if (modPathPoint != null && modPathPoint.fRoadWidthForAI != fLastWidth)
+                {
+                    GeneratePathsEditor();
+                    fLastWidth = modPathPoint.fRoadWidthForAI;
+                }
+
                 if (Vector3.Magnitude( selectedGameObject.transform.position- vLastPointPos) > 0.1F)
                 {
                     GeneratePathsEditor();
@@ -154,6 +166,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
         }
 #endif
     }
+
 
     CRaceTrackPathAlternative lastRenderedAlternativePath = null;
     public void RefreshPathLineRenderer()
@@ -219,9 +232,31 @@ public class PTK_ModPathsCreator : MonoBehaviour
         linerRenderer.startColor = linerRenderer.endColor = colorLine;
         linerRenderer.sharedMaterial.color = colorLine;
 
+
         if (linerRenderer.positionCount != ps.Length)
+        {
             linerRenderer.positionCount = ps.Length;
+        }
+
         linerRenderer.SetPositions(ps);
+
+
+        if (linerRendererTrackWidth_Right.positionCount != points.Length * 1)
+            linerRendererTrackWidth_Right.positionCount = points.Length * 1;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            linerRendererTrackWidth_Right.SetPosition(i * 1 + 0, pointsToPresent[i].transform.position + pointsToPresent[i].transform.right * pointsToPresent[i].fRoadWidthForAI * 0.5f);
+        }
+
+
+        if (linerRendererTrackWidth_Left.positionCount != points.Length * 1)
+            linerRendererTrackWidth_Left.positionCount = points.Length * 1;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            linerRendererTrackWidth_Left.SetPosition(i * 1 + 0, pointsToPresent[i].transform.position - pointsToPresent[i].transform.right * pointsToPresent[i].fRoadWidthForAI * 0.5f);
+        }
     }
 
 #if UNITY_EDITOR
