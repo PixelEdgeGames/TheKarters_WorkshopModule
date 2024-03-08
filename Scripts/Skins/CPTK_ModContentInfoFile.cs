@@ -11,7 +11,17 @@ public class CPTK_ModContentInfoFile
     public List<CItemWithColorVariant> vehicles = new List<CItemWithColorVariant>();
     public List<CItemWithColorVariant> wheels = new List<CItemWithColorVariant>();
     public List<CItemWithColorVariant> stickers = new List<CItemWithColorVariant>();
-    
+    public List<CTrackInfo> tracks = new List<CTrackInfo>();
+
+
+    [System.Serializable]
+    public class CTrackInfo
+    {
+        public string strTrackSceneNameAddKey = "";
+        public string strTrackDirName = "";
+        public int iGeneratedTargetUniqueConfigID = -1;
+    }
+
     [System.Serializable]
     public class CCharacter
     {
@@ -168,6 +178,18 @@ public class CPTK_ModContentInfoFile
         return created;
     }
 
+    public CTrackInfo GetTrackFromDirectoryName(string strDirName, bool bCreateIfNotFound)
+    {
+        foreach (var track in tracks)
+        {
+            if (track.strTrackDirName == strDirName)
+                return track;
+        }
+
+        var created = new CTrackInfo() { strTrackDirName = strDirName };
+        tracks.Add(created);
+        return created;
+    }
 
     public void SaveToFile(string path)
     {
