@@ -112,6 +112,9 @@ public class PTK_ModPathsCreator : MonoBehaviour
     public PTK_RoadBlockerInfo roadBlockerHiddenOnLap2;
     public PTK_RoadBlockerInfo roadBlockerHiddenOnLap3;
     public PTK_RoadBlockerInfo roadBlockerHiddenOnLap4Plus;
+
+    public Material pointNormalMaterial;
+    public Material pointRespawnBlockedMaterial;
     // Start is called before the first frame update
 
     public int GetEnabledFromHudLapNrBasedOnSegmentUnlockLapNr(int iSegmentIndex)
@@ -301,6 +304,23 @@ public class PTK_ModPathsCreator : MonoBehaviour
                     pathPointCurrent = childPathPoint.gameObject.AddComponent<PTK_ModPathPoint>();
 
 
+                if (pathPointCurrent.fDistanceFromFinishLine != -1)
+                    childPathPoint.name += " --- Dist " + ((int)(pathPointCurrent.fDistanceFromFinishLine)).ToString() + "m";
+
+                if(iPathPointNr == (pointsParent.childCount-1))
+                {
+                    // last point
+                    if(pathPointCurrent.fSegmentLengthDiffFromMain != 0)
+                    {
+                        if(pathPointCurrent.fSegmentLengthDiffFromMain < 0)
+                        {
+                            pathPointCurrent.name += " ( SHORTER than main: " + (-pathPointCurrent.fSegmentLengthDiffFromMain).ToString() + " )";
+                        }else if (pathPointCurrent.fSegmentLengthDiffFromMain > 0)
+                        {
+                            pathPointCurrent.name += " ( LONGER than main: " + (pathPointCurrent.fSegmentLengthDiffFromMain).ToString() + " )";
+                        }
+                    }
+                }
                 // performance reasons in editor - we won't render too many spheres
                 LODGroup lodGroup = childPathPoint.gameObject.GetComponent<LODGroup>();
                 if (lodGroup  == null)
@@ -311,12 +331,18 @@ public class PTK_ModPathsCreator : MonoBehaviour
                     LOD[] lods = new LOD[1];
                     lods[0] = new LOD(0.005f, renderers); // Set the LOD's screen relative transition height to a very low value
 
+                    pathPointCurrent.pointRenderers = renderers;
+
                     lodGroup.SetLODs(lods);
 
                     lodGroup.size = 10; // Set the LODGroup's size to control visibility distance
                     lodGroup.RecalculateBounds();
                 }
 
+                for (int iRenderer = 0; iRenderer < pathPointCurrent.pointRenderers.Length; iRenderer++)
+                {
+                    pathPointCurrent.pointRenderers[iRenderer].sharedMaterial = pathPointCurrent.bNoGroundBelow_DisableRespawnOnPoint == false ?  pointNormalMaterial : pointRespawnBlockedMaterial;
+                }
 
                 pathPointCurrent.prevPoint = lastPathPoint;
 
@@ -563,10 +589,82 @@ public class PTK_ModPathsCreator : MonoBehaviour
         mainPath_BeforeFinishLinePathPoint = mainPath_BeforeFinishLineTransform.GetComponent<PTK_ModPathPoint>();
         mainPath_AfterFinishLinePathPoint = mainPath_AfterFinishLinePointTransform.GetComponent<PTK_ModPathPoint>();
 
-        bPathGenerationSuccess = true;
+         bPathGenerationSuccess = true;
         RefreshPathLineRenderer();
     }
 
+
+
+    [EasyButtons.Button]
+    public void RefreshPointsDistanceFromFinishLine()
+    {
+        if(mainPath_BeforeFinishLinePathPoint == null)
+        {
+            Debug.LogError("Point before finish line is not assigned yet - cant calculate distances");
+            return;
+        }
+
+        int iStartBeforeFinishLineIndex = 0;
+        for (int i = 0; i < mainRoadPath.Count; i++)
+        {
+            mainRoadPath[i].fDistanceFromFinishLine = -1.0f;
+
+            if (mainRoadPath[i] == mainPath_BeforeFinishLinePathPoint)
+                iStartBeforeFinishLineIndex = i + 1;
+        }
+
+        for (int iBreach = 0; iBreach < mainRoadPathBreachList.Count; iBreach++)
+        {
+            for (int iPoint = 0; iPoint < mainRoadPathBreachList[iBreach].breachPoints.Count; iPoint++)
+            {
+                mainRoadPathBreachList[iBreach].breachPoints[iPoint].fDistanceFromFinishLine = -1;
+                mainRoadPathBreachList[iBreach].breachPoints[iPoint].fSegmentLengthDiffFromMain = -1;
+            }
+        }
+
+
+        float fDistSum = 0;
+        for (int i = 0; i < mainRoadPath.Count; i++)
+        {
+            int iIndexFromStartPoint = (i + iStartBeforeFinishLineIndex) % mainRoadPath.Count;
+            int iNextPoint = (iIndexFromStartPoint + 1) % mainRoadPath.Count; ;
+
+            Vector3 vDistNoY = (mainRoadPath[iIndexFromStartPoint].transform.position - mainRoadPath[iNextPoint].transform.position);
+            vDistNoY.y = 0.0f;
+
+            fDistSum += vDistNoY.magnitude;
+            mainRoadPath[iIndexFromStartPoint].fDistanceFromFinishLine = fDistSum;
+        }
+
+        // breach uses distances from entry/exit (player will just finish it faster)
+        for (int iBreach = 0; iBreach < mainRoadPathBreachList.Count; iBreach++)
+        {
+            float fDistEntry = mainRoadPathBreachList[iBreach].breach_Entry.connectedToMain_Point.fDistanceFromFinishLine;
+            float fDistExit = mainRoadPathBreachList[iBreach].breach_Exit.connectedToMain_Point.fDistanceFromFinishLine;
+
+
+            fDistSum = fDistEntry;
+
+            mainRoadPathBreachList[iBreach].breachPoints[0].fDistanceFromFinishLine = fDistSum;
+
+            for (int iPoint = 0; iPoint < mainRoadPathBreachList[iBreach].breachPoints.Count; iPoint++)
+            {
+                if(iPoint > 0)
+                {
+                    Vector3 vDistNoY = (mainRoadPathBreachList[iBreach].breachPoints[iPoint].transform.position - mainRoadPathBreachList[iBreach].breachPoints[iPoint-1].transform.position);
+                    vDistNoY.y = 0.0f;
+                    fDistSum += vDistNoY.magnitude;
+                    mainRoadPathBreachList[iBreach].breachPoints[iPoint].fDistanceFromFinishLine = fDistSum; // real distance
+                }
+
+                float fDistanceAlignedToEntryAndExit = Mathf.Lerp(fDistEntry, fDistExit, (iPoint + 1) / (float)mainRoadPathBreachList[iBreach].breachPoints.Count); // distance aligned to entry and exit main road, this way dist won't change a lot during entry, player will just move on it faster
+                mainRoadPathBreachList[iBreach].breachPoints[iPoint].fDistanceFromMain_EntryExitMatched = fDistanceAlignedToEntryAndExit;
+
+                mainRoadPathBreachList[iBreach].breachPoints[iPoint].fSegmentLengthDiffFromMain =   mainRoadPathBreachList[iBreach].breachPoints[iPoint].fDistanceFromFinishLine - fDistanceAlignedToEntryAndExit; // lets use this to present how much this segment is shorter from main road
+            }
+        }
+
+    }
     public bool HavePathPointTransformsForFinishLineAssigned()
     {
         if (mainPath_BeforeFinishLineTransform == null)

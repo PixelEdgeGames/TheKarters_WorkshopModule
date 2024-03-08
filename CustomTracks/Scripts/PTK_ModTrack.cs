@@ -9,6 +9,9 @@ public class PTK_ModTrack : MonoBehaviour
     public Vector2 minimapImage_WorldPos_BL;
     public Vector2 minimapImage_WorldPos_TR;
 
+    [Header("Track Loop")]
+    public bool bTrackIsLooped = true;
+
     [Header("Flip Intro animation side")]
     public bool[] bFlipIntroCamFromRightToLeftForPlayer = new bool[8];
 
@@ -46,7 +49,7 @@ public class PTK_ModTrack : MonoBehaviour
     }
 
     [EasyButtons.Button]
-    void GenerateeModTrackDataConfig()
+    void GenerateModTrackDataConfig()
     {
         modPathsCreator.GeneratePathsEditor();
     }

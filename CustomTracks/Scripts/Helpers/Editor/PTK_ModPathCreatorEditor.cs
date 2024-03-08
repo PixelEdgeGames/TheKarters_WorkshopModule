@@ -42,11 +42,19 @@ public class PTK_ModPathCreatorEditor : Editor
             pathHolder.RefreshPathLineRenderer();
         }
 
+        if (GUILayout.Button("Refresh Point Distances from finish line"))
+        {
+            pathHolder.RefreshPointsDistanceFromFinishLine();
+            pathHolder.GeneratePathsEditor();
+        }
+
         if (GUILayout.Button("Generate Paths"))
         {
             bAlreadyGenerated = true;
             pathHolder.GeneratePathsEditor();
         }
+
+
 
         // If your custom GUI has modified the object, mark it as dirty so Unity knows to save the changes
         if (GUI.changed)
