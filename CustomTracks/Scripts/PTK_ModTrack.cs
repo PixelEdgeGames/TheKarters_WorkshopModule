@@ -51,7 +51,9 @@ public class PTK_ModTrack : MonoBehaviour
     [EasyButtons.Button]
     void GenerateModTrackDataConfig()
     {
+#if UNITY_EDITOR
         modPathsCreator.GeneratePathsEditor();
+#endif
     }
 
 }

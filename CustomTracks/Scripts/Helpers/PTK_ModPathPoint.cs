@@ -56,6 +56,7 @@ public class PTK_ModPathPoint : MonoBehaviour
 #endif
     }
 
+#if UNITY_EDITOR
     public void MovePointToward(PTK_ModPathPoint pointToMove,float fCurrentStrength,float fStepPerPoint,bool bLeft,bool bMoveNextPoint,bool bMovePrevPoint)
     {
         if (fCurrentStrength <= 0)
@@ -74,6 +75,7 @@ public class PTK_ModPathPoint : MonoBehaviour
         if (bMovePrevPoint == true)
             MovePointToward(pointToMove.prevPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLeft, bMoveNextPoint, bMovePrevPoint);
     }
+#endif
 
     [EasyButtons.Button]
     public void DecreasePointsWidth()
@@ -104,6 +106,7 @@ public class PTK_ModPathPoint : MonoBehaviour
 #endif
     }
 
+#if UNITY_EDITOR
     public void ChangePointsWidth(PTK_ModPathPoint pointToWidthChange, float fCurrentStrength, float fStepPerPoint, bool bLowerWidth, bool bMoveNextPoint, bool bMovePrevPoint)
     {
         if (fCurrentStrength <= 0)
@@ -129,4 +132,5 @@ public class PTK_ModPathPoint : MonoBehaviour
         if (bMovePrevPoint == true)
             ChangePointsWidth(pointToWidthChange.prevPoint, fCurrentStrength - fStepPerPoint, fStepPerPoint, bLowerWidth, bMoveNextPoint, bMovePrevPoint);
     }
+#endif
 }
