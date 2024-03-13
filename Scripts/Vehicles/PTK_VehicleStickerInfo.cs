@@ -73,7 +73,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
     bool bIsInitialized = false;
 
-    private void Initialize()
+    public void Initialize()
     {
         if (bIsInitialized == true)
             return;
@@ -272,8 +272,6 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         if (stickerMeshRenderers_FirstLayer_Back.Length == 0)
             return;
 
-        // texture removed - set invisible
-        RefreshStickerVisibility(bIsFirstLayer);
 
         if (bIsFirstLayer == true)
         {
@@ -297,6 +295,8 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             }
         }
 
+        // texture removed - set invisible
+        RefreshStickerVisibility(bIsFirstLayer);
     }
 
     void TextureChanged(bool bIsFirstLayer)

@@ -16,7 +16,7 @@ Shader "PTK/PTK_StickerShader"
         
         SubShader
         {
-            Offset -1, -1
+            Offset -2, -2
             Tags {"Queue" = "Transparent" "RenderType" = "Transparent" }
             LOD 200
             CGPROGRAM

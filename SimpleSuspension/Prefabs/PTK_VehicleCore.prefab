@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4758149374810120839}
+  - component: {fileID: 9008103743314985972}
   m_Layer: 0
   m_Name: StickersParent -  AddMeshesInsideStickers + ChangeStickerParams
   m_TagString: Untagged
@@ -40,6 +41,29 @@ Transform:
   m_Father: {fileID: 2205870156402123998}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9008103743314985972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506687348645964520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798e0e67ab0058d4ba45e395c7de62e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicleStickers:
+  - {fileID: 9086832693945355889}
+  - {fileID: 2579983334818368611}
+  - {fileID: 4268477856385222390}
+  - {fileID: 2728881671716955130}
+  - {fileID: 3800304242041824558}
+  - {fileID: 8597817472151761349}
+  - {fileID: 5045381435266413836}
+  - {fileID: 2367441869892936594}
+  - {fileID: 3192037677149875936}
+  - {fileID: 2358893273500900745}
 --- !u!1 &1097002016812480531
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,14 +108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &1388818843679846372
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,14 +155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &1975877767730719963
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,14 +202,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &2001099744492500541
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,14 +249,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &3402103898970927257
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,14 +330,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &3606522633661481390
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,14 +377,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &4253190368965510417
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,6 +434,7 @@ MonoBehaviour:
   fr_WheelSize: 1
   bl_WheelSize: 1.26
   br_WheelSize: 1.26
+  stickersManager: {fileID: 9008103743314985972}
   vehicleStickers:
   - {fileID: 9086832693945355889}
   - {fileID: 2579983334818368611}
@@ -462,6 +457,7 @@ MonoBehaviour:
   ikRigRootBone: {fileID: 0}
   drivingWheelBone: {fileID: 0}
   characterSocketBone: {fileID: 0}
+  engineBone: {fileID: 0}
   fl_Bone: {fileID: 0}
   fl_Hinge: {fileID: 0}
   fr_Bone: {fileID: 0}
@@ -546,14 +542,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &5686257965583149857
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,14 +589,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &5786080551176011585
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,14 +636,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1 &6898489108339209100
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,14 +683,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eAttachType: 0
-  fDefaultTileX: 1
-  fDefaultTileY: 1
-  fDefaultOffsetX: 0
-  fDefaultOffsetY: 0
   stickerMaterialReference: {fileID: 2100000, guid: 462894c0789e84b468f4a4f08cfaccfb,
     type: 2}
-  stickerMeshFilters: []
-  stickerMeshFiltersSecondLayerCreated: []
+  stickerMeshRenderers_FirstLayer_Back: []
 --- !u!1001 &2789536069505792398
 PrefabInstance:
   m_ObjectHideFlags: 0

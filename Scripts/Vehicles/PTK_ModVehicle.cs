@@ -29,7 +29,7 @@ public class PTK_ModVehicle : MonoBehaviour
 
 
     [Header("Click init button below to init")]
-    public PTK_VehicleStickerInfo[] vehicleStickers;
+    public PTK_VehicleStickersParent stickersManager;
     public Animator vehicleAnimator;
 
     public Renderer[] vehicleRenderers;
@@ -79,21 +79,23 @@ public class PTK_ModVehicle : MonoBehaviour
         vehicleAnimator.transform.localPosition = Vector3.zero;
         vehicleAnimator.transform.localRotation = Quaternion.identity;
 
-        for(int i=0;i< vehicleStickers.Length;i++)
+        stickersManager.Initialize();
+
+        for (int i=0;i< stickersManager.vehicleStickers.Length;i++)
         {
-            if (vehicleStickers[i].eAttachType == PTK_VehicleStickerInfo.EAttachType.E_ENGINE && engineBone != null)
-                vehicleStickers[i].transform.parent = engineBone.transform;
+            if (stickersManager.vehicleStickers[i].eAttachType == PTK_VehicleStickerInfo.EAttachType.E_ENGINE && engineBone != null)
+                stickersManager.vehicleStickers[i].transform.parent = engineBone.transform;
             else
-                vehicleStickers[i].transform.parent = kartRoot.transform;
+                stickersManager.vehicleStickers[i].transform.parent = characterSocketBone.transform;
         }
     }
 
     public int GetAvailableStickersCountFrontAndBack()
     {
         int iStickerCount = 0;
-        for(int i=0;i< vehicleStickers.Length;i++)
+        for(int i=0;i< stickersManager.vehicleStickers.Length;i++)
         {
-            if (vehicleStickers[i].IsStickerMeshAvailable() == true)
+            if (stickersManager.vehicleStickers[i].IsStickerMeshAvailable() == true)
                 iStickerCount++;
         }
 
