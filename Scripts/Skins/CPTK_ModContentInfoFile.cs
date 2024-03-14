@@ -17,7 +17,7 @@ public class CPTK_ModContentInfoFile
     [System.Serializable]
     public class CTrackInfo
     {
-        public string strTrackSceneNameAddKey = "";
+        public string strTrackSceneName_AddressableKey = "";
         public string strTrackDirName = "";
         public int iGeneratedTargetUniqueConfigID = -1;
     }
@@ -58,7 +58,7 @@ public class CPTK_ModContentInfoFile
             {
                 public string strOutfitMaterialDirName = "TemplateName_Outfitmat";
 
-                public string strPrefabFileName = "EmptyPrefabName";
+                public string strPrefabFileName_AddressableKey = "EmptyPrefabName";
                 public int iGeneratedTargetUniqueConfigID = -1;
             }
 
@@ -119,7 +119,7 @@ public class CPTK_ModContentInfoFile
         {
             public EType eItemType = EType.__COUNT;
             public string strVariantDirName = "TemplateName_Outfitmat";
-            public string strPrefabFileName = "EmptyPrefabName";
+            public string strPrefabFileName_AddressableKey = "EmptyPrefabName";
             public int iGeneratedTargetUniqueConfigID = -1;
         }
     }

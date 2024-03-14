@@ -34,7 +34,7 @@ public class PTK_ModInfo : ScriptableObject
     [System.Serializable]
     public class CThumbForObject
     {
-        public string strObjDirName = "";
+        public string strObjDirName_AddressableKey = "";
         public Sprite spriteThumbnail;
     }
     public List<CThumbForObject> thumbnailsForObjects = new List<CThumbForObject>();
@@ -42,7 +42,7 @@ public class PTK_ModInfo : ScriptableObject
     {
         for (int i = 0; i < thumbnailsForObjects.Count; i++)
         {
-            if (thumbnailsForObjects[i].strObjDirName == strObjDirName)
+            if (thumbnailsForObjects[i].strObjDirName_AddressableKey == strObjDirName)
                 return thumbnailsForObjects[i].spriteThumbnail;
         }
 

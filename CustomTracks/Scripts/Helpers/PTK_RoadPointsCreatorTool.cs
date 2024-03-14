@@ -55,7 +55,7 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
             RefreshSplineLineRenderer();
     }
 
-    internal void GenerateRoadPath()
+    public void GenerateRoadPath()
     {
         while(generatedRoadPathParent.childCount > 0)
         {
