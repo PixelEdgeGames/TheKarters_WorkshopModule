@@ -23758,6 +23758,13 @@ MonoBehaviour:
   - {fileID: 798620310709884187}
   finishLineBoundary: {fileID: 798620309400297948}
   ItemBoxesParent: {fileID: 798620309754204404}
+  itemBoxes: []
+  BoostPadsParent: {fileID: 798620310348807317}
+  boostpadsParent_1stLapOnly: {fileID: 798620310143384211}
+  boostpadsParent_2ndLapOnly: {fileID: 798620310398346731}
+  boostpadsParent_3rdapOnly: {fileID: 798620310193875823}
+  boostpadsParent_AlwaysVisibley: {fileID: 798620308975983360}
+  boostpads: []
   modPathsCreator: {fileID: 5143785979947450723}
   aiBezierSplinesPaths: {fileID: 7275720351519152376}
   racePositionCalcPathsPointsParent: {fileID: 982022407655721314}
@@ -31453,7 +31460,7 @@ PrefabInstance:
     - target: {fileID: 7763043496823380947, guid: d26d3ee9a3c9d324cbf92b95a6d5e048,
         type: 3}
       propertyPath: m_Name
-      value: BoostpadRepresentation
+      value: Mod_BoostpadRepresentation
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d26d3ee9a3c9d324cbf92b95a6d5e048, type: 3}

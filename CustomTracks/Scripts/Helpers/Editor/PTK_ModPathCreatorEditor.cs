@@ -61,6 +61,5 @@ public class PTK_ModPathCreatorEditor : Editor
         {
             EditorUtility.SetDirty(target);
         }
-
     }
 }
