@@ -2,6 +2,7 @@ using CurveLib.Curves;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -134,12 +135,59 @@ public class PTK_ModPathsCreator : MonoBehaviour
     {
         if(Application.isPlaying == true)
         {
-            linerRenderer.enabled = false;
-            linerRendererTrackWidth_Right.enabled = false;
-            linerRendererTrackWidth_Left.enabled = false;
-            sourcePointsParent.gameObject.SetActive(false);
+            SetRoadPreviewVisible(false);
         }
     }
+
+    void SetRoadPreviewVisible(bool bVisible)
+    {
+        linerRenderer.enabled = bVisible;
+        linerRendererTrackWidth_Right.enabled = bVisible;
+        linerRendererTrackWidth_Left.enabled = bVisible;
+        sourcePointsParent.gameObject.SetActive(bVisible);
+    }
+#if UNITY_EDITOR
+
+    private void OnEnable()
+    {
+        if (Application.isPlaying == false)
+        {
+            UnityEditor.SceneView.duringSceneGui += DuringSceneGui;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (Application.isPlaying == false)
+        {
+            SceneView.duringSceneGui -= DuringSceneGui;
+        }
+    }
+
+    private void DuringSceneGui(SceneView obj)
+    {
+        if (Application.isPlaying == true)
+            return;
+
+        if (Selection.activeGameObject != null && Selection.activeGameObject.GetComponentInParent<PTK_ModTrack>() != null)
+        {
+            bool bJustShowed = sourcePointsParent.gameObject.activeInHierarchy == false;
+           
+            SetRoadPreviewVisible(true);
+
+            if (bJustShowed)
+            {
+                GeneratePathsEditor();
+            }
+        }
+        else
+        {
+            SetRoadPreviewVisible(false);
+        }
+    }
+
+
+#endif
 
     Vector3 vLastPointPos = Vector3.zero;
     float fLastWidth = -1.0f;
@@ -174,6 +222,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
     CRaceTrackPathAlternative lastRenderedAlternativePath = null;
     public void RefreshPathLineRenderer()
     {
+#if UNITY_EDITOR
         if (Application.isPlaying == true)
         {
             return;
@@ -228,20 +277,25 @@ public class PTK_ModPathsCreator : MonoBehaviour
 
 
         Vector3[] points = pointsToPresent.Select(point => point.transform.position).ToArray();
-        var curve2 = new SplineCurve(points, false, SplineType.Catmullrom, tension: 0.5F);
-        var len = curve2.GetLength();
-        var ps = curve2.GetPoints((int)(len * 1));
+        Vector3[] splinePoints = new Vector3[0];
+        
+        if (points.Length > 0)
+        {
+            var curve2 = new SplineCurve(points, false, SplineType.Chordal, tension: 1.0F);
+            var len = curve2.GetLength();
+            splinePoints = curve2.GetPoints((int)(len * 1));
+        }
 
         linerRenderer.startColor = linerRenderer.endColor = colorLine;
         linerRenderer.sharedMaterial.color = colorLine;
 
 
-        if (linerRenderer.positionCount != ps.Length)
+        if (linerRenderer.positionCount != splinePoints.Length)
         {
-            linerRenderer.positionCount = ps.Length;
+            linerRenderer.positionCount = splinePoints.Length;
         }
 
-        linerRenderer.SetPositions(ps);
+        linerRenderer.SetPositions(splinePoints);
 
 
         if (linerRendererTrackWidth_Right.positionCount != points.Length * 1)
@@ -260,6 +314,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
         {
             linerRendererTrackWidth_Left.SetPosition(i * 1 + 0, pointsToPresent[i].transform.position - pointsToPresent[i].transform.right * pointsToPresent[i].fRoadWidthForAI * 0.5f);
         }
+#endif
     }
 
 #if UNITY_EDITOR

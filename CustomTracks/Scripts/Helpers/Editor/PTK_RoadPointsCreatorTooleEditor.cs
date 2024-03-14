@@ -11,11 +11,15 @@ public class PTK_RoadPointsCreatorTooleEditor : Editor
     {
         PTK_RoadPointsCreatorTool pointCreator = (PTK_RoadPointsCreatorTool)target;
 
-      
+
+        if (pointCreator.bEditor_CreateSourcePoints)
+            GUI.color = Color.green;
 
         GUILayout.Space(10);
 
         GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandWidth(true));
+        GUI.color = Color.white;
+
         GUILayout.Space(10);
 
         GUILayout.BeginHorizontal();
@@ -31,22 +35,25 @@ public class PTK_RoadPointsCreatorTooleEditor : Editor
             if (GUILayout.Button("Create/Edit Source Points"))
             {
                 pointCreator.bEditor_CreateSourcePoints = true;
+                pointCreator.DeleteGeneratedRoadPath();
             }
 
-            GUI.color = Color.red + Color.yellow*0.5f;
-            GUILayout.Space(10);
-            if (GUILayout.Button("Delete Source Points"))
+            GUILayout.Space(20);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Generate Road Path",GUILayout.Width(250)))
             {
-                while(pointCreator.sourcePointsTransformParent.childCount > 0)
-                {
-                    GameObject.DestroyImmediate(pointCreator.sourcePointsTransformParent.GetChild(0).gameObject);
-                }
+                pointCreator.GenerateRoadPath();
             }
-            GUI.color = Color.white;
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
         else
         {
-            GUILayout.Label("Source points creating\nUse Left Mouse Click to create point");
+
+            GUI.color = Color.green;
+            GUILayout.Label("Source points creating\nUse LEFT MOUSE CLICK to create point");
+            GUI.color = Color.white;
 
             GUI.color = Color.green;
             GUILayout.Space(10);
@@ -55,7 +62,30 @@ public class PTK_RoadPointsCreatorTooleEditor : Editor
                 pointCreator.bEditor_CreateSourcePoints = false;
             }
             GUI.color = Color.white;
+
+            GUILayout.Space(10);
+            if (GUILayout.Button("In-Air : Add Point in LAST segment"))
+            {
+                pointCreator.CreatePointInTheMiddleBeforeLast();
+            }
         }
+
+
+        GUI.color = Color.red + Color.yellow * 0.5f;
+        GUILayout.Space(50);
+        if (GUILayout.Button("Delete Source Points",GUILayout.Width(150)))
+        {
+            while (pointCreator.sourcePointsTransformParent.childCount > 0)
+            {
+                GameObject.DestroyImmediate(pointCreator.sourcePointsTransformParent.GetChild(0).gameObject);
+            }
+
+            pointCreator.DeleteGeneratedRoadPath();
+            pointCreator.RefreshSplineLineRenderer();
+        }
+        GUI.color = Color.white;
+
+
 
         // If your custom GUI has modified the object, mark it as dirty so Unity knows to save the changes
         if (GUI.changed)
