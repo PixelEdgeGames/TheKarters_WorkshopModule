@@ -5,9 +5,7 @@ using UnityEngine;
 public class PTK_ModTrack : MonoBehaviour
 {
     [Header("Track Minimap")]
-    public Texture2D minimapImage;
-    public Vector2 minimapImage_WorldPos_BL;
-    public Vector2 minimapImage_WorldPos_TR;
+    public PTK_MinimapSO minimapInfo;
 
     [Header("Track Loop")]
     public bool bTrackIsLooped = true;
