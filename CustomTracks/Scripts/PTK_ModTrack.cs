@@ -5,9 +5,7 @@ using UnityEngine;
 public class PTK_ModTrack : MonoBehaviour
 {
     [Header("Track Minimap")]
-    public Texture2D minimapImage;
-    public Vector2 minimapImage_WorldPos_BL;
-    public Vector2 minimapImage_WorldPos_TR;
+    public PTK_MinimapSO minimapInfo;
 
     [Header("Track Loop")]
     public bool bTrackIsLooped = true;
@@ -56,11 +54,25 @@ public class PTK_ModTrack : MonoBehaviour
         Initialize();
     }
 
+    private void OnDisable()
+    {
+        Debug.LogError("Disabled");
+    }
+
     bool bIsInitialized = false;
     public void Initialize()
     {
         if (bIsInitialized == true)
             return;
+
+        if(minimapInfo == null)
+        {
+            Debug.LogError("Minimap Info is empty. Please generate minimap using button");
+            return;
+        }
+
+        var minimapGen = this.GetComponentInChildren<PTK_MinimapRenderAndSave>(true);
+        minimapGen.gameObject.SetActive(false);
 
         itemBoxes.AddRange(ItemBoxesParent.GetComponentsInChildren<PTK_ModItemBox>());
 
@@ -90,4 +102,32 @@ public class PTK_ModTrack : MonoBehaviour
 #endif
     }
 
+
+    [EasyButtons.Button]
+    void GenerateMinimap()
+    {
+#if UNITY_EDITOR
+        if(Application.isPlaying == true)
+        {
+            Debug.LogError("Can generate only in editor mode!");
+            return;
+        }
+
+       var minimapGen = this.GetComponentInChildren<PTK_MinimapRenderAndSave>();
+       bool bRendered = minimapGen.Editor_RenderMinimapAndSaveFileInChoosenDirectory();
+
+        if (bRendered == true)
+        {
+            minimapInfo = minimapGen.lastCreatedMinimapInfoSO;
+
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(minimapInfo);
+            UnityEditor.AssetDatabase.SaveAssets();
+        }
+        else
+        {
+            minimapInfo = null;
+        }
+#endif
+    }
 }

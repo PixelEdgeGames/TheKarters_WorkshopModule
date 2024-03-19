@@ -646,6 +646,11 @@ public class PTK_ModPathsCreator : MonoBehaviour
 
          bPathGenerationSuccess = true;
         RefreshPathLineRenderer();
+
+
+        UnityEditor.EditorUtility.SetDirty(this);
+        UnityEditor.AssetDatabase.SaveAssets();
+        UnityEditor.AssetDatabase.Refresh();
     }
 
 
