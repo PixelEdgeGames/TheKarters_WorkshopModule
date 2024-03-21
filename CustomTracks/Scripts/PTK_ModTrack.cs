@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PTK_ModTrack : MonoBehaviour
 {
-    [Header("Track Minimap")]
-    public PTK_MinimapSO minimapInfo;
 
     [Header("Track Loop")]
     public bool bTrackIsLooped = true;
@@ -17,6 +15,9 @@ public class PTK_ModTrack : MonoBehaviour
     [Header("--- Do not edit variables below ---")]
     [Space(30)]
     public Camera cameraWithEffects;
+
+    [Header("Track Minimap")]
+    public PTK_MinimapSO minimapInfo;
 
     [Header("Start Positions")]
     public Transform[] mapStartPositions;
