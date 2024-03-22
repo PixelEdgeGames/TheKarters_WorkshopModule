@@ -39,6 +39,7 @@ public class PTK_ModPathCreatorEditor : Editor
 
         if (GUILayout.Button("Refresh Path Preview"))
         {
+            pathHolder.GeneratePathsEditor();
             pathHolder.RefreshPathLineRenderer();
         }
 
@@ -52,6 +53,7 @@ public class PTK_ModPathCreatorEditor : Editor
         {
             bAlreadyGenerated = true;
             pathHolder.GeneratePathsEditor();
+            pathHolder.RefreshPathLineRenderer();
         }
 
 

@@ -428,8 +428,11 @@ public class PTK_ModPathsCreator : MonoBehaviour
             }
         }
 
-        mainPath_AfterFinishLinePointTransform.name += " AfterFinishLine";
-        mainPath_BeforeFinishLineTransform.name += " BeforeFinishLine";
+        if(mainPath_AfterFinishLinePointTransform != null)
+            mainPath_AfterFinishLinePointTransform.name += " AfterFinishLine";
+
+        if(mainPath_BeforeFinishLineTransform != null)
+            mainPath_BeforeFinishLineTransform.name += " BeforeFinishLine";
 
 
         mainRoadPathBreachList.Clear();
@@ -477,13 +480,22 @@ public class PTK_ModPathsCreator : MonoBehaviour
 
         bPathGenerationSuccess = false;
 
-        if(mainPath_BeforeFinishLineTransform == null || mainPath_AfterFinishLinePointTransform == null)
-        {
-            Debug.LogError("Please assign before finish line and after finish line points from main road");
-            return;
-        }
 
         CreatePathPointsEditor();
+
+
+        if (mainPath_BeforeFinishLineTransform == null || mainPath_AfterFinishLinePointTransform == null)
+        {
+            // if we already have road path and before and after finish line is not selected - show error
+            if(mainRoadPath.Count > 0)
+            {
+                Debug.LogError("Please assign before finish line and after finish line points from main road");
+            }
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEditor.AssetDatabase.Refresh();
+            return;
+        }
 
 
         for (int iAlternativeRoadIndex=0;iAlternativeRoadIndex< alternativeRaceTrackPaths.Count;iAlternativeRoadIndex++)
@@ -634,6 +646,7 @@ public class PTK_ModPathsCreator : MonoBehaviour
                 alternativeRoad.roadPath.Remove(removePointsBecauseOfOffset[i]);
             }
         }
+
 
         if(mainPath_BeforeFinishLineTransform.GetComponent<PTK_ModPathPoint>() == null || mainPath_AfterFinishLinePointTransform.GetComponent<PTK_ModPathPoint>() == null)
         {
