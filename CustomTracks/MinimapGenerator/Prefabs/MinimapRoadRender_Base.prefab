@@ -845,7 +845,6 @@ GameObject:
   - component: {fileID: 7610901587967617477}
   - component: {fileID: 7610901587967617476}
   - component: {fileID: 7610901587967617475}
-  - component: {fileID: 7610901587967617474}
   m_Layer: 0
   m_Name: TopRightCornerSpherePreview
   m_TagString: Untagged
@@ -916,19 +915,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7610901587967617474
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7610901587967617473}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7610901587994719369
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,8 +976,7 @@ MonoBehaviour:
   fEnviroSizeInTexture: 0.953
   cameraOffsetForRender: {x: 19.39, y: 54}
   strLastMinimapGeneratedAssetsPath: TheKarters_Workshop_Module/CustomTracks/ExampleTrack/Minimap
-  lastGeneratedMinimapSprite: {fileID: 21300000, guid: f658b26833d41d548977dd3f678e63d3,
-    type: 3}
+  lastGeneratedMinimapSprite: {fileID: 21300000, guid: f658b26833d41d548977dd3f678e63d3, type: 3}
   lastCreatedMinimapInfoSO: {fileID: 0}
   fHeightDiffToDetectEdge: 10
 --- !u!114 &7610901587994719370
@@ -1097,7 +1082,6 @@ GameObject:
   - component: {fileID: 7610901589371821142}
   - component: {fileID: 7610901589371821141}
   - component: {fileID: 7610901589371821140}
-  - component: {fileID: 7610901589371821139}
   m_Layer: 0
   m_Name: BottomLeftCornerSpherePreview
   m_TagString: Untagged
@@ -1168,19 +1152,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7610901589371821139
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7610901589371821138}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8509351704763351343
 GameObject:
   m_ObjectHideFlags: 0

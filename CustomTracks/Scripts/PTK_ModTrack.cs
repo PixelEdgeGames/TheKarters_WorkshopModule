@@ -49,6 +49,9 @@ public class PTK_ModTrack : MonoBehaviour
     [Header("RacePositionCalc Paths")]
     [SerializeField]
     public Transform racePositionCalcPathsPointsParent;
+
+    [SerializeField]
+    public GameObject extraCollidersParent;
     // Start is called before the first frame update
     void Awake()
     {
