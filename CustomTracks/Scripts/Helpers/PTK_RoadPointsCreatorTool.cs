@@ -13,16 +13,48 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
 {
     public Transform sourcePointsTransformParent;
     public Transform generatedRoadPathParent;
+    public Transform generatedRoadMeshParent;
+    public Material generatedMeshDefaultMaterial;
+    public Material wallColliderMaterial;
+    public Material alwaysRespawnCollider;
     public LineRenderer lineRendererSpline;
 
     [HideInInspector]
     public bool bEditor_CreateSourcePoints = false;
+    [HideInInspector]
+    public bool bEditor_AutoGenerateMesh = false;
+    [HideInInspector]
+    public bool bMeshRepeatUvY = true;
+    [HideInInspector]
+    public EMeshType eMeshType = EMeshType.E_WALL_LEFT;
+    [HideInInspector]
+    public LayerMask targetMeshModelLayer = 10;
+    [HideInInspector]
+    public float fNewPointTargetHeight = 7.0f;
+    public enum EMeshType
+    {
+        E_WALL_LEFT,
+        E_WALL_RIGHT
+    }
 
+    GameObject generatedMeshParent;
+    MeshFilter generatedMeshFilter;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (Application.isPlaying == true)
         {
+            if(generatedMeshParent != null)
+            {
+              var modRaceTrack = GameObject.FindObjectOfType<PTK_ModTrack>();
+
+                // to ensure mesh won't be deleted
+                if (modRaceTrack != null)
+                    generatedMeshParent.transform.parent = modRaceTrack.extraCollidersParent.transform;
+                else
+                    generatedMeshParent.transform.parent = null;
+            }
+
             GameObject.DestroyImmediate(this.gameObject);
         }
     }
@@ -114,12 +146,14 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
             lineRendererSpline.enabled = true;
             sourcePointsTransformParent.gameObject.SetActive(true);
             generatedRoadPathParent.gameObject.SetActive(true);
+            generatedRoadMeshParent.gameObject.SetActive(true);
         }
         else
         {
             sourcePointsTransformParent.gameObject.SetActive(false);
             lineRendererSpline.enabled = false;
             generatedRoadPathParent.gameObject.SetActive(false);
+            generatedRoadMeshParent.gameObject.SetActive(false);
         }
 
         PTK_RoadPointsCreatorTool pointCreator = this;// (PTK_RoadPointsCreatorTool)target;
@@ -189,7 +223,10 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         sphere.transform.localScale = new Vector3(5.0f, 5.0f, 5.0f);
         sphere.transform.position = pos + Vector3.up*2.5f*0.5f;
 
-        sphere.AddComponent<PTK_RoadPointCreatedPoint>().parentRoadPointsCreator = this;
+        var createdPoint = sphere.AddComponent<PTK_RoadPointCreatedPoint>();
+        createdPoint.parentRoadPointsCreator = this;
+        createdPoint.fMeshSizeInPoint = fNewPointTargetHeight;
+
         GameObject.DestroyImmediate(sphere.GetComponent<Collider>());
         Undo.RegisterCreatedObjectUndo(sphere, "Create Sphere");
 
@@ -209,8 +246,15 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         {
             GameObject.DestroyImmediate(generatedRoadPathParent.GetChild(0).gameObject);
         }
+
+
     }
 
+    public void DeleteGeneratedMesh()
+    {
+        if (generatedMeshParent != null)
+            GameObject.DestroyImmediate(generatedMeshParent);
+    }
    public void RefreshSplineLineRenderer()
     {
 
@@ -221,6 +265,7 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         }
 
         Vector3[] sourcePoints = new Vector3[sourcePointsTransformParent.childCount ]; // +1 so we can add extra point in the end : it will make curve bezier look nicer
+        Vector3[] sourcePointsHeights = new Vector3[sourcePointsTransformParent.childCount]; // +1 so we can add extra point in the end : it will make curve bezier look nicer
         for (int i=0;i< sourcePointsTransformParent.childCount;i++)
         {
             var curPoint = sourcePointsTransformParent.GetChild(i);
@@ -239,14 +284,25 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
             }
 
             sourcePoints[i] = sourcePointsTransformParent.GetChild(i).transform.position;
+            sourcePointsHeights[i] = sourcePointsTransformParent.GetChild(i).transform.position;
+            sourcePointsHeights[i].x = sourcePointsTransformParent.GetChild(i).GetComponent<PTK_RoadPointCreatedPoint>().fMeshAngleInPoint;
+            sourcePointsHeights[i].y = sourcePointsTransformParent.GetChild(i).GetComponent<PTK_RoadPointCreatedPoint>().fMeshSizeInPoint;
         }
 
 
         Vector3[] splinePoints = new Vector3[0];
         var curve2 = new SplineCurve(sourcePoints, false, SplineType.Chordal, tension: 1.0F);
         var len = curve2.GetLength();
-        splinePoints = curve2.GetPoints((int)(len * 5));
+        splinePoints = curve2.GetPoints((int)(len *1));
 
+
+        Vector3[] splinePointsMeshHeights = new Vector3[0];
+        if(bEditor_AutoGenerateMesh == true)
+        {
+            var curve2MeshHeight = new SplineCurve(sourcePointsHeights, false, SplineType.Chordal, tension: 1.0F);
+            var lenMeshHeight = len;
+            splinePointsMeshHeights = curve2MeshHeight.GetPoints((int)(lenMeshHeight * 1));
+        }
 
         if (lineRendererSpline.positionCount != splinePoints.Length)
         {
@@ -254,6 +310,162 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         }
 
         lineRendererSpline.SetPositions(splinePoints);
+
+        if(bEditor_AutoGenerateMesh == true && sourcePoints.Length >=2)
+        {
+            RefreshAndGenerateMesh( splinePoints, splinePointsMeshHeights);
+        }else
+        {
+            if (generatedMeshParent != null)
+                GameObject.DestroyImmediate(generatedMeshParent);
+        }
+    }
+
+    MeshRenderer meshRenderer;
+    void RefreshAndGenerateMesh(Vector3[] splinePoints, Vector3[] splinePointsMeshHeights)
+    {
+        if (generatedMeshParent == null)
+        {
+            generatedMeshParent = new GameObject("Generated_WallMesh");
+            generatedMeshParent.transform.parent = generatedRoadMeshParent.transform;
+            generatedMeshFilter = generatedMeshParent.AddComponent<MeshFilter>();
+            meshRenderer =  generatedMeshParent.AddComponent<MeshRenderer>();
+        }
+
+        generatedMeshFilter.gameObject.layer = targetMeshModelLayer;
+
+
+        if(targetMeshModelLayer == 10)
+            meshRenderer.material = wallColliderMaterial;
+        else if (targetMeshModelLayer == 30)
+            meshRenderer.material = alwaysRespawnCollider;
+        else
+            meshRenderer.material = generatedMeshDefaultMaterial;
+
+        // add wall mesh generation here
+        // use splinePoints as mesh bottom, splinePointsMeshHeights Y component as height from botton to up
+
+
+        // Initialize mesh data
+        var vertices = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var triangles = new List<int>();
+
+        int iEveryVert = 5;
+        // Calculate world space distances for UV mapping
+        float fTile = 0.5f;
+
+
+        float fQuadWidthSum = 0.0f;
+
+        Vector3 vPrevTopRight = Vector3.zero;
+        for (int i = 0; i < splinePoints.Length - iEveryVert; i+= iEveryVert)
+        {
+
+            // Define quad corners
+            Vector3 bottomLeft = splinePoints[i]- Vector3.up*3.0f;
+            Vector3 bottomRight = splinePoints[i + iEveryVert] - Vector3.up * 3.0f;
+            Vector3 topLeft = bottomLeft + Vector3.up * splinePointsMeshHeights[i].y;
+            Vector3 topRight = bottomRight + Vector3.up * splinePointsMeshHeights[i + iEveryVert].y;
+
+
+            // pitch angle
+
+            float fAnglePoint1 = splinePointsMeshHeights[i].x;
+            float fAnglePoint2 = splinePointsMeshHeights[i + iEveryVert].x;
+
+            if (eMeshType == EMeshType.E_WALL_LEFT)
+                fAnglePoint1 = fAnglePoint2 = -5;
+
+            if (eMeshType == EMeshType.E_WALL_RIGHT)
+                fAnglePoint1 = fAnglePoint2 = 5;
+
+
+            // Calculate the rotation axis for each segment (perpendicular to the up direction and segment direction)
+            Vector3 segmentDirection = (bottomRight - bottomLeft).normalized;
+
+            // Apply rotation to top vertices
+            Quaternion rotationPoint1 = Quaternion.AngleAxis(fAnglePoint1 , segmentDirection);
+            Quaternion rotationPoint2 = Quaternion.AngleAxis(fAnglePoint2 , segmentDirection);
+            topLeft = bottomLeft + rotationPoint1 * (topLeft - bottomLeft);
+            topRight = bottomRight + rotationPoint2 * (topRight - bottomRight);
+
+            // to ensure vertices are connected
+            if (vPrevTopRight != Vector3.zero)
+                topLeft = vPrevTopRight;
+
+            vPrevTopRight = topRight;
+
+            // Add vertices for the quad
+            int startVertexIndex = vertices.Count;
+
+
+            Vector3 vWidth = bottomLeft - bottomRight; vWidth.y = 0.0f;
+            float quadWidth = vWidth.magnitude * fTile;
+
+
+            float fUvY_1 = bMeshRepeatUvY == true ? splinePointsMeshHeights[i].y * fTile : 1;
+            float fUvY_2 = bMeshRepeatUvY == true ? splinePointsMeshHeights[i + iEveryVert].y * fTile : 1;
+
+
+            if (eMeshType == EMeshType.E_WALL_LEFT)
+            {
+                vertices.Add(bottomLeft);
+                vertices.Add(topLeft);
+                vertices.Add(topRight);
+                vertices.Add(bottomRight);
+
+
+                // Add UVs based on world space distances, ensuring texture repeats based on width
+                uvs.Add(new Vector2(fQuadWidthSum, 0));
+                uvs.Add(new Vector2(fQuadWidthSum, fUvY_1));
+                uvs.Add(new Vector2(fQuadWidthSum + quadWidth, fUvY_2)); // Repeat based on the ratio of height to width
+                uvs.Add(new Vector2(fQuadWidthSum + quadWidth, 0)); // Repeat once across the width
+            }
+            else if (eMeshType == EMeshType.E_WALL_RIGHT)
+            {
+                vertices.Add(bottomLeft);
+                vertices.Add(bottomRight);
+                vertices.Add(topRight);
+                vertices.Add(topLeft);
+
+
+                // Add UVs based on world space distances, ensuring texture repeats based on width
+                uvs.Add(new Vector2(fQuadWidthSum, 0));
+                uvs.Add(new Vector2(fQuadWidthSum + quadWidth, 0)); // Repeat once across the width
+                uvs.Add(new Vector2(fQuadWidthSum + quadWidth, fUvY_2)); // Repeat based on the ratio of height to width
+                uvs.Add(new Vector2(fQuadWidthSum, fUvY_1));
+            }
+
+
+
+
+
+            fQuadWidthSum += quadWidth;
+
+
+            // Add triangles
+            triangles.Add(startVertexIndex);
+            triangles.Add(startVertexIndex + 1);
+            triangles.Add(startVertexIndex + 2);
+            triangles.Add(startVertexIndex);
+            triangles.Add(startVertexIndex + 2);
+            triangles.Add(startVertexIndex + 3);
+        }
+
+        // Create and assign mesh
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices.ToArray();
+        mesh.uv = uvs.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.RecalculateNormals(); // Recalculate normals for proper lighting
+        generatedMeshFilter.mesh = mesh;
+    }
+
+    Vector3 RotatePointAroundAxis(Vector3 point, float angle, Vector3 axis)
+    {
+        Quaternion rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, axis);
+        return rotation * point;
     }
 #endif
 }

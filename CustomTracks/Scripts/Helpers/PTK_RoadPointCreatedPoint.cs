@@ -6,6 +6,11 @@ public class PTK_RoadPointCreatedPoint : MonoBehaviour
 {
     [HideInInspector]
     public PTK_RoadPointsCreatorTool parentRoadPointsCreator;
+
+    public float fMeshSizeInPoint = 5.0f;
+    [HideInInspector]
+    public float fMeshAngleInPoint = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {

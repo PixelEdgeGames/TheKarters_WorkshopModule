@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2581891381128840909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6159268140988632155}
+  m_Layer: 0
+  m_Name: GeneratedMesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6159268140988632155
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581891381128840909}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3354859223048725021}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5189709806302793029
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,7 +45,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8843951689752720325
 Transform:
   m_ObjectHideFlags: 0
@@ -45,7 +75,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5038344450634723125
 Transform:
   m_ObjectHideFlags: 0
@@ -91,6 +121,7 @@ Transform:
   m_Children:
   - {fileID: 8843951689752720325}
   - {fileID: 5038344450634723125}
+  - {fileID: 6159268140988632155}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -108,8 +139,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourcePointsTransformParent: {fileID: 8843951689752720325}
   generatedRoadPathParent: {fileID: 5038344450634723125}
+  generatedRoadMeshParent: {fileID: 6159268140988632155}
+  generatedMeshDefaultMaterial: {fileID: 2100000, guid: ba88d6852821b1f45bf8523e8dcbbe10, type: 2}
+  wallColliderMaterial: {fileID: 2100000, guid: 99047d8fa8dbdfc47a34d93b6f88496f, type: 2}
+  alwaysRespawnCollider: {fileID: 2100000, guid: f7fd2ac9061351441b6c85f97980e859, type: 2}
   lineRendererSpline: {fileID: 1583256353752527513}
   bEditor_CreateSourcePoints: 0
+  bEditor_AutoGenerateMesh: 0
+  bMeshRepeatUvY: 1
+  eMeshType: 0
+  targetMeshModelLayer:
+    serializedVersion: 2
+    m_Bits: 10
+  fNewPointTargetHeight: 7
 --- !u!120 &1583256353752527513
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -117,7 +159,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8490993612671235414}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

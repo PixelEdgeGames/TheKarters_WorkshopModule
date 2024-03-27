@@ -81,11 +81,74 @@ public class PTK_RoadPointsCreatorTooleEditor : Editor
             }
 
             pointCreator.DeleteGeneratedRoadPath();
+            pointCreator.DeleteGeneratedMesh();
             pointCreator.RefreshSplineLineRenderer();
         }
         GUI.color = Color.white;
 
+        GUILayout.Space(30);
+        EditorGUI.BeginChangeCheck();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandWidth(true),GUILayout.Width(400));
 
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Label("Mesh Generation    ");
+
+        if (pointCreator.bEditor_AutoGenerateMesh == true)
+            GUI.color = Color.yellow;
+        else
+            GUI.color = Color.white;
+        if (GUILayout.Button("Enabled"))
+        {
+            pointCreator.bEditor_AutoGenerateMesh = true;
+        }
+
+        if (pointCreator.bEditor_AutoGenerateMesh == false)
+            GUI.color = Color.yellow;
+        else
+            GUI.color = Color.white;
+        if (GUILayout.Button("Disabled"))
+        {
+            pointCreator.bEditor_AutoGenerateMesh = false;
+        }
+        GUILayout.EndHorizontal();
+
+        GUI.color = Color.white;
+
+        if (pointCreator.bEditor_AutoGenerateMesh == true)
+        {
+            GUI.color = Color.white;
+            GUILayout.Space(20);
+            pointCreator.eMeshType = (PTK_RoadPointsCreatorTool.EMeshType)EditorGUILayout.EnumPopup("MeshType", pointCreator.eMeshType, GUILayout.Width(300));
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("New Point Height");
+            GUILayout.FlexibleSpace();
+            pointCreator.fNewPointTargetHeight = EditorGUILayout.FloatField(pointCreator.fNewPointTargetHeight);
+            GUILayout.EndHorizontal();
+
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Collider Layer");
+            GUILayout.FlexibleSpace();
+            pointCreator.targetMeshModelLayer = EditorGUILayout.LayerField(pointCreator.targetMeshModelLayer);
+            GUILayout.EndHorizontal();
+
+
+            GUILayout.Space(10);
+            pointCreator.bMeshRepeatUvY = GUILayout.Toggle(pointCreator.bMeshRepeatUvY, "Repeat Texture");
+
+        }
+
+
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
+        if (EditorGUI.EndChangeCheck() == true)
+        {
+            pointCreator.RefreshSplineLineRenderer();
+        }
 
         // If your custom GUI has modified the object, mark it as dirty so Unity knows to save the changes
         if (GUI.changed)
@@ -108,4 +171,18 @@ public class PTK_RoadPointsCreatorTooleEditor : Editor
         }
     }
 
+    // Utility function to get layer names
+    string[] GetLayerNames()
+    {
+        var layerNames = new List<string>();
+        for (int i = 0; i < 32; i++) // Unity supports 32 layers
+        {
+            string layerName = LayerMask.LayerToName(i);
+            if (!string.IsNullOrEmpty(layerName))
+            {
+                layerNames.Add(layerName);
+            }
+        }
+        return layerNames.ToArray();
+    }
 }
