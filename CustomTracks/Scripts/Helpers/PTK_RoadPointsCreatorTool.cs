@@ -460,6 +460,12 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals(); // Recalculate normals for proper lighting
         generatedMeshFilter.mesh = mesh;
+
+        if (meshRenderer.GetComponent<MeshCollider>() == null)
+            meshRenderer.gameObject.AddComponent<MeshCollider>();
+
+            meshRenderer.gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+
     }
 
     Vector3 RotatePointAroundAxis(Vector3 point, float angle, Vector3 axis)
