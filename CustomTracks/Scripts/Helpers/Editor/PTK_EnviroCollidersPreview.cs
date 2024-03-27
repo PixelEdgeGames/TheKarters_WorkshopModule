@@ -280,14 +280,14 @@ public class PTK_EnviroCollidersPreview : EditorWindow
     void DisableEnvironmentCollidersPreview()
     {
         // Reset visibleLayers to the original state
-        Tools.visibleLayers = originalVisibleLayers;
+        Tools.visibleLayers = -1;
         SceneView.RepaintAll();
     }
 
     private void OnDestroy()
     {
         // Ensure we restore the original layer visibility when the window is closed
-        Tools.visibleLayers = originalVisibleLayers;
+        Tools.visibleLayers = -1;
 
     }
 
