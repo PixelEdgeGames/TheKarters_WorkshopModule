@@ -77,15 +77,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbb3cbf263e27e48a034b42d74184cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyOriginBone: {fileID: 0}
-  wheel_Bone_FL: {fileID: 0}
-  wheel_Bone_FR: {fileID: 0}
-  wheel_Bone_BL: {fileID: 0}
-  wheel_Bone_BR: {fileID: 0}
-  suspensionParent_FL: {fileID: 7139414661701512384}
-  suspensionParent_FR: {fileID: 2170680115714581875}
   suspensionParent_BL: {fileID: 3759484036770805213}
   suspensionParent_BR: {fileID: 1962915412178610561}
+  suspensionParent_FL: {fileID: 7139414661701512384}
+  suspensionParent_FR: {fileID: 2170680115714581875}
 --- !u!1 &5740023074390116304
 GameObject:
   m_ObjectHideFlags: 0
