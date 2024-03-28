@@ -97,7 +97,7 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         if (lineRendererSpline.positionCount < 2)
             return;
 
-        GameObject roadPath = new GameObject("Road Path");
+        GameObject roadPath = new GameObject("Road Path " + this.name.Replace("PTK_RoadPointsCreatorTool",""));
         roadPath.transform.parent = generatedRoadPathParent.transform;
 
        var roadStartPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -141,19 +141,17 @@ public class PTK_RoadPointsCreatorTool : MonoBehaviour
         if (Application.isPlaying == true)
             return;
 
-        if (Selection.activeGameObject == this.gameObject || (Selection.activeGameObject != null && Selection.activeGameObject.GetComponentInParent<PTK_RoadPointsCreatorTool>() != null))
+        if (Selection.activeGameObject == this.gameObject || (Selection.activeGameObject != null && Selection.activeGameObject.GetComponentInParent<PTK_RoadPointsCreatorTool>() == this))
         {
             lineRendererSpline.enabled = true;
             sourcePointsTransformParent.gameObject.SetActive(true);
             generatedRoadPathParent.gameObject.SetActive(true);
-            generatedRoadMeshParent.gameObject.SetActive(true);
         }
         else
         {
             sourcePointsTransformParent.gameObject.SetActive(false);
             lineRendererSpline.enabled = false;
             generatedRoadPathParent.gameObject.SetActive(false);
-            generatedRoadMeshParent.gameObject.SetActive(false);
         }
 
         PTK_RoadPointsCreatorTool pointCreator = this;// (PTK_RoadPointsCreatorTool)target;
