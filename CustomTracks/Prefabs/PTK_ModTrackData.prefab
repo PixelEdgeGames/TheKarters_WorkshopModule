@@ -29849,7 +29849,7 @@ GameObject:
   - component: {fileID: 1972398722833993310}
   m_Layer: 0
   m_Name: ForceJumpTriggerQuad
-  m_TagString: Untagged
+  m_TagString: AI_JumpTrigger_Quad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30799,7 +30799,7 @@ GameObject:
   - component: {fileID: 2246621295679915456}
   m_Layer: 0
   m_Name: BlockJumpTriggerQuad
-  m_TagString: Untagged
+  m_TagString: AI_BlockNormalJumpTrigger_Quad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
