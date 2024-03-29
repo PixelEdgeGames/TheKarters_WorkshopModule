@@ -340,9 +340,17 @@ public class PTK_EnviroCollidersPreview : EditorWindow
 
                 foreach(Collider colliderTransform in colliders)
                 {
+                    // we can ingore colliders in lap road blockers, layers  are auto configured in the game
+                    if (colliderTransform.GetComponentInParent<PTK_LapRoadBlockers>() != null)
+                        continue;
+
+                    // we can ingore colliders in minimap, minimap is disabled anyway
+                    if (colliderTransform.GetComponentInParent<PTK_MinimapRenderAndSave>() != null)
+                        continue;
+                    
                     // Check if the object's layer is NOT one of the visible layers
                     // This means the object has a collider but is not on the correct layer
-                    if (((1 << colliderTransform.gameObject.layer) & Tools.visibleLayers) == 0)
+                    if (((1 << colliderTransform.gameObject.layer) & iEnviroColliders) == 0)
                     {
                         collidersWithoutLayers.Add(colliderTransform.gameObject);
                     }
