@@ -137,7 +137,7 @@ public class PTK_MinimapImageProcessing
         texture.SetPixels(newPixels);
         texture.Apply();
     }
-    // Convert world position to texture space (Example implementation)
+    // Convert world position to texture space
     private static Vector2 WorldToTexture(Vector3 worldPos, Texture2D texture, PTK_MinimapRender_CornerPosCalc minimapCornerCalc)
     {
         // Normalize the world position to a value between 0 and 1
