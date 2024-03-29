@@ -52,6 +52,13 @@ public class PTK_ModTrack : MonoBehaviour
 
     [SerializeField]
     public GameObject extraCollidersParent;
+
+    [SerializeField]
+    public GameObject aiJumpTriggers;
+    [SerializeField]
+    public GameObject aiJumpBlockTriggers;
+    [SerializeField]
+    public GameObject humanLongJumpTriggers;
     // Start is called before the first frame update
     void Awake()
     {
