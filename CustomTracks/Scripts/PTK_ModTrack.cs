@@ -29,6 +29,10 @@ public class PTK_ModTrack : MonoBehaviour
     [HideInInspector]
     public List<PTK_ModItemBox> itemBoxes = new List<PTK_ModItemBox>();
 
+    [Header("Road Blocker")]
+    [SerializeField]
+    public GameObject roadBlockerParent;
+
     [Header("Boostpads")]
     public Transform BoostPadsParent;
     [SerializeField]
