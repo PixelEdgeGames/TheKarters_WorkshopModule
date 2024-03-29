@@ -23,7 +23,7 @@ public class PTK_ModInfo : ScriptableObject
     public string strModChangelog = "";
 
     [SerializeField]
-    public const float GameModPluginVersion = 1.0f;
+    public const float GameModPluginVersion = 0.1f;
 
     public CPTK_ModContentInfoFile modContentInfo = new CPTK_ModContentInfoFile();
 
