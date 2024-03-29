@@ -44,14 +44,43 @@ public class PTK_MinimapRenderAndSave : MonoBehaviour
 
 
 #if UNITY_EDITOR
+
+    int iMinimapLayer = 31;
     private void OnEnable()
     {
-        SetLayerRecursively(models3DParent.transform, 31);
+        SetLayerRecursively(models3DParent.transform, iMinimapLayer);
     }
 
     private void Update()
     {
-        SetLayerRecursively(models3DParent.transform, 31);
+        if(Application.isPlaying == false)
+        {
+
+            // Get the current stage. Prefab Mode is a different stage from the main scene stage.
+            var currentStage = UnityEditor.SceneManagement.StageUtility.GetCurrentStage();
+
+            // Check if the current stage is a Prefab Stage, which indicates Prefab Editing Mode.
+            bool isInPrefabMode = currentStage is UnityEditor.Experimental.SceneManagement.PrefabStage;
+
+            if (isInPrefabMode == false && UnityEditor.Selection.activeGameObject != null && (UnityEditor.Selection.activeGameObject == this.gameObject || UnityEditor.Selection.activeGameObject.GetComponentInParent<PTK_MinimapRenderAndSave>() == this))
+            {
+                UnityEditor.Tools.visibleLayers = (1 << iMinimapLayer);
+                models3DParent.gameObject.SetActive(true);
+            }
+            else
+            {
+                if (UnityEditor.Tools.visibleLayers == (1 << iMinimapLayer)) // were only minimap layer presented?
+                {
+                    UnityEditor.Tools.visibleLayers = -1;
+
+                    models3DParent.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        models3DParent.transform.localPosition = Vector3.zero;
+
+        SetLayerRecursively(models3DParent.transform, iMinimapLayer);
         renderTexCamera.orthographicSize =800.0f + 800.0f * (1.0f-fEnviroSizeInTexture);
         renderTexCamera.transform.position = new Vector3(-cameraOffsetForRender.x, 1000,-cameraOffsetForRender.y);
     }
@@ -65,6 +94,8 @@ public class PTK_MinimapRenderAndSave : MonoBehaviour
     }
 
     string directoryPath = "";
+
+
 
     [EasyButtons.Button]
     public bool Editor_RenderMinimapAndSaveFileInChoosenDirectory()
@@ -83,7 +114,10 @@ public class PTK_MinimapRenderAndSave : MonoBehaviour
 
         renderTexCamera.targetTexture = colorRenderTexture;
 
-        string initialDirectory = Application.dataPath + strLastMinimapGeneratedAssetsPath;
+
+        string scenePath = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path;
+
+        string initialDirectory =Path.GetDirectoryName(  scenePath);//strLastMinimapGeneratedAssetsPath;
         string strSelectedDirPath = UnityEditor.EditorUtility.OpenFolderPanel("Save texture as PNG", initialDirectory, "");
         if (strSelectedDirPath == "")
             return false;
@@ -107,9 +141,22 @@ public class PTK_MinimapRenderAndSave : MonoBehaviour
                 SaveRenderTextureToPNG( directoryPath);
 
 
+            bool userClickedOK = UnityEditor.EditorUtility.DisplayDialog(
+                "Minimap Rendering Complete",
+                "The minimap was rendered successfully!",
+                "OK"
+            );
+
             return true;
         }
 
+
+         UnityEditor.EditorUtility.DisplayDialog(
+            "Minimap Rendering ERROR",
+            "PATH EMPTY.",
+            "OK"
+
+        );
         return false;
     }
 
