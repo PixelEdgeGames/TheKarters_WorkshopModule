@@ -43,13 +43,9 @@ public class PTK_ModVehicle : MonoBehaviour
 
     [Header("Wheels")]
     public Transform fl_Bone;
-    public Transform fl_Hinge;
     public Transform fr_Bone;
-    public Transform fr_Hinge;
     public Transform bl_Bone;
-    public Transform bl_Hinge;
     public Transform br_Bone;
-    public Transform br_Hinge;
 
     [Header("Boost Pipes")]
     public Transform pipe1;
@@ -171,22 +167,27 @@ public class PTK_ModVehicle : MonoBehaviour
         System.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(strModelPath);
 
         AnimationClip[] animationClips = assets.OfType<AnimationClip>().ToArray();
-        backTransform_off = animationClips.FirstOrDefault(clip => clip.name == "back_transform_OFF");
-        backTransform_on = animationClips.FirstOrDefault(clip => clip.name == "back_transform_ON");
+        backTransform_off = animationClips.FirstOrDefault(clip => clip.name == "back_transform_OFF"); if (backTransform_off == null) Debug.LogError("Anim not found back_transform_OFF");
+        backTransform_on = animationClips.FirstOrDefault(clip => clip.name == "back_transform_ON"); if (backTransform_on == null) Debug.LogError("Anim not found back_transform_ON");
 
 
-        defaultAnim = animationClips.FirstOrDefault(clip => clip.name == "default");
-        idleHighSpeed = animationClips.FirstOrDefault(clip => clip.name == "idle_high_speed");
-        idleNormal = animationClips.FirstOrDefault(clip => clip.name == "idle_normal");
+        defaultAnim = animationClips.FirstOrDefault(clip => clip.name == "default"); if (defaultAnim == null) Debug.LogError("Anim not found default");
+        idleHighSpeed = animationClips.FirstOrDefault(clip => clip.name == "idle_high_speed"); if (idleHighSpeed == null) Debug.LogError("Anim not found idle_high_speed");
+        idleNormal = animationClips.FirstOrDefault(clip => clip.name == "idle_normal"); if (idleNormal == null) Debug.LogError("Anim not found idle_normal");
 
-        damage = animationClips.FirstOrDefault(clip => clip.name == "damage");
-        damageDeath = animationClips.FirstOrDefault(clip => clip.name == "damage_death");
+        damage = animationClips.FirstOrDefault(clip => clip.name == "damage"); if (damage == null) Debug.LogError("Anim not found damage");
+        damageDeath = animationClips.FirstOrDefault(clip => clip.name == "damage_death"); if (damageDeath == null) Debug.LogError("Anim not found damage_death");
 
         turnLeft = animationClips.FirstOrDefault(clip => clip.name == "turning_left");
-        turnRight = animationClips.FirstOrDefault(clip => clip.name == "turning_right");
+        if(turnLeft == null) turnLeft = animationClips.FirstOrDefault(clip => clip.name == "turn_left"); // legacy name
+        if (turnLeft == null) Debug.LogError("Anim not found turning_left");
 
-        strongHitBack = animationClips.FirstOrDefault(clip => clip.name == "strong_hit_back");
-        strongHitFront = animationClips.FirstOrDefault(clip => clip.name == "strong_hit_front");
+        turnRight = animationClips.FirstOrDefault(clip => clip.name == "turning_right");
+        if (turnRight == null) turnRight = animationClips.FirstOrDefault(clip => clip.name == "turn_right");  // legacy name
+        if (turnRight == null) Debug.LogError("Anim not found turning_right");
+
+        strongHitBack = animationClips.FirstOrDefault(clip => clip.name == "strong_hit_back"); if (strongHitBack == null) Debug.LogError("Anim not strong_hit_back");
+        strongHitFront = animationClips.FirstOrDefault(clip => clip.name == "strong_hit_front"); if (strongHitFront == null) Debug.LogError("Anim not found strong_hit_front");
 
         SetAnimLoopMode(new string[] { defaultAnim.name, idleHighSpeed.name, idleNormal.name }, modelImporter);
 
@@ -221,27 +222,30 @@ public class PTK_ModVehicle : MonoBehaviour
 
     }
 
+    [Header("Bones Names")]
+    public string strBodyBone = "Body";
+    public string strRootBone = "Root_SCRIPT";
+    public string strEngineBone = "Engine";
+    public string strWheelBone = "Driving_Wheel";
+    public string strPipeL = "FX-Pipe L";
+    public string strPipeR = "FX-Pipe R";
     void InitBonesReferences()
     {
       Transform[] childTransforms =  this.transform.GetComponentsInChildren<Transform>();
 
-         kartRoot = GetChildTransform("Root_SCRIPT", childTransforms);
-        engineBone = GetChildTransform("Engine", childTransforms);
-        ikRigRootBone = GetChildTransform("Body", childTransforms);
-        drivingWheelBone = GetChildTransform("Driving_Wheel", childTransforms);
-        characterSocketBone = GetChildTransform("Body", childTransforms);
+         kartRoot = GetChildTransform(strRootBone, childTransforms);
+        engineBone = GetChildTransform(strEngineBone, childTransforms);
+        ikRigRootBone = GetChildTransform(strBodyBone, childTransforms);
+        drivingWheelBone = GetChildTransform(strWheelBone, childTransforms);
+        characterSocketBone = GetChildTransform(strBodyBone, childTransforms);
 
         fl_Bone = GetChildTransform("Wheel_F L", childTransforms);
-        fl_Hinge = GetChildTransform("DEF-Bar_F L", childTransforms);
         fr_Bone = GetChildTransform("Wheel_F R", childTransforms);
-        fr_Hinge = GetChildTransform("DEF-Bar_F R", childTransforms);
         bl_Bone = GetChildTransform("Wheel_B L", childTransforms);
-        bl_Hinge = GetChildTransform("DEF-Bar_B L", childTransforms);
         br_Bone = GetChildTransform("Wheel_B R", childTransforms);
-        br_Hinge = GetChildTransform("DEF-Bar_B R", childTransforms);
 
-        pipe1 = GetChildTransform("FX-Pipe L", childTransforms);
-        pipe2 = GetChildTransform("FX-Pipe R", childTransforms);
+        pipe1 = GetChildTransform(strPipeL, childTransforms);
+        pipe2 = GetChildTransform(strPipeR, childTransforms);
     }
 
     Transform GetChildTransform(string strName, Transform[] childTransforms)
