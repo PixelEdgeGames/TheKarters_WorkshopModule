@@ -28,28 +28,28 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
             if(nameToClip.Count == 0)
             {
                 foreach (var clip in Driving)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in Events)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in Menu)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in ItemsModelAnim)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in JumpTricks_SuperLong)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in JumpTricks_NormalShort)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in ItemUsage)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in WeaponTargeting)
-                    nameToClip.Add(clip.name.ToLower(), clip);
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
             }
 
             namePart = namePart.ToLower();
@@ -61,7 +61,29 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
             return null;
         }
+
+        // in scriptable object we have names for chaaracter _A and _B and _c , they are used to assign to correct SO, but inside the game we are using names for each character
+        // AnimationCategory CharacterA , AnimationCategory CharacterB, AnimationCategory CharacterC and they shouldnt have this prefix because game logic code is not using it
+        string Remove_ABC_Prefix(string strName)
+        {
+            string[] endings = { "_a", "_b", "_c" };
+
+            strName = strName.ToLower();
+
+            foreach (var ending in endings)
+            {
+                if (strName.EndsWith(ending))
+                {
+                    string strReturn = strName.Substring(0, strName.Length - ending.Length);
+                    return strReturn;
+                }
+            }
+
+            return strName;
+        }
     }
+
+
 
     public AnimationCategory CharacterA = new AnimationCategory();
     public AnimationCategory CharacterB = new AnimationCategory();
