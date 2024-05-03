@@ -16,6 +16,9 @@ public class PTK_SuspensionSetupParent : MonoBehaviour
     List<PTK_SimpleSuspension> suspensions = new List<PTK_SimpleSuspension>();
 
     PTK_ModVehicle parentModVehicle;
+
+    Transform vehicleBodyTiltBone;
+    Transform vehicleOriginBone;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,10 +26,17 @@ public class PTK_SuspensionSetupParent : MonoBehaviour
 
         InitSuspensionList();
 
-        transform.parent = parentModVehicle.ikRigRootBone.transform;
+        vehicleBodyTiltBone = parentModVehicle.ikRigRootBone.transform;
+        vehicleOriginBone = parentModVehicle.kartRoot.transform;
+
+        transform.parent = vehicleOriginBone;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
+
+
+        for (int i = 0; i < suspensions.Count; i++)
+            suspensions[i].bodyFixedTransfom.transform.parent = vehicleBodyTiltBone.transform;
     }
 
     void InitSuspensionList()
@@ -73,6 +83,7 @@ public class PTK_SuspensionSetupParent : MonoBehaviour
                 suspensions.Add(susp);
             }
         }
+
     }
     public List<PTK_SimpleSuspension> GetVehicleSuspensions()
     {

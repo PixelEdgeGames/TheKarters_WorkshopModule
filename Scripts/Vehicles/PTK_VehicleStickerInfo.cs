@@ -90,6 +90,9 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
         {
             var meshFilter = stickerMeshRenderers_FirstLayer_Back[iMeshRenderer].GetComponent<MeshFilter>();
 
+            if (meshFilter.sharedMesh == null)
+                continue;
+
             int iStepsToMakeMax = 200;
             int iStep = Mathf.CeilToInt(meshFilter.sharedMesh.vertexCount / (float)iStepsToMakeMax);
 
