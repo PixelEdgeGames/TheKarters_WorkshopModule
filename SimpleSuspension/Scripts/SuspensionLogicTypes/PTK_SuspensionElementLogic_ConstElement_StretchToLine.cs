@@ -20,7 +20,7 @@ public class PTK_SuspensionElementLogic_ConstElement_StretchToLine : PTK_Suspens
     [Header("Angle Offset")]
     public float fElementDirectionTargetAngle;
     [Header("LocalRot Multiplier")]
-    public float localRotationChangeStrengthMultiplier = 1.0f; // if fixed attachement point rotation will change - this will increase effect of this rotation so element will rotate even more. Good if element is attached to vehicle body - it will increase tilt strength (
+    public float localRotationChangeStrengthMultiplier = 2.0f; // if fixed attachement point rotation will change - this will increase effect of this rotation so element will rotate even more. Good if element is attached to vehicle body - it will increase tilt strength (
     [Header("Limits between line")]
     public float fHowCloseWeCanMoveOnLineTo_StartPoint = 0.2f; // how close we can get to start/end point
     public float fHowCloseWeCanMoveOnLineTo_EndPoint = 0.2f;
@@ -62,6 +62,7 @@ public class PTK_SuspensionElementLogic_ConstElement_StretchToLine : PTK_Suspens
         transform.LookAt(vTargetPointPos);
     }
 
+    public float fAngleCurrent = 0.0f;
     // it will keep the orientation constant - it will just calculate how long element needs to be to reach the target element
     private void CalculatePointOnTargetLine()
     {
@@ -74,18 +75,36 @@ public class PTK_SuspensionElementLogic_ConstElement_StretchToLine : PTK_Suspens
 
 
         Vector3 vDirFromOriginToTarget = (stretchToTargetLine_StartPoint.position - vFixedPointPos).normalized; vDirFromOriginToTarget.y = 0.0f; vDirFromOriginToTarget.Normalize();
-        vDirFromOriginToTarget = Quaternion.AngleAxis(fElementDirectionTargetAngle - fixedAttachedToPoint.eulerAngles.x * localRotationChangeStrengthMultiplier, Vector3.Cross(vDirFromOriginToTarget, Vector3.up).normalized) * vDirFromOriginToTarget;
+
+        fAngleCurrent = fElementDirectionTargetAngle - fixedAttachedToPoint.eulerAngles.x * localRotationChangeStrengthMultiplier;
+        vDirFromOriginToTarget = Quaternion.AngleAxis(fAngleCurrent, Vector3.Cross(vDirFromOriginToTarget, Vector3.up).normalized) * vDirFromOriginToTarget;
+        vDirFromOriginToTarget.Normalize();
         Ray ray = new Ray(vFixedPointPos, vDirFromOriginToTarget);
 
         Plane plane = new Plane(vIntersecitonLineForward, stretchToTargetLine_StartPoint.position);
-        fLineIntersectionDistFromOriginDist = 0;
-        plane.Raycast(ray, out fLineIntersectionDistFromOriginDist);
+        
+       bool bRaycasted = plane.Raycast(ray, out fLineIntersectionDistFromOriginDist);
+
+        if(bRaycasted == true )
+        {
+            fLastLengthIntersect = fLineIntersectionDistFromOriginDist;
+            vLastRayIntersectDitr = ray.direction;
+        }
+        else
+        {
+            fLineIntersectionDistFromOriginDist = fLastLengthIntersect;
+            ray.direction = vLastRayIntersectDitr;
+        }
+
 
         vTargetPointPos = vFixedPointPos + ray.direction * fLineIntersectionDistFromOriginDist;
 
         // is outside of line start/end
         LimitTargetPositionOnLineStartEnd();
     }
+
+    float fLastLengthIntersect = 0.0f;
+    Vector3 vLastRayIntersectDitr = Vector3.forward;
 
     private void LimitTargetPositionOnLineStartEnd()
     {
@@ -94,8 +113,9 @@ public class PTK_SuspensionElementLogic_ConstElement_StretchToLine : PTK_Suspens
         float fLengthWithinLimits = Vector3.Dot(vTargetPointOffsetFromStart, directionToEnd);
 
         // Define limits 
-        float minLimit = fHowCloseWeCanMoveOnLineTo_StartPoint* fixedAttachedToPoint.lossyScale.x;
-        float maxLimit = Vector3.Distance(stretchToTargetLine_StartPoint.position, stretchToTargetLine_EndPoint.position) - fHowCloseWeCanMoveOnLineTo_EndPoint* fixedAttachedToPoint.lossyScale.x;
+        float fKartScale = Mathf.Abs(fixedAttachedToPoint.lossyScale.z);
+        float minLimit = fHowCloseWeCanMoveOnLineTo_StartPoint* fKartScale;
+        float maxLimit = Vector3.Distance(stretchToTargetLine_StartPoint.position, stretchToTargetLine_EndPoint.position) - fHowCloseWeCanMoveOnLineTo_EndPoint* fKartScale;
 
 
 

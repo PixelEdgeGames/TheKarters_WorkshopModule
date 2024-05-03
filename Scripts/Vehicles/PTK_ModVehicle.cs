@@ -27,6 +27,11 @@ public class PTK_ModVehicle : MonoBehaviour
     public float bl_WheelSize = 1.26f;
     public float br_WheelSize = 1.26f;
 
+    public float fl_WheelMaxHangDist= 0.6f;
+    public float fr_WheelMaxHangDist = 0.6f;
+    public float bl_WheelMaxHangDist = 1.35f;
+    public float br_WheelMaxHangDist = 1.35f;
+
 
     [Header("Click init button below to init")]
     public PTK_VehicleStickersParent stickersManager;

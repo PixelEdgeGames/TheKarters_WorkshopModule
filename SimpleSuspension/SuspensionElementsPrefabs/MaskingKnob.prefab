@@ -44,10 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06246302c0162154c944286a603963bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fixedPointLocalOffset: {x: 0, y: 0, z: -0.15}
   fixedAttachedToPoint: {fileID: 0}
-  localOrientation: {x: 0, y: 0, z: 0}
-  localScale: 1
+  fixedPointLocalOffset: {x: 0, y: 0, z: -0.15}
+  bOffsetBasedOnDirectionBetweenPoints: 0
+  bOrientationBasedOnStartEndPos: 0
+  vEulerAngleAdd: {x: 0, y: 0, z: 0}
+  lineStartPos: {fileID: 0}
+  lineEndPos: {fileID: 0}
 --- !u!1001 &3129857713183205019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78,12 +81,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d55588df38a642243a8aaad520550d45,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d55588df38a642243a8aaad520550d45,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d55588df38a642243a8aaad520550d45,
         type: 3}
@@ -98,7 +101,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d55588df38a642243a8aaad520550d45,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d55588df38a642243a8aaad520550d45,
         type: 3}

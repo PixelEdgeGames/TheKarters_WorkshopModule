@@ -7,6 +7,11 @@ public class PTK_SuspensionElementLogic_AttachToPoint : PTK_SuspensionElementLog
 {
     [Header("Offset based on other element orientation")]
     public bool bOffsetBasedOnDirectionBetweenPoints = false;
+
+    // helpfull when the elements is on line and this line is rotating during gameplay. It will use up from this line
+    public bool bOrientationBasedOnStartEndPos = false;
+    public Vector3 vEulerAngleAdd = Vector3.zero;
+
     public Transform lineStartPos;
     public Transform lineEndPos;
 
@@ -34,5 +39,12 @@ public class PTK_SuspensionElementLogic_AttachToPoint : PTK_SuspensionElementLog
 
         Vector3 vFixedPointPos = fixedAttachedToPoint.position + rotToUse * (fixedPointWorldOffset);
         transform.position = vFixedPointPos;
+
+        if(bOrientationBasedOnStartEndPos == true)
+        {
+            Vector3 vDir = (lineEndPos.position - lineStartPos.position).normalized;
+            Quaternion qRotLine = Quaternion.LookRotation(vDir) * Quaternion.Euler(vEulerAngleAdd);
+            transform.rotation = qRotLine;
+        }
     }
 }

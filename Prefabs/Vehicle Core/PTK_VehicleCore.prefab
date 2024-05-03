@@ -434,18 +434,11 @@ MonoBehaviour:
   fr_WheelSize: 1
   bl_WheelSize: 1.26
   br_WheelSize: 1.26
+  fl_WheelMaxHangDist: 0.6
+  fr_WheelMaxHangDist: 0.6
+  bl_WheelMaxHangDist: 1.35
+  br_WheelMaxHangDist: 1.35
   stickersManager: {fileID: 9008103743314985972}
-  vehicleStickers:
-  - {fileID: 9086832693945355889}
-  - {fileID: 2579983334818368611}
-  - {fileID: 4268477856385222390}
-  - {fileID: 2728881671716955130}
-  - {fileID: 3800304242041824558}
-  - {fileID: 8597817472151761349}
-  - {fileID: 5045381435266413836}
-  - {fileID: 2367441869892936594}
-  - {fileID: 3192037677149875936}
-  - {fileID: 2358893273500900745}
   vehicleAnimator: {fileID: 0}
   vehicleRenderers:
   - {fileID: 0}
@@ -459,13 +452,9 @@ MonoBehaviour:
   characterSocketBone: {fileID: 0}
   engineBone: {fileID: 0}
   fl_Bone: {fileID: 0}
-  fl_Hinge: {fileID: 0}
   fr_Bone: {fileID: 0}
-  fr_Hinge: {fileID: 0}
   bl_Bone: {fileID: 0}
-  bl_Hinge: {fileID: 0}
   br_Bone: {fileID: 0}
-  br_Hinge: {fileID: 0}
   pipe1: {fileID: 0}
   pipe2: {fileID: 0}
   backTransform_off: {fileID: 0}
@@ -480,6 +469,12 @@ MonoBehaviour:
   strongHitBack: {fileID: 0}
   strongHitFront: {fileID: 0}
   suspensionParent: {fileID: 235046551865381338}
+  strBodyBone: Body
+  strRootBone: Root_SCRIPT
+  strEngineBone: Engine
+  strWheelBone: Driving_Wheel
+  strPipeL: FX-Pipe L
+  strPipeR: FX-Pipe R
 --- !u!114 &4817976735990964684
 MonoBehaviour:
   m_ObjectHideFlags: 0
