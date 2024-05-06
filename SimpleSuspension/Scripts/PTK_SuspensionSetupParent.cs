@@ -29,7 +29,7 @@ public class PTK_SuspensionSetupParent : MonoBehaviour
         vehicleBodyTiltBone = parentModVehicle.ikRigRootBone.transform;
         vehicleOriginBone = parentModVehicle.kartRoot.transform;
 
-        transform.parent = vehicleOriginBone;
+        transform.parent = vehicleOriginBone.transform.parent; // one more parent to avoid scaling animation of mesh renderers. Body target transform and wheel transform are attached inside vehicle animation so rotation and scalling will affect target positions for IK (but meshes wont be scaled because that is changing mesh orientation if element is long-tilted and scale is only on Y axis
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
