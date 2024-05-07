@@ -277,14 +277,15 @@ public class PTK_ModVehicle : MonoBehaviour
         idleHighSpeed.wrapMode = WrapMode.Loop;
 
         animOverrideController["default"] = defaultAnim;
+        animOverrideController["default_Steer"] = defaultAnim;
         animOverrideController["idle_high_speed"] = idleHighSpeed;
         animOverrideController["idle_normal"] = idleNormal;
 
-        animOverrideController["damage"] = damage;
-        animOverrideController["damage_death"] = damageDeath;
+        animOverrideController["obrazenia"] = damage;
+        animOverrideController["obrazenia_death"] = damageDeath;
 
-        animOverrideController["turning_left"] = turnLeft;
-        animOverrideController["turning_right"] = turnRight;
+        animOverrideController["skrecanie_lewo"] = turnLeft;
+        animOverrideController["skrecanie_prawo"] = turnRight;
 
         animOverrideController["strong_hit_back"] = strongHitBack;
         animOverrideController["strong_hit_front"] = strongHitFront;
