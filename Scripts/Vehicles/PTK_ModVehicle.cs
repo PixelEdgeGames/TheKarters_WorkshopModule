@@ -13,6 +13,11 @@ public class PTK_ModVehicle : MonoBehaviour
     [Header("Config Per Vehicle -30,30")]
     [Tooltip("Increase vehicle angle after boostpad/3rd boost/boost landing.")]
     public float fBoostTiltIncreaseAngle = 5.0f;
+
+    [Range(0.5f,1.5f)]
+    [Tooltip("sideways angle multiplier on landing / during drift .")]
+    public float fDriftingLeanAngleMultiplier = 1.0f;
+
     public enum EVehicleType
     {
         E_FOUR_WHEELS,
