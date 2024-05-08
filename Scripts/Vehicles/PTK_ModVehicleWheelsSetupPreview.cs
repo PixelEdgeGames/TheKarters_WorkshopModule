@@ -80,8 +80,8 @@ public class PTK_ModVehicleWheelsSetupPreview : MonoBehaviour
 
             if (parentModVehicle.eVehicleType == PTK_ModVehicle.EVehicleType.E_TWO_WHEELS_LEFT_RIGHT)
             {
-                frWheel.gameObject.SetActive(false);
-                flWheel.gameObject.SetActive(false);
+                brWheel.gameObject.SetActive(false);
+                blWheel.gameObject.SetActive(false);
             }
         }
     }

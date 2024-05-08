@@ -87,12 +87,18 @@ public class PTK_ModVehicle : MonoBehaviour
 
         stickersManager.Initialize();
 
-        for (int i=0;i< stickersManager.vehicleStickers.Length;i++)
+        for (int i = 0; i < stickersManager.vehicleStickers.Length; i++)
         {
             if (stickersManager.vehicleStickers[i].eAttachType == PTK_VehicleStickerInfo.EAttachType.E_ENGINE && engineBone != null)
                 stickersManager.vehicleStickers[i].transform.parent = engineBone.transform;
             else
                 stickersManager.vehicleStickers[i].transform.parent = characterSocketBone.transform;
+        }
+
+        if (eVehicleType == PTK_ModVehicle.EVehicleType.E_TWO_WHEELS_LEFT_RIGHT)
+        {
+            bl_Bone.localPosition -= new Vector3(0.0F, 0.0F, 2.0F); // BL
+            br_Bone.localPosition -= new Vector3(0.0F, 0.0F, 2.0F);// BR
         }
     }
 
