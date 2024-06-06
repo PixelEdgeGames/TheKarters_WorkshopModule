@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 8182078892643347599}
   - component: {fileID: 5323498449487179270}
   - component: {fileID: 4717132400593685320}
+  - component: {fileID: 9182022406093656697}
   m_Layer: 0
   m_Name: WheelPoint_CenterPivot
   m_TagString: Untagged
@@ -260,3 +261,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   innerSideWheelPivotTransform: {fileID: 8465566397546913278}
   outerSideWheelPivotTransform: {fileID: 1652835127340470554}
+--- !u!114 &9182022406093656697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979107050904910057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86728f8306523f64d9b04a8c76babb91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previewMeshes:
+  - {fileID: 5323498449487179270}
+  - {fileID: 2058068453758343824}
+  - {fileID: 3260638476486647440}

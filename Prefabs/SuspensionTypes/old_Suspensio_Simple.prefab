@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 964983516718099764}
   - component: {fileID: 964983516718099765}
   m_Layer: 0
-  m_Name: Suspensio_Simple
+  m_Name: old_Suspensio_Simple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

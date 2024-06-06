@@ -100,6 +100,14 @@ public class PTK_ModVehicle : MonoBehaviour
             bl_Bone.localPosition -= new Vector3(0.0F, 0.0F, 2.0F); // BL
             br_Bone.localPosition -= new Vector3(0.0F, 0.0F, 2.0F);// BR
         }
+
+        PTK_SuspensionPreviewMesh [] previewMeshes = this.GetComponentsInChildren<PTK_SuspensionPreviewMesh>();
+
+        for(int iPreview = 0; iPreview < previewMeshes.Length;iPreview++)
+        {
+            for (int iMesh = 0; iMesh < previewMeshes[iPreview].previewMeshes.Length; iMesh++)
+                previewMeshes[iPreview].previewMeshes[iMesh].enabled = false;
+        }
     }
 
     public int GetAvailableStickersCountFrontAndBack()
