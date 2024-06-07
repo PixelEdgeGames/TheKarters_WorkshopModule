@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ModInfo", menuName = "PixelTools/ModInfo", order = 0)]
 public class PTK_ModInfo : ScriptableObject
 {
-    public static string strThumbScreenImageExt = ".png";
+    public static string strThumbScreenImageExt = ".jpg";
     public string LastBuildDateTime = "";
     public string ModName;
     [Header("Used to generate constant uqnique IDs for your items! Important to avoid conflicts with other mods.")]

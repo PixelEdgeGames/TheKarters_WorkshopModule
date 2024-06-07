@@ -129,7 +129,7 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
                     }
                     else if (animCategory == "ItemUsage")
                         taregtChar.ItemUsage.Add(clip);
-                    else if (animCategory == "WeaponTargetting")
+                    else if (animCategory == "WeaponTargetting" || animCategory == "WeaponTargeting")
                         taregtChar.WeaponTargeting.Add(clip);
                     else
                         Debug.LogError("Unknown Category " + animCategory);
