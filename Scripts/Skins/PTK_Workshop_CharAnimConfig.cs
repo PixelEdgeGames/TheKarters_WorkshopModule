@@ -16,6 +16,7 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
         public List<AnimationClip> Events = new List<AnimationClip>();
         public List<AnimationClip> Menu = new List<AnimationClip>();
         public List<AnimationClip> ItemsModelAnim = new List<AnimationClip>();
+        public List<AnimationClip> ItemsModelAnim_Common = new List<AnimationClip>();
         public List<AnimationClip> JumpTricks_SuperLong = new List<AnimationClip>();
         public List<AnimationClip> JumpTricks_NormalShort = new List<AnimationClip>();
         public List<AnimationClip> ItemUsage = new List<AnimationClip>();
@@ -38,6 +39,15 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
                 foreach (var clip in ItemsModelAnim)
                     nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+
+                foreach (var clip in ItemsModelAnim_Common)
+                {
+                    if(nameToClip.ContainsKey(Remove_ABC_Prefix(clip.name)))
+                    {
+                        Debug.LogError("Duplicate: " + Remove_ABC_Prefix(clip.name));
+                    }else
+                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                }
 
                 foreach (var clip in JumpTricks_SuperLong)
                     nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
