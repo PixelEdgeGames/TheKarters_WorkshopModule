@@ -138,6 +138,11 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
 
                     config.iLastInitializationElementsCount++;
                 }
+
+                if(taregtChar.ItemsModelAnim_Common.Count == 0)
+                {
+                    Debug.LogError("Item Common animations are empty! __PUT_Blender_ANIM_Export_here/ItemsCommonAnims directory should exist by defeault. If this directory does not exist please copy it from other character and do not remove it in the future.");
+                }
             }
         }
 

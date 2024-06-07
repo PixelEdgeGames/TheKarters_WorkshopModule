@@ -41,13 +41,7 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
                     nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
 
                 foreach (var clip in ItemsModelAnim_Common)
-                {
-                    if(nameToClip.ContainsKey(Remove_ABC_Prefix(clip.name)))
-                    {
-                        Debug.LogError("Duplicate: " + Remove_ABC_Prefix(clip.name));
-                    }else
                     nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
-                }
 
                 foreach (var clip in JumpTricks_SuperLong)
                     nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
