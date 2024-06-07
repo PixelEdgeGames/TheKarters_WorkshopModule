@@ -23,7 +23,7 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
         Dictionary<string, AnimationClip> nameToClip = new Dictionary<string, AnimationClip>();
 
-        public AnimationClip GetClipByNameFull(string namePart)
+        public AnimationClip GetClipByNameFull(string namePart,string alternative = "")
         {
             if(nameToClip.Count == 0)
             {
@@ -53,9 +53,13 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
             }
 
             namePart = namePart.ToLower();
+            alternative = alternative.ToLower();
 
             if (nameToClip.ContainsKey(namePart))
                 return nameToClip[namePart];
+
+            if (nameToClip.ContainsKey(alternative))
+                return nameToClip[alternative];
 
             Debug.LogError("Clip not found: " + namePart);
 
