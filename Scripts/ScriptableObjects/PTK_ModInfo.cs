@@ -11,6 +11,7 @@ public class PTK_ModInfo : ScriptableObject
     [Header("Used to generate constant uqnique IDs for your items! Important to avoid conflicts with other mods.")]
     public string UniqueModNameHashToGenerateItemsKeys = "";
     public string ModAuthor = "";
+    public int  iTrackLeaderboardVersion = 0;
     public bool bUploadModDescriptionToServer = true;
     public bool bUploadAndReplaceScreenshootsOnServer = true;
     public string strModDescription = "";
