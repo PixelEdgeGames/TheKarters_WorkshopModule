@@ -19,6 +19,7 @@ public class CPTK_ModContentInfoFile
     {
         public string strTrackSceneName_AddressableKey = "";
         public string strTrackDirName = "";
+        public string strLeaderboardVersion = "";
         public int iGeneratedTargetUniqueConfigID = -1;
     }
 
