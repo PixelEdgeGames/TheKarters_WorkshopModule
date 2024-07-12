@@ -80,13 +80,16 @@ public class PTK_CheckpointLogic : MonoBehaviour
     {
         int iShowAsNumber = 1;
 
-        Transform checkpointsParent = transform.parent.parent;
-        for (int iCheckpointNr=0;iCheckpointNr< checkpointsParent.childCount;iCheckpointNr++)
+        if(transform.parent != null && transform.parent.parent != null)
         {
-          if(transform.parent == checkpointsParent.GetChild(iCheckpointNr))
+            Transform checkpointsParent = transform.parent.parent;
+            for (int iCheckpointNr = 0; iCheckpointNr < checkpointsParent.childCount; iCheckpointNr++)
             {
-                iShowAsNumber =( iCheckpointNr+1);
-                break;
+                if (transform.parent == checkpointsParent.GetChild(iCheckpointNr))
+                {
+                    iShowAsNumber = (iCheckpointNr + 1);
+                    break;
+                }
             }
         }
 
