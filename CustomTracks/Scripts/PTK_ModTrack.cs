@@ -63,6 +63,11 @@ public class PTK_ModTrack : MonoBehaviour
     public GameObject aiJumpBlockTriggers;
     [SerializeField]
     public GameObject humanLongJumpTriggers;
+
+    [Header("RacePositionCalc Paths")]
+    [SerializeField]
+    public Transform checkpointParent;
+
     // Start is called before the first frame update
     void Awake()
     {
