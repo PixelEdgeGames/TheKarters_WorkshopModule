@@ -40,6 +40,8 @@ public class PTK_CheckpointLogic : MonoBehaviour
     [SerializeField]
     MeshRenderer checkpointModel_R;
 
+    public GameObject forwardParentDebugMesh;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +63,7 @@ public class PTK_CheckpointLogic : MonoBehaviour
     void InitializeAndSetupCheckpoint()
     {
         transform.localScale = Vector3.one;
-        transform.eulerAngles = new Vector3(0.0f, transform.eulerAngles.y, transform.eulerAngles.z);
+     //   transform.eulerAngles = new Vector3(0.0f, transform.eulerAngles.y, transform.eulerAngles.z);
 
         SetupMainCheckpointLogicPlane();
 
@@ -106,6 +108,8 @@ public class PTK_CheckpointLogic : MonoBehaviour
             bShowCheckpointPlaneMesh = false;
 
         checkpointRangePlaneMeshRenderer.enabled = bShowCheckpointPlaneMesh;
+
+        forwardParentDebugMesh.SetActive(bShowCheckpointPlaneMesh);
 
         switch (iShowAsNumber)
         {
