@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PTK_ModTrack : MonoBehaviour
 {
+    [Header("Music Soundbank Name")]
+    public string strMusicSoundBank = "";
 
     [Header("Track Loop")]
     public bool bTrackIsLooped = true;
@@ -66,7 +68,7 @@ public class PTK_ModTrack : MonoBehaviour
 
     [Header("RacePositionCalc Paths")]
     [SerializeField]
-    public Transform checkpointParent;
+    public PTK_CheckpointParent checkpointParent;
 
     // Start is called before the first frame update
     void Awake()

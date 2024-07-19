@@ -18,11 +18,16 @@ public class PTK_CheckpointLogic : MonoBehaviour
     bool bShowMesh_L = true;
     [SerializeField]
     bool bShowMesh_R = true;
-    [Header("Extra Settings")]
-    [Range(0, 30)]
+    [Header("Extra Size")]
+    [Range(0, 200)]
     [SerializeField]
-    public float fExtraBottomHeight = 10.0f;
- 
+    public float fExtraSidesHeight = 5.0f;
+    [Range(0, 200)]
+    [SerializeField]
+    public float fExtraTopHeight = 200.0f;
+    [Range(0, 200)]
+    [SerializeField]
+    public float fExtraBottomHeight =200.0f;
 
     [Header("Visual")]
     [SerializeField]
@@ -35,6 +40,10 @@ public class PTK_CheckpointLogic : MonoBehaviour
     Material checkpointMat2;
     [SerializeField]
     Material checkpointMat3;
+    [SerializeField]
+    Material checkpointPlaneMat;
+    [SerializeField]
+    Material timeDiffOnlyPlaneMat;
     [SerializeField]
     MeshRenderer checkpointModel_L;
     [SerializeField]
@@ -63,7 +72,6 @@ public class PTK_CheckpointLogic : MonoBehaviour
     void InitializeAndSetupCheckpoint()
     {
         transform.localScale = Vector3.one;
-     //   transform.eulerAngles = new Vector3(0.0f, transform.eulerAngles.y, transform.eulerAngles.z);
 
         SetupMainCheckpointLogicPlane();
 
@@ -72,28 +80,37 @@ public class PTK_CheckpointLogic : MonoBehaviour
 
     private void SetupMainCheckpointLogicPlane()
     {
-        checkpointRangePlane.transform.localScale = new Vector3(fCheckpointWidth, GetCheckpointConstantHeight() + fExtraBottomHeight, 0.1f);
-
-        checkpointRangePlane.transform.localPosition = new Vector3(0.0f, -fExtraBottomHeight * 0.5f, 0.0f);
+        checkpointRangePlane.transform.localScale = new Vector3(fCheckpointWidth + fExtraSidesHeight * 2, GetCheckpointConstantHeight() + fExtraBottomHeight + fExtraTopHeight, 0.1f);
+        checkpointRangePlane.transform.localPosition = new Vector3(0.0f, (fExtraTopHeight - fExtraBottomHeight) * 0.5f, 0.0f);
         checkpointRangePlane.transform.localRotation = Quaternion.identity;
     }
 
+    PTK_CheckpointParent checkpointParent;
     private void Setup3DModelMeshes()
     {
         int iShowAsNumber = 1;
 
-        if(transform.parent != null && transform.parent.parent != null)
+        if(checkpointParent == null)
         {
-            Transform checkpointsParent = transform.parent.parent;
-            for (int iCheckpointNr = 0; iCheckpointNr < checkpointsParent.childCount; iCheckpointNr++)
-            {
-                if (transform.parent == checkpointsParent.GetChild(iCheckpointNr))
-                {
-                    iShowAsNumber = (iCheckpointNr + 1);
-                    break;
-                }
-            }
+            checkpointParent = this.GetComponentInParent<PTK_CheckpointParent>();
         }
+
+        if (checkpointParent != null)
+        {
+            if (transform.parent == checkpointParent.parentCheckpoint_0)
+                iShowAsNumber = 1;
+            else if (transform.parent == checkpointParent.parentCheckpoint_1)
+                iShowAsNumber = 2;
+            else if (transform.parent == checkpointParent.parentCheckpoint_2)
+                iShowAsNumber = 3;
+            else if (transform.parent == checkpointParent.parentCheckpoint_TimeOnly)
+                iShowAsNumber = -1;
+            else
+                Debug.LogError("Checkpoint type not found");
+        }
+
+        bool bIsTimeDiffOnlyCheckpoint = iShowAsNumber == -1;
+
 
         float fModelSideOffset = 1.5f;
         float fModelHeightOffset = 1.0f;
@@ -125,21 +142,42 @@ public class PTK_CheckpointLogic : MonoBehaviour
                 checkpointModel_L.material = checkpointMat3;
                 checkpointModel_R.material = checkpointMat3;
                 break;
+            case -1:
+                break;
         }
 
-        checkpointModel_L.enabled = bShowMesh_L;
-        checkpointModel_R.enabled = bShowMesh_R;
-    }
+        if(bIsTimeDiffOnlyCheckpoint == false)
+        {
+            if (bShowMesh_L == false && bShowMesh_R == false)
+            {
+                if (checkpointModel_L.enabled == true) // do not allow to disable both sides
+                    bShowMesh_L = true;
+                else
+                    bShowMesh_R = true;
+            }
 
+            checkpointModel_L.enabled = bShowMesh_L;
+            checkpointModel_R.enabled = bShowMesh_R;
+
+            checkpointRangePlaneMeshRenderer.sharedMaterial = checkpointPlaneMat;
+        }
+        else
+        {
+            checkpointModel_L.enabled = false;
+            checkpointModel_R.enabled = false;
+
+            checkpointRangePlaneMeshRenderer.sharedMaterial = timeDiffOnlyPlaneMat;
+        }
+    }
 
     [EasyButtons.Button]
     void AlignToGround()
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(transform.position + Vector3.up*20.0f,-Vector3.up,out hit,300))
+        if (Physics.Raycast(transform.position + Vector3.up * 20.0f, -Vector3.up, out hit, 300))
         {
-            transform.position = hit.point + Vector3.up* GetCheckpointConstantHeight() * 0.5F - Vector3.up*2.0f;
+            transform.position = hit.point + Vector3.up * GetCheckpointConstantHeight() * 0.5F - Vector3.up * 2.0f;
         }
     }
 }
