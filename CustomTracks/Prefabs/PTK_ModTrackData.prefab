@@ -23735,7 +23735,7 @@ MonoBehaviour:
   aiJumpTriggers: {fileID: 798620310379882281}
   aiJumpBlockTriggers: {fileID: 798620308886168796}
   humanLongJumpTriggers: {fileID: 798620309010124698}
-  checkpointParent: {fileID: 3831535015663493956}
+  checkpointParent: {fileID: 8766175968701928563}
 --- !u!1 &798620310416810046
 GameObject:
   m_ObjectHideFlags: 0
