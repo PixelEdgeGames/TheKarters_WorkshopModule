@@ -68,7 +68,7 @@ public class PTK_ModTrack : MonoBehaviour
 
     [Header("RacePositionCalc Paths")]
     [SerializeField]
-    public PTK_CheckpointParent checkpointParent;
+    public GameObject checkpointParent;
 
     // Start is called before the first frame update
     void Awake()
