@@ -12,6 +12,9 @@ public class PTK_CharacterInfoSO : ScriptableObject
         public string strCharNameForUI = "Default Name";
         public float fCharacterHeight = 1.5f;
 
+        [Header("Custom VO Soundbank")]
+        public string strCustomVOSoundBankName = "";
+
         [Header("Leave Default")]
         public Vector3 vCharOffsetPosInVehicle = Vector3.zero;
         public string strAttachItemHandBoneName_L = "Hand L";
