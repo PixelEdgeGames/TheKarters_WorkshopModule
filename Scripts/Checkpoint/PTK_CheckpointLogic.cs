@@ -21,13 +21,13 @@ public class PTK_CheckpointLogic : MonoBehaviour
     [Header("Extra Size")]
     [Range(0, 200)]
     [SerializeField]
-    public float fExtraSidesHeight = 5.0f;
+    public float fExtraSides_Width = 5.0f;
     [Range(0, 200)]
     [SerializeField]
-    public float fExtraTopHeight = 200.0f;
+    public float fExtraTop_Height = 200.0f;
     [Range(0, 200)]
     [SerializeField]
-    public float fExtraBottomHeight =200.0f;
+    public float fExtraBottom_Height =200.0f;
 
     [Header("Visual")]
     [SerializeField]
@@ -80,8 +80,8 @@ public class PTK_CheckpointLogic : MonoBehaviour
 
     private void SetupMainCheckpointLogicPlane()
     {
-        checkpointRangePlane.transform.localScale = new Vector3(fCheckpointWidth + fExtraSidesHeight * 2, GetCheckpointConstantHeight() + fExtraBottomHeight + fExtraTopHeight, 0.1f);
-        checkpointRangePlane.transform.localPosition = new Vector3(0.0f, (fExtraTopHeight - fExtraBottomHeight) * 0.5f, 0.0f);
+        checkpointRangePlane.transform.localScale = new Vector3(fCheckpointWidth + fExtraSides_Width * 2, GetCheckpointConstantHeight() + fExtraBottom_Height + fExtraTop_Height, 0.1f);
+        checkpointRangePlane.transform.localPosition = new Vector3(0.0f, (fExtraTop_Height - fExtraBottom_Height) * 0.5f, 0.0f);
         checkpointRangePlane.transform.localRotation = Quaternion.identity;
     }
 
