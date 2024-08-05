@@ -24,7 +24,7 @@ public class PTK_MinimapRenderAndSave : MonoBehaviour
     public int iFinishLineWidthCellCount = 4;
 
     [Header("Edit Camera Pos & Size")]
-    [Range(0,2)]
+    [Range(-2,2)]
     public float fEnviroSizeInTexture = 1.0f;
     public Vector2 cameraOffsetForRender;
     [Header("Last Generated Minimap")]
