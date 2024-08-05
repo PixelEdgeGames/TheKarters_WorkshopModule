@@ -90,7 +90,6 @@ public class PTK_ModTrack : MonoBehaviour
         if(minimapInfo == null)
         {
             Debug.LogError("Minimap Info is empty. Please generate minimap using button");
-            return;
         }
 
         var minimapGen = this.GetComponentInChildren<PTK_MinimapRenderAndSave>(true);
