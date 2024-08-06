@@ -4,25 +4,41 @@ using UnityEngine;
 
 public class PTK_OffroadGroundType : MonoBehaviour
 {
+    [Range(0.0f, 10.0f)]
+    public float fGroundFriction = 0.5f;
+
+    [HideInInspector]
+    public Collider collider;
     public enum EOffroadGroundType
     {
         GRASS,
-        DIRT,
+        DIRT_ROCKS,
+        MUD,
+        SAND,
         ICE,
         SNOW,
-        LAVA
+        WATER,
+        LAVA,
+
+        __COUNT,
+        __NONE_OFF = 200
     }
-    public float fGroundFriction = 1.0f;
+
+    public EOffroadGroundType eOffroadGroundType = EOffroadGroundType.GRASS;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        this.tag = "PTK_OffroadGround";
+        collider = this.GetComponent<Collider>();
+
+
+        this.gameObject.layer = LayerMask.NameToLayer("GroundCollider");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
