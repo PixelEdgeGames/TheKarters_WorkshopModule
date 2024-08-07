@@ -20,10 +20,19 @@ public class PTK_OffroadGroundType : MonoBehaviour
         WATER,
         LAVA,
 
-        __COUNT,
-        __NONE_OFF = 200
+        __COUNT_DO_NOT_USE,
+
+        __NONE_ = 200
     }
 
+    public static bool OffroadGroundTypeShouldShowSkidemarks(EOffroadGroundType _eGroundType)
+    {
+        if (_eGroundType == EOffroadGroundType.__NONE_ || _eGroundType == EOffroadGroundType.__COUNT_DO_NOT_USE)
+            return false;
+
+
+        return true;
+    }
     public EOffroadGroundType eOffroadGroundType = EOffroadGroundType.GRASS;
 
     // Start is called before the first frame update
