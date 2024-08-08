@@ -13,34 +13,89 @@ public class PTK_GroundType : MonoBehaviour
     [System.Serializable]
     public class CGroundSettings
     {
-        [HideInInspector]
-        public bool[] bPlayerLandedAndDrivingOnSurface = new bool[8]; // can be used to detect if player landed on surface / if it is driving on it
         [Header("Friction Type (Normal/Offroad/Ice)")]
-        public EFrictionType eFrictionType = EFrictionType.E0_NORMAL_DEFAULT_GROUND;
+        public EFrictionType_16 eFrictionType = EFrictionType_16.E0_NORMAL_DEFAULT_GROUND; CVariable eFrictionType_4b = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
         [Header("Skidemarks Color")]
-        public ESkideMarksType eSkideMarksType = ESkideMarksType.E0_GROUND_DEFAULT_BLACK_1;
+        public ESkideMarksType_16 eSkideMarksType = ESkideMarksType_16.E0_GROUND_DEFAULT_BLACK_1; CVariable eSkideMarksType_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
         [Header("Driving Particle VFX")]
-        public EDriveParticleEffect eDrivingParticleEffect_1 = EDriveParticleEffect.E0_NONE_DEFAULT_GROUND;
-        public EDriveParticleEffect eDrivingParticleEffect_2 = EDriveParticleEffect.E0_NONE_DEFAULT_GROUND;
+        public EDriveParticleEffect_16 eDrivingParticleEffect_1 = EDriveParticleEffect_16.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_1_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public EDriveParticleEffect_16 eDrivingParticleEffect_2 = EDriveParticleEffect_16.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_2_4b = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
 
         [Header("Logic Effects - Enabled/Disabled")]
-        public ELogicEffectType eLogicEffect_1 = ELogicEffectType.E0_NONE;
-        public ELogicEffectType eLogicEffect_2 = ELogicEffectType.E0_NONE;
-        public ELogicEffectType eLogicEffect_3 = ELogicEffectType.E0_NONE;
-        public ELogicEffectType eLogicEffect_4 = ELogicEffectType.E0_NONE;
-        public ELogicEffectType eLogicEffect_5 = ELogicEffectType.E0_NONE;
-        public ELogicEffectType eLogicEffect_6 = ELogicEffectType.E0_NONE;
-        public enum EFrictionType
+        public ELogicEffectType_32 eLogicEffect_1 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_1_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_2 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_2_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_3 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_3_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_4 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_4_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_5 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_5_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_6 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_6_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+
+        public (int,int,int) GetAsInt()
+        {
+            eFrictionType_4b.SetValue((int)eFrictionType);
+            eSkideMarksType_4B.SetValue((int)eSkideMarksType);
+            eDrivingParticleEffect_1_4B.SetValue((int)eDrivingParticleEffect_1);
+            eDrivingParticleEffect_2_4b.SetValue((int)eDrivingParticleEffect_2);
+            eLogicEffect_1_5B.SetValue((int)eLogicEffect_1);
+            eLogicEffect_2_5B.SetValue((int)eLogicEffect_2);
+            eLogicEffect_3_5B.SetValue((int)eLogicEffect_3);
+
+            // int 2
+            eLogicEffect_4_5B.SetValue((int)eLogicEffect_4);
+            eLogicEffect_5_5B.SetValue((int)eLogicEffect_5);
+            eLogicEffect_6_5B.SetValue((int)eLogicEffect_6);
+
+            return (ptkIntPacker_1.PackVariables(), ptkIntPacker_2.PackVariables(), ptkIntPacker_3.PackVariables());
+        }
+
+        PixelSDK_IntVariablePacker ptkIntPacker_1 = new PixelSDK_IntVariablePacker();
+        PixelSDK_IntVariablePacker ptkIntPacker_2 = new PixelSDK_IntVariablePacker();
+        PixelSDK_IntVariablePacker ptkIntPacker_3 = new PixelSDK_IntVariablePacker();
+
+        public CGroundSettings()
+        {
+            ptkIntPacker_1.AddVariable(eFrictionType_4b);
+            ptkIntPacker_1.AddVariable(eSkideMarksType_4B);
+            ptkIntPacker_1.AddVariable(eDrivingParticleEffect_1_4B);
+            ptkIntPacker_1.AddVariable(eDrivingParticleEffect_2_4b);
+            ptkIntPacker_1.AddVariable(eLogicEffect_1_5B); // 21
+            ptkIntPacker_1.AddVariable(eLogicEffect_2_5B); // 26
+            ptkIntPacker_1.AddVariable(eLogicEffect_3_5B); // 31
+
+            ptkIntPacker_2.AddVariable(eLogicEffect_4_5B);
+            ptkIntPacker_2.AddVariable(eLogicEffect_5_5B);
+            ptkIntPacker_2.AddVariable(eLogicEffect_6_5B); // 15
+        }
+        public void ReadFromInt(int iData1,int iData2, int iData3)
+        {
+            ptkIntPacker_1.UnpackVariables(iData1);
+            ptkIntPacker_2.UnpackVariables(iData2);
+            ptkIntPacker_3.UnpackVariables(iData3);
+
+            eFrictionType = (EFrictionType_16) eFrictionType_4b.Value;
+            eSkideMarksType = (ESkideMarksType_16)eSkideMarksType_4B.Value;
+            eDrivingParticleEffect_1 = (EDriveParticleEffect_16)eDrivingParticleEffect_1_4B.Value;
+            eDrivingParticleEffect_2 = (EDriveParticleEffect_16)eDrivingParticleEffect_2_4b.Value;
+            eLogicEffect_1 = (ELogicEffectType_32)eLogicEffect_1_5B.Value;
+            eLogicEffect_2 = (ELogicEffectType_32)eLogicEffect_2_5B.Value;
+            eLogicEffect_3 = (ELogicEffectType_32)eLogicEffect_3_5B.Value;
+
+            eLogicEffect_4 = (ELogicEffectType_32)eLogicEffect_4_5B.Value;
+            eLogicEffect_5 = (ELogicEffectType_32)eLogicEffect_5_5B.Value;
+            eLogicEffect_6 = (ELogicEffectType_32)eLogicEffect_6_5B.Value;
+
+
+        }
+        public enum EFrictionType_16
         {
             E0_NORMAL_DEFAULT_GROUND,
             E1_OFFROAD_MEDIUM,
             E2_OFFROAD_MUD_STRONG,
             E3_ICE_NO_FRICTION,
 
-            __COUNT
+            __COUNT // max 16 types! for serialization
         }
 
-        public enum ESkideMarksType
+        public enum ESkideMarksType_16
         {
             E0_GROUND_DEFAULT_BLACK_1,
             E1_GROUND_GRAY_2,
@@ -62,10 +117,10 @@ public class PTK_GroundType : MonoBehaviour
             E11_SAND_1,
             E12_SAND_2,
 
-            __COUNT
+            __COUNT // max 16 types! for serialization
         }
 
-        public enum EDriveParticleEffect
+        public enum EDriveParticleEffect_16
         {
             E0_NONE_DEFAULT_GROUND,
             E1_GRASS,
@@ -79,11 +134,11 @@ public class PTK_GroundType : MonoBehaviour
             E9_HEAL,
             E10_BOOST,
 
-            __COUNT
+            __COUNT // max 16 types! for serialization
 
         }
 
-        public enum ELogicEffectType
+        public enum ELogicEffectType_32
         {
             E0_NONE,
 
@@ -109,14 +164,14 @@ public class PTK_GroundType : MonoBehaviour
 
             E16_FLATTENED,
 
-            __COUNT
+            __COUNT // max 32 types! for serialization
         }
 
     }
 
     public static bool ShouldSkidemarksBeAlwaysVisibleOnGround(CGroundSettings _eGroundType)
     {
-        if (_eGroundType == null || _eGroundType.eFrictionType == CGroundSettings.EFrictionType.E0_NORMAL_DEFAULT_GROUND)
+        if (_eGroundType == null || _eGroundType.eFrictionType == CGroundSettings.EFrictionType_16.E0_NORMAL_DEFAULT_GROUND)
             return false;
 
 
