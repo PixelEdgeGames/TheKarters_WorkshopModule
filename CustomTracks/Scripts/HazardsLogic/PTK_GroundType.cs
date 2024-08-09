@@ -18,28 +18,28 @@ public class PTK_GroundType : MonoBehaviour
         [Header("Skidemarks Color")]
         public ESkideMarksType_16 eSkideMarksType = ESkideMarksType_16.E0_GROUND_DEFAULT_BLACK_1; CVariable eSkideMarksType_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
         [Header("Driving Particle VFX")]
-        public EDriveParticleEffect_16 eDrivingParticleEffect_1 = EDriveParticleEffect_16.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_1_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        public EDriveParticleEffect_16 eDrivingParticleEffect_2 = EDriveParticleEffect_16.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_2_4b = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public EDriveParticleEffect_32 eDrivingParticleEffect_1 = EDriveParticleEffect_32.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_1_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+        public EDriveParticleEffect_32 eDrivingParticleEffect_2 = EDriveParticleEffect_32.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_2_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
 
         [Header("Logic Effects - Enabled/Disabled")]
-        public ELogicEffectType_32 eLogicEffect_1 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_1_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        public ELogicEffectType_32 eLogicEffect_2 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_2_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        public ELogicEffectType_32 eLogicEffect_3 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_3_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        public ELogicEffectType_32 eLogicEffect_4 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_4_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        public ELogicEffectType_32 eLogicEffect_5 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_5_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        public ELogicEffectType_32 eLogicEffect_6 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_6_5B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_1 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_1_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_2 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_2_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_3 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_3_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_4 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_4_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_5 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_5_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+        public ELogicEffectType_32 eLogicEffect_6 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_6_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
 
         public (int,int,int) GetAsInt()
         {
             eFrictionType_4b.SetValue((int)eFrictionType);
             eSkideMarksType_4B.SetValue((int)eSkideMarksType);
-            eDrivingParticleEffect_1_4B.SetValue((int)eDrivingParticleEffect_1);
-            eDrivingParticleEffect_2_4b.SetValue((int)eDrivingParticleEffect_2);
+            eDrivingParticleEffect_1_5B.SetValue((int)eDrivingParticleEffect_1);
+            eDrivingParticleEffect_2_5B.SetValue((int)eDrivingParticleEffect_2);
             eLogicEffect_1_5B.SetValue((int)eLogicEffect_1);
             eLogicEffect_2_5B.SetValue((int)eLogicEffect_2);
-            eLogicEffect_3_5B.SetValue((int)eLogicEffect_3);
 
             // int 2
+            eLogicEffect_3_5B.SetValue((int)eLogicEffect_3);
             eLogicEffect_4_5B.SetValue((int)eLogicEffect_4);
             eLogicEffect_5_5B.SetValue((int)eLogicEffect_5);
             eLogicEffect_6_5B.SetValue((int)eLogicEffect_6);
@@ -55,15 +55,15 @@ public class PTK_GroundType : MonoBehaviour
         {
             ptkIntPacker_1.AddVariable(eFrictionType_4b);
             ptkIntPacker_1.AddVariable(eSkideMarksType_4B);
-            ptkIntPacker_1.AddVariable(eDrivingParticleEffect_1_4B);
-            ptkIntPacker_1.AddVariable(eDrivingParticleEffect_2_4b);
-            ptkIntPacker_1.AddVariable(eLogicEffect_1_5B); // 21
-            ptkIntPacker_1.AddVariable(eLogicEffect_2_5B); // 26
-            ptkIntPacker_1.AddVariable(eLogicEffect_3_5B); // 31
+            ptkIntPacker_1.AddVariable(eDrivingParticleEffect_1_5B);//13
+            ptkIntPacker_1.AddVariable(eDrivingParticleEffect_2_5B);//18
+            ptkIntPacker_1.AddVariable(eLogicEffect_1_5B); // 23
+            ptkIntPacker_1.AddVariable(eLogicEffect_2_5B); // 28
 
-            ptkIntPacker_2.AddVariable(eLogicEffect_4_5B);
-            ptkIntPacker_2.AddVariable(eLogicEffect_5_5B);
-            ptkIntPacker_2.AddVariable(eLogicEffect_6_5B); // 15
+            ptkIntPacker_2.AddVariable(eLogicEffect_3_5B); // 5
+            ptkIntPacker_2.AddVariable(eLogicEffect_4_5B); // 10
+            ptkIntPacker_2.AddVariable(eLogicEffect_5_5B); // 15
+            ptkIntPacker_2.AddVariable(eLogicEffect_6_5B); // 20
         }
         public void ReadFromInt(int iData1,int iData2, int iData3)
         {
@@ -73,12 +73,12 @@ public class PTK_GroundType : MonoBehaviour
 
             eFrictionType = (EFrictionType_16) eFrictionType_4b.Value;
             eSkideMarksType = (ESkideMarksType_16)eSkideMarksType_4B.Value;
-            eDrivingParticleEffect_1 = (EDriveParticleEffect_16)eDrivingParticleEffect_1_4B.Value;
-            eDrivingParticleEffect_2 = (EDriveParticleEffect_16)eDrivingParticleEffect_2_4b.Value;
+            eDrivingParticleEffect_1 = (EDriveParticleEffect_32)eDrivingParticleEffect_1_5B.Value;
+            eDrivingParticleEffect_2 = (EDriveParticleEffect_32)eDrivingParticleEffect_2_5B.Value;
             eLogicEffect_1 = (ELogicEffectType_32)eLogicEffect_1_5B.Value;
             eLogicEffect_2 = (ELogicEffectType_32)eLogicEffect_2_5B.Value;
-            eLogicEffect_3 = (ELogicEffectType_32)eLogicEffect_3_5B.Value;
 
+            eLogicEffect_3 = (ELogicEffectType_32)eLogicEffect_3_5B.Value;
             eLogicEffect_4 = (ELogicEffectType_32)eLogicEffect_4_5B.Value;
             eLogicEffect_5 = (ELogicEffectType_32)eLogicEffect_5_5B.Value;
             eLogicEffect_6 = (ELogicEffectType_32)eLogicEffect_6_5B.Value;
@@ -120,7 +120,7 @@ public class PTK_GroundType : MonoBehaviour
             __COUNT // max 16 types! for serialization
         }
 
-        public enum EDriveParticleEffect_16
+        public enum EDriveParticleEffect_32
         {
             E0_NONE_DEFAULT_GROUND,
             E1_GRASS,
@@ -133,6 +133,10 @@ public class PTK_GroundType : MonoBehaviour
             E8_FIRE,
             E9_HEAL,
             E10_BOOST,
+            E11_DIRT,
+            E12_ICE,
+            E13_LAVA,
+            E14_ELECTRICITY,
 
             __COUNT // max 16 types! for serialization
 
