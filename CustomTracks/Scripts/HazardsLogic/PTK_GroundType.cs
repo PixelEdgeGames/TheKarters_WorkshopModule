@@ -1,11 +1,9 @@
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class PTK_GroundType : MonoBehaviour
 {
     public static string strTagName = "PTK_GroundTypeTag";
-
-    [Range(0.0f, 10.0f)]
-    public float fGroundFriction = 0.5f;
 
     [HideInInspector]
     public Collider collider;
@@ -15,11 +13,17 @@ public class PTK_GroundType : MonoBehaviour
     {
         [Header("Friction Type (Normal/Offroad/Ice)")]
         public EFrictionType_16 eFrictionType = EFrictionType_16.E0_NORMAL_DEFAULT_GROUND; CVariable eFrictionType_4b = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
-        [Header("Skidemarks Color")]
-        public ESkideMarksType_16 eSkideMarksType = ESkideMarksType_16.E0_GROUND_DEFAULT_BLACK_1; CVariable eSkideMarksType_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        [Header("Audio SFX")]
+        public EAudioEffect_16 eDrivingAudioSFX = EAudioEffect_16.E0_NONE_DEFAULT_GROUND; CVariable eDrivingAudioSFX_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+
         [Header("Driving Particle VFX")]
         public EDriveParticleEffect_32 eDrivingParticleEffect_1 = EDriveParticleEffect_32.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_1_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
         public EDriveParticleEffect_32 eDrivingParticleEffect_2 = EDriveParticleEffect_32.E0_NONE_DEFAULT_GROUND; CVariable eDrivingParticleEffect_2_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
+
+
+        [Header("Skidemarks Color")]
+        public ESkideMarksType_16 eSkideMarksType = ESkideMarksType_16.E0_GROUND_DEFAULT_BLACK_1; CVariable eSkideMarksType_4B = new CVariable(CVariable.EType.E_4_BIT_16_CHOICES, 0);
+        public Color previewSkidemarkColor = Color.black;
 
         [Header("Logic Effects - Enabled/Disabled")]
         public ELogicEffectType_32 eLogicEffect_1 = ELogicEffectType_32.E0_NONE; CVariable eLogicEffect_1_5B = new CVariable(CVariable.EType.E_5_BIT_32_CHOICES, 0);
@@ -39,10 +43,12 @@ public class PTK_GroundType : MonoBehaviour
             eLogicEffect_2_5B.SetValue((int)eLogicEffect_2);
 
             // int 2
-            eLogicEffect_3_5B.SetValue((int)eLogicEffect_3);
-            eLogicEffect_4_5B.SetValue((int)eLogicEffect_4);
-            eLogicEffect_5_5B.SetValue((int)eLogicEffect_5);
-            eLogicEffect_6_5B.SetValue((int)eLogicEffect_6);
+            eLogicEffect_3_5B.SetValue((int)eLogicEffect_3); // 5
+            eLogicEffect_4_5B.SetValue((int)eLogicEffect_4); // 10
+            eLogicEffect_5_5B.SetValue((int)eLogicEffect_5); // 15
+            eLogicEffect_6_5B.SetValue((int)eLogicEffect_6); // 20
+            eDrivingAudioSFX_4B.SetValue((int)eDrivingAudioSFX); // 24
+
 
             return (ptkIntPacker_1.PackVariables(), ptkIntPacker_2.PackVariables(), ptkIntPacker_3.PackVariables());
         }
@@ -64,6 +70,7 @@ public class PTK_GroundType : MonoBehaviour
             ptkIntPacker_2.AddVariable(eLogicEffect_4_5B); // 10
             ptkIntPacker_2.AddVariable(eLogicEffect_5_5B); // 15
             ptkIntPacker_2.AddVariable(eLogicEffect_6_5B); // 20
+            ptkIntPacker_2.AddVariable(eDrivingAudioSFX_4B); // 24
         }
         public void ReadFromInt(int iData1,int iData2, int iData3)
         {
@@ -82,6 +89,8 @@ public class PTK_GroundType : MonoBehaviour
             eLogicEffect_4 = (ELogicEffectType_32)eLogicEffect_4_5B.Value;
             eLogicEffect_5 = (ELogicEffectType_32)eLogicEffect_5_5B.Value;
             eLogicEffect_6 = (ELogicEffectType_32)eLogicEffect_6_5B.Value;
+
+            eDrivingAudioSFX = (EAudioEffect_16)eDrivingAudioSFX_4B.Value;
 
 
         }
@@ -120,6 +129,42 @@ public class PTK_GroundType : MonoBehaviour
             __COUNT // max 16 types! for serialization
         }
 
+        public static Color SkidemarkTypeToColor(ESkideMarksType_16 skidemark)
+        {
+            Color color = Color.black;
+            switch (skidemark)
+            {
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E0_GROUND_DEFAULT_BLACK_1:
+                    color = new Color(0.0f, 0.0f, 0.0f, 1.0f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E1_GROUND_GRAY_2:
+                    color = new Color(0.5f, 0.5f, 0.5f, 1.0f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E2_GRASS_GREEN_1:
+                    color = new Color(0.0f, 1.0f, 0.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E3_GRASS_GREEN_2:
+                    color = new Color(0.0f, 0.5f, 0.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E4_ICE_1:
+                    color = new Color(0.6f, 0.8f, 1.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E5_ICE_2:
+                    color = new Color(0.5f, 1.0f, 1.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E8_SNOW_WHITE:
+                    color = new Color(1.0f, 1.0f, 1.0f, 1.0f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E6_WATER_1:
+                    color = new Color(0.25f, 0.44f, 1.0f, 0.75f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E7_WATER_2:
+                    color = new Color(0.0f, 0.14f, 1.0f, 0.75f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E9_LAVA_1:
+                    color = new Color(1.0f, 0.0f, 0.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E10_LAVA_2:
+                    color = new Color(1.0f, 0.4f, 0.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E11_SAND_1:
+                    color = new Color(1.0f, 1.0f, 0.0f, 0.65f); break;
+                case PTK_GroundType.CGroundSettings.ESkideMarksType_16.E12_SAND_2:
+                    color = new Color(1.0f, 1.0f, 0.6f, 0.65f); break;
+            }
+
+            return color;
+        }
+
         public enum EDriveParticleEffect_32
         {
             E0_NONE_DEFAULT_GROUND,
@@ -135,7 +180,6 @@ public class PTK_GroundType : MonoBehaviour
             E10_BOOST,
             E11_DIRT,
             E12_ICE,
-            E13_LAVA,
             E14_ELECTRICITY,
 
             __COUNT // max 16 types! for serialization
@@ -171,6 +215,18 @@ public class PTK_GroundType : MonoBehaviour
             __COUNT // max 32 types! for serialization
         }
 
+        public enum EAudioEffect_16
+        {
+            E0_NONE_DEFAULT_GROUND,
+            E1_DIRT_OFFROAD_DEFAULT,
+            E2_ICE,
+            E3_WATER,
+            E4_FIRE,
+
+
+            __COUNT
+        }
+
     }
 
     public static bool ShouldSkidemarksBeAlwaysVisibleOnGround(CGroundSettings _eGroundType)
@@ -198,6 +254,12 @@ public class PTK_GroundType : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (groundSettings.eFrictionType != PTK_GroundType.CGroundSettings.EFrictionType_16.E0_NORMAL_DEFAULT_GROUND && groundSettings.eDrivingAudioSFX == PTK_GroundType.CGroundSettings.EAudioEffect_16.E0_NONE_DEFAULT_GROUND)
+        {
+            // we have friction but no sound effect - setting to default
+            groundSettings.eDrivingAudioSFX = PTK_GroundType.CGroundSettings.EAudioEffect_16.E1_DIRT_OFFROAD_DEFAULT;
+        }
 
+        groundSettings.previewSkidemarkColor = PTK_GroundType.CGroundSettings.SkidemarkTypeToColor(groundSettings.eSkideMarksType);
     }
 }
