@@ -194,23 +194,18 @@ public class PTK_GroundType : MonoBehaviour
             E2_BOUNCE_ON_LAND_MED,
             E3_BOUNCE_ON_LAND_HIGH,
 
-            E4_DAMAGE_10, // TOUCHING_OR_LANDED
-            E5_DAMAGE_25,
-            E6_DAMAGE_50,
-            E7_DAMAGE_100,
-            E8_DAMAGE_KILL,
+            E4_DAMAGE_LOW, // TOUCHING_OR_LANDED
+            E5_DAMAGE_MED,
+            E6_DAMAGE_HIGH,
 
-            E9_HEAL_5, // TOUCHING_OR_LANDED
-            E10_HEAL_10,
-            E11_HEAL_25,
-            E12_HEAL_50,
-            E13_HEAL_100,
+            E9_HEAL_LOW, // TOUCHING_OR_LANDED
+            E10_HEAL_MED,
+            E11_HEAL_HIGH,
 
             E14_BOOSTPAD_CONTINUOUS, // TOUCHING_OR_LANDED
 
-            E15_POISON,
+            E15_POISON_DAMAGE,
 
-            E16_FLATTENED,
 
             __COUNT // max 32 types! for serialization
         }
