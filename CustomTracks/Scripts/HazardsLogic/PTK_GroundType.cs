@@ -247,6 +247,10 @@ public class PTK_GroundType : MonoBehaviour
         this.gameObject.layer = LayerMask.NameToLayer("GroundCollider");
     }
 
+    private void OnDestroy()
+    {
+        this.tag = "Untagged";
+    }
     // Update is called once per frame
     void Update()
     {
