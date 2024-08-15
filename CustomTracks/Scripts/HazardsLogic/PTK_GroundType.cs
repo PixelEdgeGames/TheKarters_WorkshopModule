@@ -193,6 +193,7 @@ public class PTK_GroundType : MonoBehaviour
             E1_BOUNCE_ON_LAND_LOW,
             E2_BOUNCE_ON_LAND_MED,
             E3_BOUNCE_ON_LAND_HIGH,
+            E3_BOUNCE_ON_LAND_ULTRA,
 
             E4_DAMAGE_LOW, // TOUCHING_OR_LANDED
             E5_DAMAGE_MED,
