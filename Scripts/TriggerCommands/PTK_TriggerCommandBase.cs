@@ -1,0 +1,64 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(PTK_TriggerCommandsBehaviour))]
+public abstract class PTK_TriggerCommandBase : MonoBehaviour
+{
+    public enum ETriggerCommandType
+    {
+        E00_TRIGGER_ENABLE_DISABLE,
+        E01_GAME_OBJECT_ENABLE_DISABLE,
+        E02_SIGNAL_RECEIVER_MANUAL_RESET,
+        E03_SIGNAL_RECEIVER_ENABLE_DISABLE,
+
+        __COUNT
+    }
+
+    protected abstract ETriggerCommandType GetCommandType();
+
+    public abstract void Awake();
+    public abstract void Start();
+
+    protected abstract void RaceResetted_RevertToDefault();
+    protected abstract void OnRaceTimerJustStarted_SyncAndRunAnimsImpl();
+    protected abstract void ExecuteImpl(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals);
+    protected abstract void ExecuteImpl(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal);
+
+    public void Execute(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals)
+    {
+        ExecuteImpl(recivedTriggerSignals);
+    }
+
+    public void Execute(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal)
+    {
+        ExecuteImpl(recivedTriggerSignal);
+    }
+
+    // multiple triggers can send multiple events and we don't want to run this command multiple times
+    bool bAlreadyResetted = false;
+    bool bAlreadyTimerStartEventLaunched = false;
+
+    public void RaceResetted()
+    {
+        if(bAlreadyResetted == false)
+        {
+            RaceResetted_RevertToDefault();
+            bAlreadyResetted = true;
+            bAlreadyTimerStartEventLaunched = false;
+        }
+    }
+
+    public void OnRaceTimerJustStarted_SyncAndRunAnims()
+    {
+        if(bAlreadyTimerStartEventLaunched == false)
+        {
+            OnRaceTimerJustStarted_SyncAndRunAnimsImpl();
+            bAlreadyResetted = false;
+            bAlreadyTimerStartEventLaunched = true;
+        }
+    }
+
+
+}
