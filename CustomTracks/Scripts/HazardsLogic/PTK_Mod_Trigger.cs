@@ -19,18 +19,35 @@ public class PTK_Mod_Trigger : MonoBehaviour
         E2_ON_BOTH
     }
 
+    public enum ETriggerFrequency
+    {
+        E0_ALWAYS_EACH_DETECTION,
+        E1_ONCE_UNTIL_ENABLED_AGAIN
+    }
+
+    [Header("Core")]
+    public bool bIsTriggerEnabled = true;
+    public ETriggerFrequency eTriggerFrequency = ETriggerFrequency.E0_ALWAYS_EACH_DETECTION;
     public ETriggerActivationType eActivationType = ETriggerActivationType.E0_ON_ENTER;
 
     public static string strHazardTriggerTagName = "PTK_HazardTrigger";
 
-    [Header("Settings")]
-    public bool bCommandSequenceEventsEnabled = true;
-    public bool bDetectVehicles = true;
+    [Header("Params")]
+    public bool bDetectPlayers = true;
+    public bool bTargettedByMissiles = false;
+    public bool bAffectedByAreaEffectWeapons = false;
+
+    [Header("Player Ignore Settings")]
+    public bool bIgnorePlayerWhenTeleporting = false;
+    public bool bIgnorePlayerWhenImmune = false;
+    public bool bIgnorePlayerWhenUsingBoostingItem = false;
 
     public PTK_TriggerCommandSequence[] commandSequencesToCall;
 
     [Header("Auto Generated - Do not change")]
     public int iUniqueTriggerID = -1;
+    [HideInInspector]
+    public int iUniqueTriggerIDCratedForObjectInstance = 0;
     private void Start()
     {
         this.tag = PTK_Mod_Trigger.strHazardTriggerTagName;
@@ -39,7 +56,7 @@ public class PTK_Mod_Trigger : MonoBehaviour
 
     private void OnEnable()
     {
-        if (iUniqueTriggerID == -1 || iUniqueTriggerID == 0)
+        if (iUniqueTriggerID == -1 || iUniqueTriggerID == 0 || (iUniqueTriggerIDCratedForObjectInstance != this.gameObject.GetInstanceID()))
             GenerateUniqueID();
     }
 
@@ -66,6 +83,7 @@ public class PTK_Mod_Trigger : MonoBehaviour
         }
 
         iUniqueTriggerID = iUniqueIDToSet;
+        iUniqueTriggerIDCratedForObjectInstance = this.gameObject.GetInstanceID();
     }
 
     private void OnDestroy()
