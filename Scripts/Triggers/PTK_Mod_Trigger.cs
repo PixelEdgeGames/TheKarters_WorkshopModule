@@ -8,7 +8,6 @@ using UnityEditor;
 
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class PTK_Mod_Trigger : MonoBehaviour
 {
     public enum ETriggerActivationType
@@ -74,6 +73,8 @@ public class PTK_Mod_Trigger : MonoBehaviour
     public bool bIgnorePlayerWhenImmune = false;
     public bool bIgnorePlayerWhenUsingBoostingItem = false;
 
+    [Header("Variable Conditions - Check for Players Within Distance Range")]
+    public float fDistanceToSearchForAnyPlayer = 9999;
     [Header("Trigger if ANY of these conditions are correct")]
     public List<PTK_Mod_TriggerVariableConditions> variableTypeConditions;
 
@@ -103,11 +104,13 @@ public class PTK_Mod_Trigger : MonoBehaviour
 
     private void Start()
     {
+        EnsureContainsTriggerID();
+
         this.tag = PTK_Mod_Trigger.strHazardTriggerTagName;
 
         for(int i=0;i< variableTypeConditions.Count;i++)
         {
-            variableTypeConditions[i].InitializeAndAttachToEvents();
+            variableTypeConditions[i].Awake_InitializeAndAttachToEvents(this);
         }
 
         var commandBehaviour = this.GetComponent<PTK_TriggerCommandsBehaviour>();
@@ -115,11 +118,11 @@ public class PTK_Mod_Trigger : MonoBehaviour
         {
             // player added  command to this trigger - we will auto commands launcher so player dont need to assign it by hand
             
-            if(this.GetComponent<PTK_TriggersCommandsLauncher>() == null)
+            if(this.GetComponent<PTK_TriggerArrayCommandsExecutor>() == null)
             {
-                var commandLauncher = this.gameObject.AddComponent<PTK_TriggersCommandsLauncher>();
+                var commandLauncher = this.gameObject.AddComponent<PTK_TriggerArrayCommandsExecutor>();
 
-                commandLauncher.receiveDataFromTriggersOnEnterExitEvent.Add(this);
+                commandLauncher.triggersToReceiveDataOnTriggerEvent.Add(this);
                 commandLauncher.commandBehavioursToRun.Add(commandBehaviour);
             }
         }
@@ -135,6 +138,17 @@ public class PTK_Mod_Trigger : MonoBehaviour
                 triggerData.bManualTriggerLaunched = true;
                 OnTriggerEventNetSynced(triggerData);
             }
+        }
+    }
+
+
+    private void OnDestroy()
+    {
+        this.tag = "Untagged";
+
+        for (int i = 0; i < variableTypeConditions.Count; i++)
+        {
+            variableTypeConditions[i].Destroy_Deinitialize();
         }
     }
 
@@ -164,12 +178,16 @@ public class PTK_Mod_Trigger : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void OnValidate()
+    {
+        EnsureContainsTriggerID();
+    }
+
+    public void EnsureContainsTriggerID()
     {
         if (iUniqueTriggerID == -1 || iUniqueTriggerID == 0 || (iUniqueTriggerIDCratedForObjectInstance != this.gameObject.GetInstanceID()))
             GenerateUniqueID();
     }
-
     void GenerateUniqueID()
     {
         int iUniqueIDToSet = UnityEngine.Random.Range(1, int.MaxValue - 1);
@@ -196,10 +214,6 @@ public class PTK_Mod_Trigger : MonoBehaviour
         iUniqueTriggerIDCratedForObjectInstance = this.gameObject.GetInstanceID();
     }
 
-    private void OnDestroy()
-    {
-        this.tag = "Untagged";
-    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

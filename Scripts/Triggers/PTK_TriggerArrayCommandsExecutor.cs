@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_TriggersCommandsLauncher : MonoBehaviour
+public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
 {
     [System.Serializable]
     public class CRecivedTriggerWithData
@@ -25,10 +25,10 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
         E_NO_NEED_TO_WAIT_FOR_MANUAL_CLEAR_FIRST
     }
 
-    public List<PTK_Mod_Trigger> receiveDataFromTriggersOnEnterExitEvent = new List<PTK_Mod_Trigger>();
+    public List<PTK_Mod_Trigger> triggersToReceiveDataOnTriggerEvent = new List<PTK_Mod_Trigger>();
 
     [Header("PreviewOnly - Receive Signals from Triggers")]
-     List<CRecivedTriggerWithData> recivedTriggerSignalsPreview = new List<CRecivedTriggerWithData>();
+     List<CRecivedTriggerWithData> recivedTriggerEventsPreview = new List<CRecivedTriggerWithData>();
     [Header("When to send commands")]
     public ERunCommandsCondition eRunCommandCondition = ERunCommandsCondition.E0_RUN_COMMANDS_IF_RECEIVED_DATA_FROM_ALL_TRIGGERS;
     [Header("Allow Sending Commands Again?")]
@@ -40,40 +40,40 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
 
     private void Start()
     {
-        recivedTriggerSignalsPreview = new List<CRecivedTriggerWithData>();
+        recivedTriggerEventsPreview = new List<CRecivedTriggerWithData>();
 
-        for (int i=0;i< receiveDataFromTriggersOnEnterExitEvent.Count;i++)
+        for (int i=0;i< triggersToReceiveDataOnTriggerEvent.Count;i++)
         {
-            if (receiveDataFromTriggersOnEnterExitEvent[i] == null)
+            if (triggersToReceiveDataOnTriggerEvent[i] == null)
                 continue;
 
             var receivedInfo = new CRecivedTriggerWithData();
-            receivedInfo.trigger = receiveDataFromTriggersOnEnterExitEvent[i];
+            receivedInfo.trigger = triggersToReceiveDataOnTriggerEvent[i];
 
-            recivedTriggerSignalsPreview.Add(receivedInfo);
+            recivedTriggerEventsPreview.Add(receivedInfo);
         }
 
 
-        for (int i=0;i< recivedTriggerSignalsPreview.Count;i++)
+        for (int i=0;i< recivedTriggerEventsPreview.Count;i++)
         {
-            if (recivedTriggerSignalsPreview[i].trigger == null)
+            if (recivedTriggerEventsPreview[i].trigger == null)
                 continue;
 
             int currentIndexLambda = i;
-            recivedTriggerSignalsPreview[currentIndexLambda].trigger.OnTriggerEventNetSynced += (triggerData) =>
+            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnTriggerEventNetSynced += (triggerData) =>
            {
                // we will allow to run logic only if the signal receiver is not disabled
                if(this.gameObject.activeInHierarchy == true)
                {
-                   recivedTriggerSignalsPreview[currentIndexLambda].bSignalReceived = true;
-                   recivedTriggerSignalsPreview[currentIndexLambda].triggerEventData = triggerData;
+                   recivedTriggerEventsPreview[currentIndexLambda].bSignalReceived = true;
+                   recivedTriggerEventsPreview[currentIndexLambda].triggerEventData = triggerData;
 
-                   TriggerSignalReceived();
+                   TriggerEventReceived();
                }
            };
 
-            recivedTriggerSignalsPreview[currentIndexLambda].trigger.OnRaceResettedEvent += OnRaceResetted;
-            recivedTriggerSignalsPreview[currentIndexLambda].trigger.OnRaceTimerSyncedJustStarted += OnRaceTimerJustStarted;
+            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnRaceResettedEvent += OnRaceResetted;
+            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnRaceTimerSyncedJustStarted += OnRaceTimerJustStarted;
         }
     }
 
@@ -90,7 +90,7 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
 
     private void OnRaceResetted()
     {
-        ClearReceivedSignalsInfo();
+        ClearReceivedEventsInfo();
 
         for (int iBehaviour = 0; iBehaviour < commandBehavioursToRun.Count; iBehaviour++)
         {
@@ -101,9 +101,9 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
         }
     }
 
-    private void TriggerSignalReceived()
+    private void TriggerEventReceived()
     {
-        if (recivedTriggerSignalsPreview.Count == 0)
+        if (recivedTriggerEventsPreview.Count == 0)
             return;
 
         bool bReceivedSignalsFromAllTriggers = true;
@@ -111,17 +111,17 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
 
         CRecivedTriggerWithData firstReceivedTrigger = null;
 
-        for (int i = 0; i < recivedTriggerSignalsPreview.Count; i++)
+        for (int i = 0; i < recivedTriggerEventsPreview.Count; i++)
         {
-            if (recivedTriggerSignalsPreview[i].trigger == null)
+            if (recivedTriggerEventsPreview[i].trigger == null)
                 continue;
 
-            bReceivedSignalsFromAllTriggers &= recivedTriggerSignalsPreview[i].bSignalReceived;
-            bReceivedSignalFromAtLeasOne |= recivedTriggerSignalsPreview[i].bSignalReceived;
+            bReceivedSignalsFromAllTriggers &= recivedTriggerEventsPreview[i].bSignalReceived;
+            bReceivedSignalFromAtLeasOne |= recivedTriggerEventsPreview[i].bSignalReceived;
 
-            if(firstReceivedTrigger == null && recivedTriggerSignalsPreview[i].bSignalReceived == true)
+            if(firstReceivedTrigger == null && recivedTriggerEventsPreview[i].bSignalReceived == true)
             {
-                firstReceivedTrigger = recivedTriggerSignalsPreview[i];
+                firstReceivedTrigger = recivedTriggerEventsPreview[i];
             }
         }
 
@@ -140,7 +140,7 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
 
             if (eAutoClearAndAllowSendingAgain == EAllowSendingCommandsAgain.E_YES_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN)
             {
-                ClearReceivedSignalsInfo();
+                ClearReceivedEventsInfo();
             }
         }
 
@@ -154,7 +154,7 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
             {
                 if (eRunCommandCondition == ERunCommandsCondition.E0_RUN_COMMANDS_IF_RECEIVED_DATA_FROM_ALL_TRIGGERS)
                 {
-                    commandBehavioursToRun[iBehaviour].Execute(recivedTriggerSignalsPreview);
+                    commandBehavioursToRun[iBehaviour].Execute(recivedTriggerEventsPreview);
                 }
 
                 if (eRunCommandCondition == ERunCommandsCondition.E1_RUN_COMMANDS_IF_RECIVED_TRIGGER_DATA_FROM_AT_LEAST_ONE )
@@ -165,12 +165,12 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
         }
     }
 
-     void ClearReceivedSignalsInfo()
+     void ClearReceivedEventsInfo()
     {
-        for (int i = 0; i < recivedTriggerSignalsPreview.Count; i++)
+        for (int i = 0; i < recivedTriggerEventsPreview.Count; i++)
         {
-            recivedTriggerSignalsPreview[i].bSignalReceived = false;
-            recivedTriggerSignalsPreview[i].triggerEventData = null;
+            recivedTriggerEventsPreview[i].bSignalReceived = false;
+            recivedTriggerEventsPreview[i].triggerEventData = null;
         }
 
         bAlreadyCommandSent = false;
@@ -178,6 +178,6 @@ public class PTK_TriggersCommandsLauncher : MonoBehaviour
 
     public void ManualResetAllowSendingAgain()
     {
-        ClearReceivedSignalsInfo();
+        ClearReceivedEventsInfo();
     }
 }

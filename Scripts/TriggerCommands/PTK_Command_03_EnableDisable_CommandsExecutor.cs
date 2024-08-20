@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_TriggerCommand_03_SignalReceiversEnableDisable : PTK_TriggerCommandBase
+public class PTK_Command_03_EnableDisable_CommandsExecutor : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E03_SIGNAL_RECEIVER_ENABLE_DISABLE;
+        return ETriggerCommandType.E03_ENABLE_DISABLE_COMMANDS_EXECUTOR;
     }
 
-    public PTK_TriggersCommandsLauncher[] gameObjectsToEnable;
-    public PTK_TriggersCommandsLauncher[] gameObjectsToDisable;
+    public PTK_TriggerArrayCommandsExecutor[] gameObjectsToEnable;
+    public PTK_TriggerArrayCommandsExecutor[] gameObjectsToDisable;
 
-    Dictionary<PTK_TriggersCommandsLauncher, bool> defaultEnabledState = new Dictionary<PTK_TriggersCommandsLauncher, bool>();
+    Dictionary<PTK_TriggerArrayCommandsExecutor, bool> defaultEnabledState = new Dictionary<PTK_TriggerArrayCommandsExecutor, bool>();
 
     public override void Awake()
     {
-        foreach (PTK_TriggersCommandsLauncher go in gameObjectsToEnable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToEnable)
         {
             if (go == null)
                 continue;
@@ -25,7 +25,7 @@ public class PTK_TriggerCommand_03_SignalReceiversEnableDisable : PTK_TriggerCom
                 defaultEnabledState.Add(go, go.gameObject.activeInHierarchy);
         }
 
-        foreach (PTK_TriggersCommandsLauncher go in gameObjectsToDisable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToDisable)
         {
             if (go == null)
                 continue;
@@ -38,19 +38,19 @@ public class PTK_TriggerCommand_03_SignalReceiversEnableDisable : PTK_TriggerCom
     {
     }
 
-    protected override void ExecuteImpl(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals)
+    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
         CommandExecuted();
     }
 
-    protected override void ExecuteImpl(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal)
+    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
     {
         CommandExecuted();
     }
 
     void CommandExecuted()
     {
-        foreach (PTK_TriggersCommandsLauncher go in gameObjectsToEnable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToEnable)
         {
             if (go == null)
                 continue;
@@ -58,7 +58,7 @@ public class PTK_TriggerCommand_03_SignalReceiversEnableDisable : PTK_TriggerCom
             go.gameObject.SetActive(true);
         }
 
-        foreach (PTK_TriggersCommandsLauncher go in gameObjectsToDisable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToDisable)
         {
             if (go == null)
                 continue;
@@ -70,7 +70,7 @@ public class PTK_TriggerCommand_03_SignalReceiversEnableDisable : PTK_TriggerCom
 
     protected override void RaceResetted_RevertToDefault()
     {
-        foreach (PTK_TriggersCommandsLauncher go in defaultEnabledState.Keys)
+        foreach (PTK_TriggerArrayCommandsExecutor go in defaultEnabledState.Keys)
         {
             if (go == null)
                 continue;

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_TriggerCommand_01_GameObjectsEnableDisable : PTK_TriggerCommandBase
+public class PTK_Command_01_GameObjectsEnableDisable : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E01_GAME_OBJECT_ENABLE_DISABLE;
+        return ETriggerCommandType.E01_ENABLE_DISABLE_GAME_OBJECT;
     }
 
     public GameObject[] gameObjectsToEnable;
@@ -38,12 +38,12 @@ public class PTK_TriggerCommand_01_GameObjectsEnableDisable : PTK_TriggerCommand
     {
     }
 
-    protected override void ExecuteImpl(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals)
+    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
         CommandExecuted();
     }
 
-    protected override void ExecuteImpl(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal)
+    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
     {
         CommandExecuted();
     }

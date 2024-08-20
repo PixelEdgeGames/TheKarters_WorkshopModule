@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_TriggerCommand_02_SignalReceiversManualReset : PTK_TriggerCommandBase
+public class PTK_Command_02_ManualReset_CommandExecutor : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E02_SIGNAL_RECEIVER_MANUAL_RESET;
+        return ETriggerCommandType.E02_COMMANDS_EXECUTOR_MANUAL_RESET;
     }
 
-    public PTK_TriggersCommandsLauncher[] signalsToReset;
+    public PTK_TriggerArrayCommandsExecutor[] signalsToReset;
 
 
     public override void Awake()
@@ -20,19 +20,19 @@ public class PTK_TriggerCommand_02_SignalReceiversManualReset : PTK_TriggerComma
     {
     }
 
-    protected override void ExecuteImpl(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals)
+    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
         CommandExecuted();
     }
 
-    protected override void ExecuteImpl(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal)
+    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
     {
         CommandExecuted();
     }
 
     void CommandExecuted()
     {
-        foreach (PTK_TriggersCommandsLauncher go in signalsToReset)
+        foreach (PTK_TriggerArrayCommandsExecutor go in signalsToReset)
         {
             if (go == null)
                 continue;

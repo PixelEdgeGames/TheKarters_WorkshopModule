@@ -29,14 +29,14 @@ public class PTK_TriggerCommandsBehaviour : MonoBehaviour
         }
     }
 
-    internal void Execute(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignalsPreview)
+    internal void Execute(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignalsPreview)
     {
         for (int i = 0; i < ptkCommands.Length; i++)
         {
             ptkCommands[i].Execute(recivedTriggerSignalsPreview);
         }
     }
-    internal void Execute(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData firstTriggerData)
+    internal void Execute(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData firstTriggerData)
     {
         for (int i = 0; i < ptkCommands.Length; i++)
         {

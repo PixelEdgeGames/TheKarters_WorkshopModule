@@ -8,10 +8,10 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
 {
     public enum ETriggerCommandType
     {
-        E00_TRIGGER_ENABLE_DISABLE,
-        E01_GAME_OBJECT_ENABLE_DISABLE,
-        E02_SIGNAL_RECEIVER_MANUAL_RESET,
-        E03_SIGNAL_RECEIVER_ENABLE_DISABLE,
+        E00_ENABLE_DISABLE_TRIGGER,
+        E01_ENABLE_DISABLE_GAME_OBJECT,
+        E02_COMMANDS_EXECUTOR_MANUAL_RESET,
+        E03_ENABLE_DISABLE_COMMANDS_EXECUTOR,
 
         __COUNT
     }
@@ -23,15 +23,15 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
 
     protected abstract void RaceResetted_RevertToDefault();
     protected abstract void OnRaceTimerJustStarted_SyncAndRunAnimsImpl();
-    protected abstract void ExecuteImpl(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals);
-    protected abstract void ExecuteImpl(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal);
+    protected abstract void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals);
+    protected abstract void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal);
 
-    public void Execute(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals)
+    public void Execute(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
         ExecuteImpl(recivedTriggerSignals);
     }
 
-    public void Execute(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal)
+    public void Execute(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
     {
         ExecuteImpl(recivedTriggerSignal);
     }

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_TriggerCommand_00_TriggersEnableDisable : PTK_TriggerCommandBase
+public class PTK_Command_00_TriggersEnableDisable : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E00_TRIGGER_ENABLE_DISABLE;
+        return ETriggerCommandType.E00_ENABLE_DISABLE_TRIGGER;
     }
 
     public PTK_Mod_Trigger[] triggersToEnable;
@@ -38,12 +38,12 @@ public class PTK_TriggerCommand_00_TriggersEnableDisable : PTK_TriggerCommandBas
     {
     }
 
-    protected override void ExecuteImpl(List<PTK_TriggersCommandsLauncher.CRecivedTriggerWithData> recivedTriggerSignals)
+    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
         CommandExecuted();
     }
 
-    protected override void ExecuteImpl(PTK_TriggersCommandsLauncher.CRecivedTriggerWithData recivedTriggerSignal)
+    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
     {
         CommandExecuted();
     }
