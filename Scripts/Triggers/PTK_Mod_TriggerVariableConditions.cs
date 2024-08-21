@@ -89,7 +89,7 @@ public class PTK_Mod_TriggerVariableConditions
     public bool bIgnoreConditions = false;
     [Header("ALL below conditions need to pass for trigger to pass")]
     public List<CGameTypeCondition> gameTypeConditionsToCheck = new List<CGameTypeCondition>();
-    public List<CPlayerTypeCondition> playerTypeConditionsToCheck = new List<CPlayerTypeCondition>();
+    public List<CPlayerTypeCondition> playersInRangeConditionsToCheck = new List<CPlayerTypeCondition>();
     
     bool bRegisteredToEvents = false;
 

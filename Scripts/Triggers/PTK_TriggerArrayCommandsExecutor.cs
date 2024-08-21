@@ -12,26 +12,29 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
         public bool bSignalReceived = false;
     }
 
-    public enum ERunCommandsCondition
+    public enum ECommandsRunCondition
     {
-        E0_RUN_COMMANDS_IF_RECEIVED_DATA_FROM_ALL_TRIGGERS,
-        E1_RUN_COMMANDS_IF_RECIVED_TRIGGER_DATA_FROM_AT_LEAST_ONE
+        E0_RUN_IF_RECIVED_EVENT_FROM_ANY_TRIGGER,
+        E1_RUN_IF_RECEIVED_EVENT_DATA_FROM_ALL_TRIGGERS
     }
 
-    public enum EAllowSendingCommandsAgain
+    public enum ECommandsRunMode
     {
-        E_YES_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN,
-        E_NO_NEED_TO_WAIT_FOR_MANUAL_CLEAR_FIRST
+        E_REPEAT_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN,
+        E_ONCE_MANUAL_CLEAR_REQUIRED
     }
 
+    public bool bModTriggerCommandExecutorEnabled = true;
+
+    public List<GameObject> objectsWithTriggersToReceiveDataOnTriggerEvent = new List<GameObject>();
     public List<PTK_ModBaseTrigger> triggersToReceiveDataOnTriggerEvent = new List<PTK_ModBaseTrigger>();
 
     [Header("PreviewOnly - Receive Signals from Triggers")]
      List<CRecivedTriggerWithData> recivedTriggerEventsPreview = new List<CRecivedTriggerWithData>();
     [Header("When to send commands")]
-    public ERunCommandsCondition eRunCommandCondition = ERunCommandsCondition.E0_RUN_COMMANDS_IF_RECEIVED_DATA_FROM_ALL_TRIGGERS;
+    public ECommandsRunCondition eRunCommandCondition = ECommandsRunCondition.E0_RUN_IF_RECIVED_EVENT_FROM_ANY_TRIGGER;
     [Header("Allow Sending Commands Again?")]
-    public EAllowSendingCommandsAgain eAutoClearAndAllowSendingAgain = EAllowSendingCommandsAgain.E_YES_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN;
+    public ECommandsRunMode eRunCommandsMode = ECommandsRunMode.E_REPEAT_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN;
     [Header("Commands To Send")]
     public List<PTK_TriggerCommandsBehaviour> commandBehavioursToRun = new List<PTK_TriggerCommandsBehaviour>();
 
@@ -50,6 +53,25 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
             receivedInfo.trigger = triggersToReceiveDataOnTriggerEvent[i];
 
             recivedTriggerEventsPreview.Add(receivedInfo);
+        }
+
+        for (int i = 0; i < objectsWithTriggersToReceiveDataOnTriggerEvent.Count; i++)
+        {
+            var triggersInside = objectsWithTriggersToReceiveDataOnTriggerEvent[i].GetComponentsInChildren<PTK_ModBaseTrigger>();
+
+            for(int iTrigger = 0; iTrigger < triggersInside.Length;iTrigger++)
+            {
+                if(triggersToReceiveDataOnTriggerEvent.Contains(triggersInside[iTrigger]) == false)
+                {
+                    if (triggersInside[iTrigger] == null)
+                        continue;
+
+                    var receivedInfo = new CRecivedTriggerWithData();
+                    receivedInfo.trigger = triggersInside[iTrigger];
+
+                    recivedTriggerEventsPreview.Add(receivedInfo);
+                }
+            }
         }
 
 
@@ -131,10 +153,10 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
         }
 
         bool bCanSendCommand = false;
-        if (eRunCommandCondition == ERunCommandsCondition.E0_RUN_COMMANDS_IF_RECEIVED_DATA_FROM_ALL_TRIGGERS && bReceivedSignalsFromAllTriggers == true)
+        if (eRunCommandCondition == ECommandsRunCondition.E1_RUN_IF_RECEIVED_EVENT_DATA_FROM_ALL_TRIGGERS && bReceivedSignalsFromAllTriggers == true)
             bCanSendCommand = true;
 
-        if (eRunCommandCondition == ERunCommandsCondition.E1_RUN_COMMANDS_IF_RECIVED_TRIGGER_DATA_FROM_AT_LEAST_ONE && bReceivedSignalFromAtLeasOne == true)
+        if (eRunCommandCondition == ECommandsRunCondition.E0_RUN_IF_RECIVED_EVENT_FROM_ANY_TRIGGER && bReceivedSignalFromAtLeasOne == true)
             bCanSendCommand = true;
 
 
@@ -143,7 +165,7 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
             SendCommands(firstReceivedTrigger);
             bAlreadyCommandSent = true;
 
-            if (eAutoClearAndAllowSendingAgain == EAllowSendingCommandsAgain.E_YES_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN)
+            if (eRunCommandsMode == ECommandsRunMode.E_REPEAT_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN)
             {
                 ClearReceivedEventsInfo();
             }
@@ -157,12 +179,12 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
         {
             if (commandBehavioursToRun[iBehaviour] != null)
             {
-                if (eRunCommandCondition == ERunCommandsCondition.E0_RUN_COMMANDS_IF_RECEIVED_DATA_FROM_ALL_TRIGGERS)
+                if (eRunCommandCondition == ECommandsRunCondition.E1_RUN_IF_RECEIVED_EVENT_DATA_FROM_ALL_TRIGGERS)
                 {
                     commandBehavioursToRun[iBehaviour].Execute(recivedTriggerEventsPreview);
                 }
 
-                if (eRunCommandCondition == ERunCommandsCondition.E1_RUN_COMMANDS_IF_RECIVED_TRIGGER_DATA_FROM_AT_LEAST_ONE )
+                if (eRunCommandCondition == ECommandsRunCondition.E0_RUN_IF_RECIVED_EVENT_FROM_ANY_TRIGGER )
                 {
                     commandBehavioursToRun[iBehaviour].Execute(firstReceivedTriggerSignal);
                 }

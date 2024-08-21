@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3035596951858971682
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72700074682125281}
+  - component: {fileID: 19755134462183950}
+  - component: {fileID: 4206002407235417969}
+  m_Layer: 0
+  m_Name: ModTrigger_WithoutCommandsBehaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &72700074682125281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3035596951858971682}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3760987873122730425}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &19755134462183950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3035596951858971682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512324d4f766bda428ea5a89fe72a38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bModTriggerCommandExecutorEnabled: 1
+  objectsWithTriggersToReceiveDataOnTriggerEvent:
+  - {fileID: 4560034501295548083}
+  triggersToReceiveDataOnTriggerEvent: []
+  eRunCommandCondition: 0
+  eRunCommandsMode: 0
+  commandBehavioursToRun: []
+--- !u!114 &4206002407235417969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3035596951858971682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1813ccc2cb16e44192c074ba4c59889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerArrayCommandsExecutorParent: {fileID: 19755134462183950}
+  instantiateInTriggersParent: {fileID: 4560034501295548083}
+  GameEventTrigger: {fileID: 6890199144606083135, guid: 3d2aed034ab6192428437ebbdb85e5b7,
+    type: 3}
+  PlayerEventTriggerBox: {fileID: 510216975398530771, guid: f6864c4a7c038214ea590c47c2870f13,
+    type: 3}
+  PlayerEventTriggerSphere: {fileID: 4255074861451779883, guid: 5141d97426145ca4abc1b11fb8012413,
+    type: 3}
+  PlayerOrBulletPhysicsCollisionBox: {fileID: 7956203414574651193, guid: 579f6be9dd36d0745927a433035c09c6,
+    type: 3}
+  PlayerOrBulletPhysicsCollisionSphere: {fileID: 1874614294854238211, guid: 974834ea0a7578344ac72e3d45469466,
+    type: 3}
+  ConditionTriggerBox: {fileID: 489634069108566538, guid: 9193bb1d057bbe6448241763c47bd2b4,
+    type: 3}
+  ConditionTriggerSphere: {fileID: 708241433744727835, guid: d4da027366f81e2419ac6f8b120e948a,
+    type: 3}
+--- !u!1 &4560034501295548083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3760987873122730425}
+  m_Layer: 0
+  m_Name: Triggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3760987873122730425
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4560034501295548083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 72700074682125281}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

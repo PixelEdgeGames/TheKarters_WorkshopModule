@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class PTK_ModVariableConditionsTriggerType : PTK_ModBaseTrigger
 {
     [Header("Variable Conditions - Check for Players Within Distance Range")]
-    public float fDistanceToSearchForAnyPlayerInRange = 9999;
-    public bool bInRangeCheckOnlyForLocalPlayersWithCamera = true;
+    public List<PTK_PlayersInRangeVolume_Base> checkPlayersInVolumes = new List<PTK_PlayersInRangeVolume_Base>();
     [Header("Trigger if ANY of these conditions are correct")]
     public List<PTK_Mod_TriggerVariableConditions> variableTypeConditions;
 
@@ -38,26 +38,8 @@ public class PTK_ModVariableConditionsTriggerType : PTK_ModBaseTrigger
 
     }
 
-    [HideInInspector]
-    public bool[] bAreGlobalPlayersWithinRange = new bool[8];
-
     private void Update()
     {
-        for (int i = 0; i < bAreGlobalPlayersWithinRange.Length; i++)
-        {
-            if (PTK_ModGameplayDataSync.Instance.playersInfo[i].bIsPlayerEnabled == true && Vector3.Magnitude(transform.position - PTK_ModGameplayDataSync.Instance.playersInfo[i].vPosition) < fDistanceToSearchForAnyPlayerInRange)
-            {
-                if (bInRangeCheckOnlyForLocalPlayersWithCamera == true && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalCameraIndex == -1)
-                    bAreGlobalPlayersWithinRange[i] = false; // no camera
-                else
-                    bAreGlobalPlayersWithinRange[i] = true;
-            }
-            else
-            {
-                bAreGlobalPlayersWithinRange[i] = false;
-            }
-        }
-
         for (int i = 0; i < variableTypeConditions.Count; i++)
         {
             if (variableTypeConditions[i].bIgnoreConditions == true)

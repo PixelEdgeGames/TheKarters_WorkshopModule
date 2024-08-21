@@ -2,36 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_Command_01_GameObjectsEnableDisable : PTK_TriggerCommandBase
+public class PTK_Command_03_ModTriggerCommandExecutor_EnableDisable : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E01_ENABLE_DISABLE_GAME_OBJECT;
+        return ETriggerCommandType.E03_ENABLE_DISABLE_COMMANDS_EXECUTOR;
     }
 
-    public GameObject[] gameObjectsToEnable;
-    public GameObject[] gameObjectsToDisable;
+    public PTK_TriggerArrayCommandsExecutor[] gameObjectsToEnable;
+    public PTK_TriggerArrayCommandsExecutor[] gameObjectsToDisable;
 
-    Dictionary<GameObject, bool> defaultEnabledState = new Dictionary<GameObject, bool>();
+    Dictionary<PTK_TriggerArrayCommandsExecutor, bool> defaultEnabledState = new Dictionary<PTK_TriggerArrayCommandsExecutor, bool>();
 
     public override void Awake()
     {
-        foreach (GameObject go in gameObjectsToEnable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToEnable)
         {
             if (go == null)
                 continue;
 
             if (defaultEnabledState.ContainsKey(go) == false)
-                defaultEnabledState.Add(go, go.gameObject.activeInHierarchy);
+                defaultEnabledState.Add(go, go.bModTriggerCommandExecutorEnabled);
         }
 
-        foreach (GameObject go in gameObjectsToDisable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToDisable)
         {
             if (go == null)
                 continue;
 
             if (defaultEnabledState.ContainsKey(go) == false)
-                defaultEnabledState.Add(go, go.gameObject.activeInHierarchy);
+                defaultEnabledState.Add(go, go.bModTriggerCommandExecutorEnabled);
         }
     }
     public override void Start()
@@ -50,32 +50,32 @@ public class PTK_Command_01_GameObjectsEnableDisable : PTK_TriggerCommandBase
 
     void CommandExecuted()
     {
-        foreach (GameObject go in gameObjectsToEnable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToEnable)
         {
             if (go == null)
                 continue;
 
-            go.gameObject.SetActive(true);
+            go.bModTriggerCommandExecutorEnabled = true;
         }
 
-        foreach (GameObject go in gameObjectsToDisable)
+        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToDisable)
         {
             if (go == null)
                 continue;
 
-            go.gameObject.SetActive(false);
+            go.bModTriggerCommandExecutorEnabled = false;
         }
     }
 
 
     protected override void RaceResetted_RevertToDefault()
     {
-        foreach (GameObject go in defaultEnabledState.Keys)
+        foreach (PTK_TriggerArrayCommandsExecutor go in defaultEnabledState.Keys)
         {
             if (go == null)
                 continue;
 
-            go.gameObject.SetActive(defaultEnabledState[go]);
+            go.bModTriggerCommandExecutorEnabled = defaultEnabledState[go];
         }
     }
 

@@ -140,54 +140,6 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
     public CPlayerEvents playerEvents = new CPlayerEvents();
     public CGameEvents gameEvents = new CGameEvents();
 
-
-
-    // better performance if we don't receive events from all players that are fired constantly
-    internal void RegisterToGameTypeEventsOnly(PTK_ModGameplayData_GameEventsRegister pTK_ModGameplayData_AllEventsRegister)
-    {
-        gameEvents.OnGameEvent_RaceFinished += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
-        gameEvents.OnGameEvent_RaceRestarted += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
-        gameEvents.OnGameEvent_RaceTimerStart += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceTimerStart;
-        gameEvents.OnGameEvent_GamePaused += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GamePaused;
-        gameEvents.OnGameEvent_GameUnpaused += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
-    }
-
-    internal void UnRegisterFromGameTypeEventsOnly(PTK_ModGameplayData_GameEventsRegister pTK_ModGameplayData_AllEventsRegister)
-    {
-        gameEvents.OnGameEvent_RaceFinished -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
-
-        gameEvents.OnGameEvent_RaceRestarted -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
-        gameEvents.OnGameEvent_RaceTimerStart -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceTimerStart;
-        gameEvents.OnGameEvent_GamePaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GamePaused;
-        gameEvents.OnGameEvent_GameUnpaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
-    }
-
-    internal void RegisterToPlayerAllEvents(PTK_ModGameplayData_PlayerEventsRegister pTK_ModGameplayData_AllEventsRegister)
-    {
-
-        playerEvents.OnPlayerEvent_JustJumped += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustJumped;
-        playerEvents.OnPlayerEvent_JustLanded += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustLanded;
-        playerEvents.OnPlayerEvent_JustDied += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustDied;
-        playerEvents.OnPlayerUsedWeapon += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_UsedWeapon;
-        playerEvents.OnPlayerJustReceivedWeapon += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustReceivedWeapon;
-        playerEvents.OnPlayerMadeTrick += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_MadeTrick;
-        playerEvents.OnPlayerBoostFired += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_BoostFired;
-    }
-
-
-
-    internal void UnRegisterFromAllPlayerEvents(PTK_ModGameplayData_PlayerEventsRegister pTK_ModGameplayData_AllEventsRegister)
-    {
-        playerEvents.OnPlayerEvent_JustJumped -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustJumped;
-        playerEvents.OnPlayerEvent_JustLanded += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustLanded;
-        playerEvents.OnPlayerEvent_JustDied -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustDied;
-        playerEvents.OnPlayerUsedWeapon -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_UsedWeapon;
-        playerEvents.OnPlayerJustReceivedWeapon -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustReceivedWeapon;
-        playerEvents.OnPlayerMadeTrick -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_MadeTrick;
-        playerEvents.OnPlayerBoostFired -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_BoostFired;
-    }
-
-
     //---------------------------------------------
 
     static PTK_ModGameplayDataSync _Instance;

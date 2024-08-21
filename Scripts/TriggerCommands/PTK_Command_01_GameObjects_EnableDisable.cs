@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_Command_03_EnableDisable_CommandsExecutor : PTK_TriggerCommandBase
+public class PTK_Command_01_GameObjects_EnableDisable : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E03_ENABLE_DISABLE_COMMANDS_EXECUTOR;
+        return ETriggerCommandType.E01_ENABLE_DISABLE_GAME_OBJECT;
     }
 
-    public PTK_TriggerArrayCommandsExecutor[] gameObjectsToEnable;
-    public PTK_TriggerArrayCommandsExecutor[] gameObjectsToDisable;
+    public GameObject[] gameObjectsToEnable;
+    public GameObject[] gameObjectsToDisable;
 
-    Dictionary<PTK_TriggerArrayCommandsExecutor, bool> defaultEnabledState = new Dictionary<PTK_TriggerArrayCommandsExecutor, bool>();
+    Dictionary<GameObject, bool> defaultEnabledState = new Dictionary<GameObject, bool>();
 
     public override void Awake()
     {
-        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToEnable)
+        foreach (GameObject go in gameObjectsToEnable)
         {
             if (go == null)
                 continue;
@@ -25,7 +25,7 @@ public class PTK_Command_03_EnableDisable_CommandsExecutor : PTK_TriggerCommandB
                 defaultEnabledState.Add(go, go.gameObject.activeInHierarchy);
         }
 
-        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToDisable)
+        foreach (GameObject go in gameObjectsToDisable)
         {
             if (go == null)
                 continue;
@@ -50,7 +50,7 @@ public class PTK_Command_03_EnableDisable_CommandsExecutor : PTK_TriggerCommandB
 
     void CommandExecuted()
     {
-        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToEnable)
+        foreach (GameObject go in gameObjectsToEnable)
         {
             if (go == null)
                 continue;
@@ -58,7 +58,7 @@ public class PTK_Command_03_EnableDisable_CommandsExecutor : PTK_TriggerCommandB
             go.gameObject.SetActive(true);
         }
 
-        foreach (PTK_TriggerArrayCommandsExecutor go in gameObjectsToDisable)
+        foreach (GameObject go in gameObjectsToDisable)
         {
             if (go == null)
                 continue;
@@ -70,7 +70,7 @@ public class PTK_Command_03_EnableDisable_CommandsExecutor : PTK_TriggerCommandB
 
     protected override void RaceResetted_RevertToDefault()
     {
-        foreach (PTK_TriggerArrayCommandsExecutor go in defaultEnabledState.Keys)
+        foreach (GameObject go in defaultEnabledState.Keys)
         {
             if (go == null)
                 continue;

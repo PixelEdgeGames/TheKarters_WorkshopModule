@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PTK_Command_02_ManualReset_CommandExecutor : PTK_TriggerCommandBase
+public class PTK_Command_02_ModTriggerCommandExecutor_ManualReset : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
         return ETriggerCommandType.E02_COMMANDS_EXECUTOR_MANUAL_RESET;
     }
 
-    public PTK_TriggerArrayCommandsExecutor[] signalsToReset;
+    public PTK_TriggerArrayCommandsExecutor[] commandsExecutorsToReset;
 
 
     public override void Awake()
@@ -32,7 +32,7 @@ public class PTK_Command_02_ManualReset_CommandExecutor : PTK_TriggerCommandBase
 
     void CommandExecuted()
     {
-        foreach (PTK_TriggerArrayCommandsExecutor go in signalsToReset)
+        foreach (PTK_TriggerArrayCommandsExecutor go in commandsExecutorsToReset)
         {
             if (go == null)
                 continue;
