@@ -66,11 +66,11 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
     }
 
 
-    public virtual void OnRaceTimerJustStarted()
+    protected virtual void OnRaceTimerJustStarted()
     {
     }
 
-    public virtual void OnRaceResetted()
+    protected virtual void OnRaceResetted()
     {
     }
 }
