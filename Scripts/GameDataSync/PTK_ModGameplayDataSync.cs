@@ -5,12 +5,29 @@ using UnityEngine;
 
 public class PTK_ModGameplayDataSync : MonoBehaviour
 {
+    // values need to use network synced data - use properties if possible instead of adding event types like PlayerRaceFinished (it can be triggered by checking player property instead)
+    [System.Serializable]
     public class CGameInfo
     {
+        public enum ERaceState
+        {
+            E_WAITING_FOR_RACE_START,
+            E_RACE_IS_RUNNING_COUNTDOWN_COMPLETE,
+            E_AT_LEAST_ONE_PLAYER_FINISHED_RACE_WAITING_FOR_END,
+            E_RACE_FINISHED_PRESENTING_SUMMARY
+        }
+
+        public bool bIsWholeRaceFinished = false;
+        public ERaceState eRaceState = ERaceState.E_WAITING_FOR_RACE_START;
         public float fCurrentRaceTime = 0.0f;
-        public int iCurrentPlayingVehicles = 0;
+
+        public bool bIsOnlinePlay = false;
+
+        public int iCurrentPlayingPlayersCount = 0;
         public int iLocalPlayersCount = 0;
 
+        public int iCurrentCupRoundIndex = 0;
+        public int iCurrentCupRoundsCount = 0;
 
         public string strTrackName = "";
         public int iTrackConfigID = 0;
@@ -23,19 +40,23 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public int iCurrentBestLapNrOnHud = 0;
     }
 
+    // values need to use network synced data - use properties if possible instead of adding event types like PlayerRaceFinished (it can be triggered by checking player property instead)
     [System.Serializable]
     public class CCameraInfo
     {
         public bool bCameraEnabled = false;
-        public Vector3 vCamPos = Vector3.zero;
+        public Vector3 vCameraPosition = Vector3.zero;
         public Vector3 vCameraDirection = Vector3.zero;
+        public CPlayerInfo parentPlayerInfo;
     }
 
 
+    // values need to use network synced data - use properties if possible instead of adding event types like PlayerRaceFinished (it can be triggered by checking player property instead)
     [System.Serializable]
     public class CPlayerInfo
     {
-        public bool bIsPlaying = false;
+        public bool bIsPlayerEnabled = false;
+        public int iLocalCameraIndex = -1;
 
         public Vector3 vPosition;
         public Vector3 vVelocity;
@@ -60,8 +81,11 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public float fAccelInput = 0.0f;
 
         public float fReservesPercentage = 0.0f;
-        public float fBoostBarLoadedValNormalized = 0.0f;
-        public int iBoostBarLoadingIndex = 0;
+        public bool bIsWheelTouchingGround_BL = false;
+        public bool bIsWheelTouchingGround_BR = false;
+        public bool bIsWheelTouchingGround_FL = false;
+        public bool bIsWheelTouchingGround_FR = false;
+        public bool bAreBoostbarsReadyToFire = false;
         public float fBeforeRaceBurningWheelsLoadedValNormalized = 0;
 
 
@@ -77,22 +101,23 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
 
     }
 
+    // values need to use network synced data - use properties if possible instead of adding event types like PlayerRaceFinished (it can be triggered by checking player property instead)
     [System.Serializable]
     public class CGameEvents
     {
         // global events
         public Action OnGameEvent_RaceFinished;
-        public Action OnGameEvent_FirstPlayerMovedThroughFinishLine;
-        public Action OnGameEvent_FirstPlayerDied;
 
         public Action OnGameEvent_RaceRestarted;
         public Action OnGameEvent_RaceTimerStart;
-        public Action OnGameEvent_AnyPlayerDied;
-        public Action OnGameEvent_LapNrIncreased;
-        public Action OnGameEvent_FinalLapStarted;
+
+        public Action OnGameEvent_GamePaused;
+        public Action OnGameEvent_GameUnpaused;
+
     }
 
 
+    // values need to use network synced data - use properties if possible instead of adding event types like PlayerRaceFinished (it can be triggered by checking player property instead)
     [System.Serializable]
     public class CPlayerEvents
     {
@@ -101,20 +126,16 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public Action<int> OnPlayerEvent_JustJumped;
         public Action<int, float> OnPlayerEvent_JustLanded;
         public Action<int> OnPlayerEvent_JustDied;
-        public Action<int, int> OnPlayerEvent_FinishedRace;
-        public Action<int> OnPlayerKilledOpponent;
         public Action<int, int> OnPlayerUsedWeapon;
+        public Action<int, int> OnPlayerJustReceivedWeapon;
         public Action<int> OnPlayerMadeTrick;
-        public Action<int> OnPlayerDestroyedItemBox;
         public Action<int, int, float, float> OnPlayerBoostFired;
-
-        public Action<int> OnPlayerLapNrIncrease;
     }
 
     public CGameInfo gameInfo = new CGameInfo();
 
     public CPlayerInfo[] playersInfo = new[] { new CPlayerInfo(), new CPlayerInfo(), new CPlayerInfo(), new CPlayerInfo(), new CPlayerInfo(), new CPlayerInfo(), new CPlayerInfo(), new CPlayerInfo() };
-    public CCameraInfo[] camerasInfo = new CCameraInfo[] { new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo() };
+    public CCameraInfo[] localCamsInfo = new CCameraInfo[] { new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo() };
 
     public CPlayerEvents playerEvents = new CPlayerEvents();
     public CGameEvents gameEvents = new CGameEvents();
@@ -125,14 +146,10 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
     internal void RegisterToGameTypeEventsOnly(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
     {
         gameEvents.OnGameEvent_RaceFinished += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
-        gameEvents.OnGameEvent_FirstPlayerMovedThroughFinishLine += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_FirstPlayerMovedThroughFinishLine;
-        gameEvents.OnGameEvent_FirstPlayerDied += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_FirstPlayerDied;
-
         gameEvents.OnGameEvent_RaceRestarted += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
         gameEvents.OnGameEvent_RaceTimerStart += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceTimerStart;
-        gameEvents.OnGameEvent_AnyPlayerDied += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_AnyPlayerDied;
-        gameEvents.OnGameEvent_LapNrIncreased += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_LapNrIncreased;
-        gameEvents.OnGameEvent_FinalLapStarted += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_FinalLapStarted;
+        gameEvents.OnGameEvent_GamePaused += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GamePaused;
+        gameEvents.OnGameEvent_GameUnpaused += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
     }
 
    internal void RegisterToAllEvents(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
@@ -142,11 +159,9 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         playerEvents.OnPlayerEvent_JustJumped += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustJumped;
         playerEvents.OnPlayerEvent_JustLanded += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustLanded;
         playerEvents.OnPlayerEvent_JustDied += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustDied;
-        playerEvents.OnPlayerEvent_FinishedRace += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_FinishedRace;
-        playerEvents.OnPlayerKilledOpponent += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_KilledOpponent;
         playerEvents.OnPlayerUsedWeapon += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_UsedWeapon;
+        playerEvents.OnPlayerJustReceivedWeapon += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustReceivedWeapon;
         playerEvents.OnPlayerMadeTrick += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_MadeTrick;
-        playerEvents.OnPlayerDestroyedItemBox += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_DestroyedItemBox;
         playerEvents.OnPlayerBoostFired += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_BoostFired;
     }
 
@@ -154,14 +169,11 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
     internal void UnRegisterFromGameTypeEventsOnly(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
     {
         gameEvents.OnGameEvent_RaceFinished -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
-        gameEvents.OnGameEvent_FirstPlayerMovedThroughFinishLine -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_FirstPlayerMovedThroughFinishLine;
-        gameEvents.OnGameEvent_FirstPlayerDied -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_FirstPlayerDied;
 
         gameEvents.OnGameEvent_RaceRestarted -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
         gameEvents.OnGameEvent_RaceTimerStart -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceTimerStart;
-        gameEvents.OnGameEvent_AnyPlayerDied -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_AnyPlayerDied;
-        gameEvents.OnGameEvent_LapNrIncreased -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_LapNrIncreased;
-        gameEvents.OnGameEvent_FinalLapStarted -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_FinalLapStarted;
+        gameEvents.OnGameEvent_GamePaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GamePaused;
+        gameEvents.OnGameEvent_GameUnpaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
     }
 
     internal void UnRegisterFromAllEvents(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
@@ -171,11 +183,9 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         playerEvents.OnPlayerEvent_JustJumped -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustJumped;
         playerEvents.OnPlayerEvent_JustLanded += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustLanded;
         playerEvents.OnPlayerEvent_JustDied -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustDied;
-        playerEvents.OnPlayerEvent_FinishedRace -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_FinishedRace;
-        playerEvents.OnPlayerKilledOpponent -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_KilledOpponent;
         playerEvents.OnPlayerUsedWeapon -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_UsedWeapon;
+        playerEvents.OnPlayerJustReceivedWeapon -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustReceivedWeapon;
         playerEvents.OnPlayerMadeTrick -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_MadeTrick;
-        playerEvents.OnPlayerDestroyedItemBox -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_DestroyedItemBox;
         playerEvents.OnPlayerBoostFired -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_BoostFired;
     }
 
@@ -190,9 +200,11 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
             if(_Instance == null)
             {
                 var dataSync = new GameObject();
+                dataSync.SetActive(false); // so Awake wont be called before we set instance
                 dataSync.name = "PTK_ModGameplayDataSync";
-                GameObject.DontDestroyOnLoad(dataSync);
                 _Instance = dataSync.AddComponent<PTK_ModGameplayDataSync>();
+                GameObject.DontDestroyOnLoad(dataSync);
+                dataSync.SetActive(true); // so Awake wont be called before we set instance
             }
 
             return _Instance;

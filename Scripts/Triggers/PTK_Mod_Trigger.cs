@@ -30,6 +30,11 @@ public class PTK_Mod_Trigger : MonoBehaviour
     [SerializeField]
     bool _bTriggerByRangedWeaponsDamage = false;
 
+    [Header("Player Ignore Settings")]
+    public bool bIgnorePlayerWhenTeleporting = false;
+    public bool bIgnorePlayerWhenImmune = false;
+    public bool bIgnorePlayerWhenUsingBoostingItem = false;
+
     [Header("Auto Trigger Events")]
     [SerializeField]
     bool _bAutoTriggerOnSceneLoad = false;
@@ -68,13 +73,10 @@ public class PTK_Mod_Trigger : MonoBehaviour
     }
 
 
-    [Header("Player Ignore Settings")]
-    public bool bIgnorePlayerWhenTeleporting = false;
-    public bool bIgnorePlayerWhenImmune = false;
-    public bool bIgnorePlayerWhenUsingBoostingItem = false;
 
     [Header("Variable Conditions - Check for Players Within Distance Range")]
-    public float fDistanceToSearchForAnyPlayer = 9999;
+    public float fDistanceToSearchForAnyPlayerInRange = 9999;
+    public bool bInRangeCheckOnlyForLocalPlayersWithCamera = true;
     [Header("Trigger if ANY of these conditions are correct")]
     public List<PTK_Mod_TriggerVariableConditions> variableTypeConditions;
 
@@ -213,7 +215,31 @@ public class PTK_Mod_Trigger : MonoBehaviour
         iUniqueTriggerID = iUniqueIDToSet;
         iUniqueTriggerIDCratedForObjectInstance = this.gameObject.GetInstanceID();
     }
+    [HideInInspector]
+    public bool [] bAreGlobalPlayersWithinRange = new bool[8];
 
+    private void Update()
+    {
+        for(int i=0;i< bAreGlobalPlayersWithinRange.Length; i++)
+        {
+            if (PTK_ModGameplayDataSync.Instance.playersInfo[i].bIsPlayerEnabled == true && Vector3.Magnitude(transform.position-PTK_ModGameplayDataSync.Instance.playersInfo[i].vPosition ) < fDistanceToSearchForAnyPlayerInRange)
+            {
+                if (bInRangeCheckOnlyForLocalPlayersWithCamera == true && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalCameraIndex == -1)
+                    bAreGlobalPlayersWithinRange[i] = false; // no camera
+                else
+                    bAreGlobalPlayersWithinRange[i] = true;
+            }
+            else
+            {
+                bAreGlobalPlayersWithinRange[i] = false;
+            }
+        }
+
+        for (int i = 0; i < variableTypeConditions.Count; i++)
+        {
+            variableTypeConditions[i].CheckConditions(this);
+        }
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
