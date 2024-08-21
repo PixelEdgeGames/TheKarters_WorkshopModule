@@ -7,12 +7,14 @@ public class PTK_ModTriggerEditorHelper : MonoBehaviour
     public PTK_TriggerArrayCommandsExecutor triggerArrayCommandsExecutorParent;
 
     public GameObject instantiateInTriggersParent;
+    public GameObject commandsBehaviourParent;
+    public PTK_TriggerCommandsBehaviour commandsBehaviourPrefab;
 
+    public GameObject PlayerOrBulletPhysicsCollisionBox;
+    public GameObject PlayerOrBulletPhysicsCollisionSphere;
     public GameObject GameEventTrigger;
     public GameObject PlayerEventTriggerBox;
     public GameObject PlayerEventTriggerSphere;
-    public GameObject PlayerOrBulletPhysicsCollisionBox;
-    public GameObject PlayerOrBulletPhysicsCollisionSphere;
     public GameObject ConditionTriggerBox;
     public GameObject ConditionTriggerSphere;
     // Start is called before the first frame update

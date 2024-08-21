@@ -30,6 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3760987873122730425}
+  - {fileID: 638776594060625368}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,6 +52,7 @@ MonoBehaviour:
   triggersToReceiveDataOnTriggerEvent: []
   eRunCommandCondition: 0
   eRunCommandsMode: 0
+  eCommandBehavioursExecutionMode: 0
   commandBehavioursToRun: []
 --- !u!114 &4206002407235417969
 MonoBehaviour:
@@ -66,15 +68,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerArrayCommandsExecutorParent: {fileID: 19755134462183950}
   instantiateInTriggersParent: {fileID: 4560034501295548083}
+  commandsBehaviourParent: {fileID: 5941789520320359678}
+  commandsBehaviourPrefab: {fileID: 5911540646165072785, guid: bab7b6e70c6e66f459455215babb6580,
+    type: 3}
+  PlayerOrBulletPhysicsCollisionBox: {fileID: 7956203414574651193, guid: 579f6be9dd36d0745927a433035c09c6,
+    type: 3}
+  PlayerOrBulletPhysicsCollisionSphere: {fileID: 1874614294854238211, guid: 974834ea0a7578344ac72e3d45469466,
+    type: 3}
   GameEventTrigger: {fileID: 6890199144606083135, guid: 3d2aed034ab6192428437ebbdb85e5b7,
     type: 3}
   PlayerEventTriggerBox: {fileID: 510216975398530771, guid: f6864c4a7c038214ea590c47c2870f13,
     type: 3}
   PlayerEventTriggerSphere: {fileID: 4255074861451779883, guid: 5141d97426145ca4abc1b11fb8012413,
-    type: 3}
-  PlayerOrBulletPhysicsCollisionBox: {fileID: 7956203414574651193, guid: 579f6be9dd36d0745927a433035c09c6,
-    type: 3}
-  PlayerOrBulletPhysicsCollisionSphere: {fileID: 1874614294854238211, guid: 974834ea0a7578344ac72e3d45469466,
     type: 3}
   ConditionTriggerBox: {fileID: 489634069108566538, guid: 9193bb1d057bbe6448241763c47bd2b4,
     type: 3}
@@ -109,4 +114,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 72700074682125281}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5941789520320359678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 638776594060625368}
+  m_Layer: 0
+  m_Name: Behaviours
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &638776594060625368
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5941789520320359678}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 72700074682125281}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

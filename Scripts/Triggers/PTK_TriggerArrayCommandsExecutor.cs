@@ -24,6 +24,13 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
         E_ONCE_MANUAL_CLEAR_REQUIRED
     }
 
+    public enum ECommandBehaviourExecutionMode
+    {
+        RUN_ALL_SIMULTANEOUSLY,  // Run all commands at the same time
+        RUN_SEQUENTIALLY,        // Run each command one at a time in order from first to last
+        RUN_PING_PONG            // Run each command one at a time, then reverse direction
+    }
+
     public bool bModTriggerCommandExecutorEnabled = true;
 
     public List<GameObject> objectsWithTriggersToReceiveDataOnTriggerEvent = new List<GameObject>();
@@ -35,10 +42,16 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
     public ECommandsRunCondition eRunCommandCondition = ECommandsRunCondition.E0_RUN_IF_RECIVED_EVENT_FROM_ANY_TRIGGER;
     [Header("Allow Sending Commands Again?")]
     public ECommandsRunMode eRunCommandsMode = ECommandsRunMode.E_REPEAT_AUTO_CLEAR_AND_WAIT_FOR_TRIGGERS_AGAIN;
+    [Header("Execution Mode")]
+    public ECommandBehaviourExecutionMode eCommandBehavioursExecutionMode = ECommandBehaviourExecutionMode.RUN_ALL_SIMULTANEOUSLY;
+
     [Header("Commands To Send")]
     public List<PTK_TriggerCommandsBehaviour> commandBehavioursToRun = new List<PTK_TriggerCommandsBehaviour>();
 
     bool bAlreadyCommandSent = false;
+
+    int iBehaviourIndexToRun = 0;
+    int iPingPongDirection = 1;
 
     private void Start()
     {
@@ -117,6 +130,9 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
 
     private void OnRaceResetted()
     {
+        iBehaviourIndexToRun = 0;
+        iPingPongDirection = 1;
+
         ClearReceivedEventsInfo();
 
         for (int iBehaviour = 0; iBehaviour < commandBehavioursToRun.Count; iBehaviour++)
@@ -177,6 +193,9 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
     {
         for (int iBehaviour = 0; iBehaviour < commandBehavioursToRun.Count; iBehaviour++)
         {
+            if (eCommandBehavioursExecutionMode != ECommandBehaviourExecutionMode.RUN_ALL_SIMULTANEOUSLY && iBehaviour != iBehaviourIndexToRun)
+                continue;
+
             if (commandBehavioursToRun[iBehaviour] != null)
             {
                 if (eRunCommandCondition == ECommandsRunCondition.E1_RUN_IF_RECEIVED_EVENT_DATA_FROM_ALL_TRIGGERS)
@@ -190,6 +209,35 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
                 }
             }
         }
+
+
+        if (commandBehavioursToRun.Count > 1) // at least 2 elements!
+        {
+            if (eCommandBehavioursExecutionMode == ECommandBehaviourExecutionMode.RUN_SEQUENTIALLY)
+            {
+                iBehaviourIndexToRun++; iBehaviourIndexToRun %= commandBehavioursToRun.Count;
+            }
+            else if (eCommandBehavioursExecutionMode == ECommandBehaviourExecutionMode.RUN_PING_PONG)
+            {
+                // Move in current direction (forward or backward)
+                iBehaviourIndexToRun += iPingPongDirection;
+
+                // If we go past the last element, reverse direction and move to the second last element
+                if (iBehaviourIndexToRun >= commandBehavioursToRun.Count)
+                {
+                    iPingPongDirection = -1;
+                    iBehaviourIndexToRun = commandBehavioursToRun.Count - 2;
+                }
+
+                // If we go before the first element, reverse direction and move to the second element
+                else if (iBehaviourIndexToRun < 0)
+                {
+                    iPingPongDirection = 1;
+                    iBehaviourIndexToRun = 1;
+                }
+            }
+        }
+
     }
 
      void ClearReceivedEventsInfo()

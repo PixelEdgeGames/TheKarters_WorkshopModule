@@ -7,6 +7,7 @@ using UnityEngine;
 public class PTK_TriggerCommandsBehaviour : MonoBehaviour
 {
     PTK_TriggerCommandBase[] ptkCommands;
+    public string strBehaviourInfo = "";
 
     private void Awake()
     {

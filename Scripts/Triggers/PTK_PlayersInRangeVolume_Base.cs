@@ -6,10 +6,10 @@ public abstract class PTK_PlayersInRangeVolume_Base : MonoBehaviour
 {
     public enum EPlayerType
     {
-        E0_LOCAL_PLAYER_WITH_CAMERA,
-        E1_ALL_PLAYERS
+        E0_ALL_PLAYERS,
+        E1_LOCAL_PLAYER_WITH_CAMERA_ONLY
     }
-    public EPlayerType eLookForPlayersOfType = EPlayerType.E0_LOCAL_PLAYER_WITH_CAMERA;
+    public EPlayerType eLookForPlayersOfType = EPlayerType.E0_ALL_PLAYERS;
     [HideInInspector]
     public bool[] bAreGlobalPlayersWithinRange = new bool[8];
 

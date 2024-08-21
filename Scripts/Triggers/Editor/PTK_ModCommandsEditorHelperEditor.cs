@@ -13,9 +13,10 @@ public class PTK_ModCommandsEditorHelperEditor : Editor
         typeof(PTK_Command_01_GameObjects_EnableDisable),
         typeof(PTK_Command_02_ModTriggerCommandExecutor_ManualReset),
         typeof(PTK_Command_03_ModTriggerCommandExecutor_EnableDisable),
+        typeof(PTK_Command_04_AnimationClip_PlayPauseStop),
         // Add more command types here as needed
     };
-
+    
     public override void OnInspectorGUI()
     {
         // Reference to the target object (the script being inspected)

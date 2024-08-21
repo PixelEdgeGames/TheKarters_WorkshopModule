@@ -5,6 +5,15 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class PTK_ModVariableConditionsTriggerType : PTK_ModBaseTrigger
 {
+    public enum ETriggerActivationType
+    {
+        E0_CONDITION_MET,        // When the condition is met
+        E1_CONDITION_NO_LONGER_MET,    // When the condition is no longer met
+        E2_BOTH_MET_AND_NO_LONGER_MET  // Both when the condition is met and when it is no longer met
+    }
+
+    public ETriggerActivationType eTriggerActivationType = ETriggerActivationType.E0_CONDITION_MET;
+
     [Header("Variable Conditions - Check for Players Within Distance Range")]
     public List<PTK_PlayersInRangeVolume_Base> checkPlayersInVolumes = new List<PTK_PlayersInRangeVolume_Base>();
     [Header("Trigger if ANY of these conditions are correct")]

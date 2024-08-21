@@ -142,14 +142,25 @@ public class PTK_Mod_TriggerVariableConditions
             {
                 bConditionAlreadyPassed_TriggerEventSent = true;
 
-                pTK_Mod_Trigger.OnTriggerEvent_ByVariableConditions?.Invoke();
-                pTK_Mod_Trigger.OnTriggerEvent?.Invoke();
+                if(pTK_Mod_Trigger.eTriggerActivationType == PTK_ModVariableConditionsTriggerType.ETriggerActivationType.E0_CONDITION_MET ||
+                    pTK_Mod_Trigger.eTriggerActivationType == PTK_ModVariableConditionsTriggerType.ETriggerActivationType.E2_BOTH_MET_AND_NO_LONGER_MET)
+                {
+                    pTK_Mod_Trigger.OnTriggerEvent_ByVariableConditions?.Invoke();
+                    pTK_Mod_Trigger.OnTriggerEvent?.Invoke();
+                }
 
             }
             else if (bConditionAlreadyPassed_TriggerEventSent == true && bConditionPassed == false)
             {
                 // we passed condition before but now it is no longer valid - we are setting bConditionAlreadyPassed for trigger to happen again
                 bConditionAlreadyPassed_TriggerEventSent = false;
+
+                if (pTK_Mod_Trigger.eTriggerActivationType == PTK_ModVariableConditionsTriggerType.ETriggerActivationType.E1_CONDITION_NO_LONGER_MET ||
+                    pTK_Mod_Trigger.eTriggerActivationType == PTK_ModVariableConditionsTriggerType.ETriggerActivationType.E2_BOTH_MET_AND_NO_LONGER_MET)
+                {
+                    pTK_Mod_Trigger.OnTriggerEvent_ByVariableConditions?.Invoke();
+                    pTK_Mod_Trigger.OnTriggerEvent?.Invoke();
+                }
             }
         }
     }

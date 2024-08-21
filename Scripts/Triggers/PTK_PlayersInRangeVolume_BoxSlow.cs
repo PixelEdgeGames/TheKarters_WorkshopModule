@@ -21,7 +21,7 @@ public class PTK_PlayersInRangeVolume_BoxSlow : PTK_PlayersInRangeVolume_Base
         {
             if (PTK_ModGameplayDataSync.Instance.playersInfo[i].bIsPlayerEnabled == true && IsInside( PTK_ModGameplayDataSync.Instance.playersInfo[i].vPosition) == true)
             {
-                if (eLookForPlayersOfType == EPlayerType.E0_LOCAL_PLAYER_WITH_CAMERA && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalCameraIndex == -1)
+                if (eLookForPlayersOfType == EPlayerType.E1_LOCAL_PLAYER_WITH_CAMERA_ONLY && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalCameraIndex == -1)
                     bAreGlobalPlayersWithinRange[i] = false; // no camera
                 else
                     bAreGlobalPlayersWithinRange[i] = true;
