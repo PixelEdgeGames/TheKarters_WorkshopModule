@@ -143,7 +143,7 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
 
 
     // better performance if we don't receive events from all players that are fired constantly
-    internal void RegisterToGameTypeEventsOnly(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
+    internal void RegisterToGameTypeEventsOnly(PTK_ModGameplayData_GameEventsRegister pTK_ModGameplayData_AllEventsRegister)
     {
         gameEvents.OnGameEvent_RaceFinished += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
         gameEvents.OnGameEvent_RaceRestarted += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
@@ -152,9 +152,18 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         gameEvents.OnGameEvent_GameUnpaused += pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
     }
 
-   internal void RegisterToAllEvents(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
+    internal void UnRegisterFromGameTypeEventsOnly(PTK_ModGameplayData_GameEventsRegister pTK_ModGameplayData_AllEventsRegister)
     {
-        RegisterToGameTypeEventsOnly(pTK_ModGameplayData_AllEventsRegister);
+        gameEvents.OnGameEvent_RaceFinished -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
+
+        gameEvents.OnGameEvent_RaceRestarted -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
+        gameEvents.OnGameEvent_RaceTimerStart -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceTimerStart;
+        gameEvents.OnGameEvent_GamePaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GamePaused;
+        gameEvents.OnGameEvent_GameUnpaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
+    }
+
+    internal void RegisterToPlayerAllEvents(PTK_ModGameplayData_PlayerEventsRegister pTK_ModGameplayData_AllEventsRegister)
+    {
 
         playerEvents.OnPlayerEvent_JustJumped += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustJumped;
         playerEvents.OnPlayerEvent_JustLanded += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustLanded;
@@ -166,20 +175,9 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
     }
 
 
-    internal void UnRegisterFromGameTypeEventsOnly(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
+
+    internal void UnRegisterFromAllPlayerEvents(PTK_ModGameplayData_PlayerEventsRegister pTK_ModGameplayData_AllEventsRegister)
     {
-        gameEvents.OnGameEvent_RaceFinished -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceFinished;
-
-        gameEvents.OnGameEvent_RaceRestarted -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceRestarted;
-        gameEvents.OnGameEvent_RaceTimerStart -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_RaceTimerStart;
-        gameEvents.OnGameEvent_GamePaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GamePaused;
-        gameEvents.OnGameEvent_GameUnpaused -= pTK_ModGameplayData_AllEventsRegister.OnGameEvent_GameUnpaused;
-    }
-
-    internal void UnRegisterFromAllEvents(PTK_ModGameplayData_AllEventsRegister pTK_ModGameplayData_AllEventsRegister)
-    {
-        UnRegisterFromGameTypeEventsOnly(pTK_ModGameplayData_AllEventsRegister);
-
         playerEvents.OnPlayerEvent_JustJumped -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustJumped;
         playerEvents.OnPlayerEvent_JustLanded += pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustLanded;
         playerEvents.OnPlayerEvent_JustDied -= pTK_ModGameplayData_AllEventsRegister.OnPlayerEvent_JustDied;

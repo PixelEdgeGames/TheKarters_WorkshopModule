@@ -8,8 +8,7 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
     [System.Serializable]
     public class CRecivedTriggerWithData
     {
-        public PTK_Mod_Trigger trigger;
-        public PTK_Mod_Trigger.CTriggerEventData triggerEventData;
+        public PTK_ModBaseTrigger trigger;
         public bool bSignalReceived = false;
     }
 
@@ -25,7 +24,7 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
         E_NO_NEED_TO_WAIT_FOR_MANUAL_CLEAR_FIRST
     }
 
-    public List<PTK_Mod_Trigger> triggersToReceiveDataOnTriggerEvent = new List<PTK_Mod_Trigger>();
+    public List<PTK_ModBaseTrigger> triggersToReceiveDataOnTriggerEvent = new List<PTK_ModBaseTrigger>();
 
     [Header("PreviewOnly - Receive Signals from Triggers")]
      List<CRecivedTriggerWithData> recivedTriggerEventsPreview = new List<CRecivedTriggerWithData>();
@@ -60,21 +59,27 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
                 continue;
 
             int currentIndexLambda = i;
-            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnTriggerEventNetSynced += (triggerData) =>
+            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnTriggerEvent += () =>
            {
                // we will allow to run logic only if the signal receiver is not disabled
                if(this.gameObject.activeInHierarchy == true)
                {
                    recivedTriggerEventsPreview[currentIndexLambda].bSignalReceived = true;
-                   recivedTriggerEventsPreview[currentIndexLambda].triggerEventData = triggerData;
+                 //  recivedTriggerEventsPreview[currentIndexLambda].triggerEventData = triggerData;
 
                    TriggerEventReceived();
                }
            };
-
-            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnRaceResettedEvent += OnRaceResetted;
-            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnRaceTimerSyncedJustStarted += OnRaceTimerJustStarted;
         }
+
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted += OnRaceResetted;
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart += OnRaceTimerJustStarted;
+    }
+
+    private void OnDestroy()
+    {
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted -= OnRaceResetted;
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart -= OnRaceTimerJustStarted;
     }
 
     private void OnRaceTimerJustStarted()
@@ -170,7 +175,7 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
         for (int i = 0; i < recivedTriggerEventsPreview.Count; i++)
         {
             recivedTriggerEventsPreview[i].bSignalReceived = false;
-            recivedTriggerEventsPreview[i].triggerEventData = null;
+          //  recivedTriggerEventsPreview[i].triggerEventData = null;
         }
 
         bAlreadyCommandSent = false;

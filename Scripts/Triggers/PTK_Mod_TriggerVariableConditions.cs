@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PTK_Mod_TriggerVariableConditions : PTK_ModGameplayData_AllEventsRegister
+public class PTK_Mod_TriggerVariableConditions 
 {
     
 
@@ -18,30 +18,7 @@ public class PTK_Mod_TriggerVariableConditions : PTK_ModGameplayData_AllEventsRe
         E_GREATER_THAN_OR_EQUAL // >=
     }
 
-    [System.Serializable]
-    public class CEventTypeTrigger
-    {
-        public enum EAutoTriggerType
-        {
-            E_GAME_RACE_FINISHED_EVENT,
-            E_GAME_RACE_RESTARTED_EVENT,
-            E_GAME_RACE_RACE_TIMER_START_EVENT,
-            E_GAME_PAUSE_EVENT,
-            E_GAME_UNPAUSE_EVENT,
-
-            E_ANY_PLAYER_IN_RANGE_DIED_EVENT,
-            E_ANY_PLAYER_IN_RANGE_JUMPED_EVENT,
-            E_ANY_PLAYER_IN_RANGE_LANDED_EVENT,
-            E_ANY_PLAYER_IN_RANGE_USED_WEAPON_EVENT,
-            E_ANY_PLAYER_IN_RANGE_KILLED_SOMEONE_EVENT,
-            E_ANY_PLAYER_IN_RANGE_MADE_TRICK_EVENT,
-            E_ANY_PLAYER_IN_RANGE_USED_BOOST_EVENT,
-
-            __COUNT
-        }
-
-        public EAutoTriggerType triggerOnEventType = EAutoTriggerType.__COUNT;
-    }
+ 
 
 
     [System.Serializable]
@@ -110,22 +87,19 @@ public class PTK_Mod_TriggerVariableConditions : PTK_ModGameplayData_AllEventsRe
 
     public string strConditionName = "";
     public bool bIgnoreConditions = false;
-    [Header("Pass Trigger on event detection")]
-    public List<CEventTypeTrigger> eventTypesConditionsToCheck = new List<CEventTypeTrigger>();
     [Header("ALL below conditions need to pass for trigger to pass")]
     public List<CGameTypeCondition> gameTypeConditionsToCheck = new List<CGameTypeCondition>();
     public List<CPlayerTypeCondition> playerTypeConditionsToCheck = new List<CPlayerTypeCondition>();
     
     bool bRegisteredToEvents = false;
 
-    PTK_Mod_Trigger parentModTrigger;
-    public void Awake_InitializeAndAttachToEvents(PTK_Mod_Trigger _parentModTrigger)
+    PTK_ModVariableConditionsTriggerType parentModTrigger;
+    public void Awake_InitializeAndAttachToEvents(PTK_ModVariableConditionsTriggerType _parentModTrigger)
     {
         parentModTrigger = _parentModTrigger;
 
         if (gameTypeConditionsToCheck.Count > 0)
         {
-            PTK_ModGameplayDataSync.Instance.RegisterToGameTypeEventsOnly(this);
             bRegisteredToEvents = true;
         }
     }
@@ -134,29 +108,55 @@ public class PTK_Mod_TriggerVariableConditions : PTK_ModGameplayData_AllEventsRe
     {
         if(bRegisteredToEvents == true)
         {
-            PTK_ModGameplayDataSync.Instance.UnRegisterFromGameTypeEventsOnly(this);
         }
     }
 
 
-    public void CheckConditions(PTK_Mod_Trigger pTK_Mod_Trigger)
+    // this way it will work like trigger - when the condition is passed we will return true, and we will wait until condition is no longer valid before sending trigger again
+    // for example condition player velocity higher than 30 - we will send it but we will send it again only if it will go back to < 30
+    // for triggers we will need to pass it every time
+
+    // we wont send trigger about value again until it will no go back again
+    bool bConditionAlreadyPassed_TriggerEventSent = false;
+
+    public void CheckConditions(PTK_ModVariableConditionsTriggerType pTK_Mod_Trigger)
     {
         if (bIgnoreConditions == true)
             return;
 
+        bool bConditionPassed = true;
+        bool bContainsAnyCondition = false;
         for(int i=0;i< gameTypeConditionsToCheck.Count;i++)
         {
-            bool bApproved = CheckConditionType(gameTypeConditionsToCheck[i], pTK_Mod_Trigger);
+            if (gameTypeConditionsToCheck[i].bDisableCondition == true)
+                continue;
+
+            bConditionPassed &= CheckConditionType(gameTypeConditionsToCheck[i], pTK_Mod_Trigger);
+
+            bContainsAnyCondition = true;
+        }
+
+        if(bContainsAnyCondition == true)
+        {
+            if(bConditionAlreadyPassed_TriggerEventSent == false && bConditionPassed == true)
+            {
+                bConditionAlreadyPassed_TriggerEventSent = true;
+
+                pTK_Mod_Trigger.OnTriggerEvent_ByVariableConditions?.Invoke();
+                pTK_Mod_Trigger.OnTriggerEvent?.Invoke();
+
+            }
+            else if (bConditionAlreadyPassed_TriggerEventSent == true && bConditionPassed == false)
+            {
+                // we passed condition before but now it is no longer valid - we are setting bConditionAlreadyPassed for trigger to happen again
+                bConditionAlreadyPassed_TriggerEventSent = false;
+            }
         }
     }
 
-    bool bConditionAlreadyPassed = false;
 
-    private bool CheckConditionType(CGameTypeCondition condition, PTK_Mod_Trigger pTK_Mod_Trigger)
+    private bool CheckConditionType(CGameTypeCondition condition, PTK_ModVariableConditionsTriggerType pTK_Mod_Trigger)
     {
-        if (condition.bDisableCondition == true)
-            return false;
-
         bool bConditionPassed = false;
         switch(condition.eGameConditionType)
         {
@@ -164,81 +164,9 @@ public class PTK_Mod_TriggerVariableConditions : PTK_ModGameplayData_AllEventsRe
                 break;
         }
 
-        if (bConditionPassed == false)
-            bConditionAlreadyPassed = false;
-
-        // this way it will work like trigger - when the condition is passed we will return true, and we will wait until condition is no longer valid before sending trigger again
-        // for example condition player velocity higher than 30 - we will send it but we will send it again only if it will go back to < 30
-        // for triggers we will need to pass it every time
-
-        // we wont send trigger about value again until it will no go back again
-        if (bConditionAlreadyPassed == true)
-            return false;
-
         return bConditionPassed;
     }
 
  
-
-    internal override void OnGameEvent_RaceFinished()
-    {
-    }
-
-
-    internal override void OnGameEvent_RaceRestarted()
-    {
-    }
-
-    internal override void OnGameEvent_RaceTimerStart()
-    {
-    }
-
-    internal override void OnGameEvent_GamePaused()
-    {
-    }
-
-    internal override void OnGameEvent_GameUnpaused()
-    {
-    }
-
-
-
-    // PLAYER EVENTS NOT USED
-    internal override void OnPlayerEvent_JustJumped(int iGlobalPlayerIndex)
-    {
-    }
-
-    internal override void OnPlayerEvent_JustLanded(int iGlobalPlayerIndex, float fTimeInAir)
-    {
-    }
-
-    internal override void OnPlayerEvent_JustDied(int iGlobalPlayerIndex)
-    {
-    }
-
-    internal override void OnPlayerEvent_FinishedRace(int iGlobalPlayerIndex,int iFinishedRacePosIndex)
-    {
-    }
-
-    internal override void OnPlayerEvent_KilledOpponent(int iGlobalPlayerIndex)
-    {
-    }
-
-    internal override void OnPlayerEvent_UsedWeapon(int iGlobalPlayerIndex,int iWeaponType)
-    {
-    }
-
-    internal override void OnPlayerEvent_MadeTrick(int iGlobalPlayerIndex)
-    {
-    }
-
-
-    internal override void OnPlayerEvent_BoostFired(int iGlobalPlayerIndex, int iBoostType, float fBoostStrength, float fBoostDuration)
-    {
-    }
-
-    internal override void OnPlayerEvent_JustReceivedWeapon(int iGlobalPlayerIndex, int iWeaponType)
-    {
-    }
 
 }

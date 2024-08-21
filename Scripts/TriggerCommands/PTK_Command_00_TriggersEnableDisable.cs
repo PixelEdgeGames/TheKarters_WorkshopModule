@@ -9,14 +9,14 @@ public class PTK_Command_00_TriggersEnableDisable : PTK_TriggerCommandBase
         return ETriggerCommandType.E00_ENABLE_DISABLE_TRIGGER;
     }
 
-    public PTK_Mod_Trigger[] triggersToEnable;
-    public PTK_Mod_Trigger[] triggersToDisable;
+    public PTK_ModBaseTrigger[] triggersToEnable;
+    public PTK_ModBaseTrigger[] triggersToDisable;
 
-    Dictionary<PTK_Mod_Trigger, bool> defaultEnabledState = new Dictionary<PTK_Mod_Trigger, bool>();
+    Dictionary<PTK_ModBaseTrigger, bool> defaultEnabledState = new Dictionary<PTK_ModBaseTrigger, bool>();
 
     public override void Awake()
     {
-        foreach(PTK_Mod_Trigger trigger in triggersToEnable)
+        foreach(PTK_ModBaseTrigger trigger in triggersToEnable)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
@@ -25,7 +25,7 @@ public class PTK_Command_00_TriggersEnableDisable : PTK_TriggerCommandBase
                 defaultEnabledState.Add(trigger, trigger.gameObject.activeInHierarchy);
         }
 
-        foreach (PTK_Mod_Trigger trigger in triggersToDisable)
+        foreach (PTK_ModBaseTrigger trigger in triggersToDisable)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
@@ -50,7 +50,7 @@ public class PTK_Command_00_TriggersEnableDisable : PTK_TriggerCommandBase
 
     void CommandExecuted()
     {
-        foreach (PTK_Mod_Trigger trigger in triggersToEnable)
+        foreach (PTK_ModBaseTrigger trigger in triggersToEnable)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
@@ -58,7 +58,7 @@ public class PTK_Command_00_TriggersEnableDisable : PTK_TriggerCommandBase
             trigger.gameObject.SetActive(true);
         }
 
-        foreach (PTK_Mod_Trigger trigger in triggersToDisable)
+        foreach (PTK_ModBaseTrigger trigger in triggersToDisable)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
@@ -70,7 +70,7 @@ public class PTK_Command_00_TriggersEnableDisable : PTK_TriggerCommandBase
 
     protected override void RaceResetted_RevertToDefault()
     {
-        foreach(PTK_Mod_Trigger trigger in defaultEnabledState.Keys)
+        foreach(PTK_ModBaseTrigger trigger in defaultEnabledState.Keys)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
