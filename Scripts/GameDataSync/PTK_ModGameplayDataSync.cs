@@ -38,6 +38,7 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public bool bIsTimeTrialGameMode = false;
 
         public int iCurrentBestLapNrOnHud = 0;
+        public int iPlayerRaceRestartCount = 0;
     }
 
     // values need to use network synced data - use properties if possible instead of adding event types like PlayerRaceFinished (it can be triggered by checking player property instead)
@@ -95,7 +96,7 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public bool bIsDeathImmune = false;
         public bool bIsPoisoned = false;
 
-        public PixelWeaponObject.EWeaponType eCurrentWeaponType;
+        public int iCurrentWeaponType;
 
         public PTK_GroundType.CGroundSettings currentDrivingGroundData;
 
@@ -106,7 +107,8 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
     public class CGameEvents
     {
         // global events
-        public Action OnGameEvent_RaceFinished;
+        public Action OnGameEvent_WholeRaceFinished;
+        public Action OnGameEvent_FirstPlayerFinishedRace;
 
         public Action OnGameEvent_RaceRestarted;
         public Action OnGameEvent_RaceTimerStart;
@@ -114,6 +116,7 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public Action OnGameEvent_GamePaused;
         public Action OnGameEvent_GameUnpaused;
 
+        public Action OnGameEvent_RaceLeftLoadingMainMenu;
     }
 
 
@@ -126,6 +129,7 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public Action<int> OnPlayerEvent_JustJumped;
         public Action<int, float> OnPlayerEvent_JustLanded;
         public Action<int> OnPlayerEvent_JustDied;
+        public Action<int,int> OnPlayerEvent_JustKilledSomeone;
         public Action<int, int> OnPlayerUsedWeapon;
         public Action<int, int> OnPlayerJustReceivedWeapon;
         public Action<int> OnPlayerMadeTrick;
@@ -169,4 +173,5 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
             GameObject.DestroyImmediate(this.gameObject);
         }
     }
+
 }

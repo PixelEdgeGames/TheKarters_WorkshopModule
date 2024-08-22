@@ -34,9 +34,8 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             helper.PlayerOrBulletPhysicsCollisionSphere,
             helper.PlayerEventTriggerBox,
             helper.PlayerEventTriggerSphere,
-            helper.ConditionTriggerBox,
-            helper.ConditionTriggerSphere,
-            helper.GameEventTrigger
+            helper.GameEventTrigger,
+            helper.GameConditionTrigger
         };
         var triggersCategory = new List<string>
         {
@@ -44,9 +43,8 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             "",
             "Player Events",
             "",
-            "Variable Conditions",
-            "",
-            "Game Events"
+            "Game Events",
+            "Game Condition"
         };
 
         int iIndex = 0;

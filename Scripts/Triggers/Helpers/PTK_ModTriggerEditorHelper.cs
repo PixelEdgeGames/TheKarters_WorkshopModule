@@ -15,8 +15,7 @@ public class PTK_ModTriggerEditorHelper : MonoBehaviour
     public GameObject GameEventTrigger;
     public GameObject PlayerEventTriggerBox;
     public GameObject PlayerEventTriggerSphere;
-    public GameObject ConditionTriggerBox;
-    public GameObject ConditionTriggerSphere;
+    public GameObject GameConditionTrigger;
     // Start is called before the first frame update
     void Start()
     {

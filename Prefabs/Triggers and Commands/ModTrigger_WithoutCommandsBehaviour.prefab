@@ -81,9 +81,7 @@ MonoBehaviour:
     type: 3}
   PlayerEventTriggerSphere: {fileID: 4255074861451779883, guid: 5141d97426145ca4abc1b11fb8012413,
     type: 3}
-  ConditionTriggerBox: {fileID: 489634069108566538, guid: 9193bb1d057bbe6448241763c47bd2b4,
-    type: 3}
-  ConditionTriggerSphere: {fileID: 708241433744727835, guid: d4da027366f81e2419ac6f8b120e948a,
+  GameConditionTrigger: {fileID: 489634069108566538, guid: 9193bb1d057bbe6448241763c47bd2b4,
     type: 3}
 --- !u!1 &4560034501295548083
 GameObject:

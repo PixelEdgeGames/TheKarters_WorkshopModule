@@ -10,7 +10,7 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         E_PHYSICS_COLLISION,
         E_GAME_EVENT_TYPE,
         E_PLAYER_IN_RANGE_EVENT_TYPE,
-        E_VARIABLE_CONDITION
+        E_GAME_VARIABLE_CONDITION
     }
 
     public class CTriggerEventData_Player
@@ -31,8 +31,9 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
 
 
     public Action OnTriggerEvent;
-    public Action OnTriggerEvent_ByVariableConditions;
-    public Action OnTriggerEvent_ByEventCondition;
+    public Action OnTriggerEvent_ByGameVariableConditions;
+    public Action OnTriggerEvent_ByGameEvent;
+    public Action<int> OnTriggerEvent_ByPlayerEvent;
     public Action<CTriggerEventData_Player> OnTriggerEvent_ByPlayerCollision;
     public Action<CTriggerEventData_Weapon> OnTriggerEvent_ByWeaponCollision;
 

@@ -27,6 +27,18 @@ public abstract class PTK_PlayersInRangeVolume_Base : MonoBehaviour
             meshRenderer.enabled = false;
     }
 
+    public int GetPlayersInsideVolumeCount()
+    {
+        int iPlayersCountInVolume = 0;
+        for(int i=0;i< bAreGlobalPlayersWithinRange.Length;i++)
+        {
+            if (bAreGlobalPlayersWithinRange[i] == true)
+                iPlayersCountInVolume++;
+        }
+
+        return iPlayersCountInVolume;
+    }
+
     public virtual void Start()
     {
         
