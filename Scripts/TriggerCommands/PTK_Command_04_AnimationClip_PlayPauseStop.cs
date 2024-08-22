@@ -14,9 +14,6 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
         public Animation animationObject;
         public EActionType eActionType;
         public AnimationClip clipToPlay;
-        public bool bAutoPlayOnRaceStart = false;
-        [Header("Should we use this anim first frame to bring object to initial state")]
-        public bool bRaceRestartUseFirstFrameAsDefault = false;
         [HideInInspector]
         public float fTransitionTime = 0.3f;
 
@@ -24,6 +21,8 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
         {
             E_PLAY,
             E_PLAY_REVERSED,
+            E_PAUSE,
+            E_UNPAUSE,
             E_STOP
         }
     }
@@ -85,7 +84,7 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
                 if (objAnimLogic.animationObject.GetClip(objAnimLogic.clipToPlay.name) == null)
                     objAnimLogic.animationObject.AddClip(objAnimLogic.clipToPlay, objAnimLogic.clipToPlay.name);
 
-                if (objAnimLogic.animationObject[objAnimLogic.clipToPlay.name].normalizedTime == 0)
+                if (objAnimLogic.animationObject[objAnimLogic.clipToPlay.name].normalizedTime == 0 )
                     objAnimLogic.animationObject[objAnimLogic.clipToPlay.name].normalizedTime = 1.0f;
 
                 objAnimLogic.animationObject[objAnimLogic.clipToPlay.name].speed = -1.0f;
@@ -102,6 +101,32 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
                 objAnimLogic.animationObject.CrossFade(objAnimLogic.clipToPlay.name, objAnimLogic.fTransitionTime);
             }
 
+            if (objAnimLogic.eActionType == CAnimation.EActionType.E_PAUSE)
+            {
+                foreach(AnimationState animClipInList in objAnimLogic.animationObject)
+                {
+                    if (objAnimLogic.animationObject.IsPlaying(animClipInList.name))
+                    {
+                        fLastSpeedBeforePause = objAnimLogic.animationObject[animClipInList.name].speed;
+                        objAnimLogic.animationObject[animClipInList.name].speed = 0.0f;
+                        Debug.LogError("Playing clip name: " + animClipInList.name);
+                        break;
+                    }
+                }
+            }
+
+            if (objAnimLogic.eActionType == CAnimation.EActionType.E_UNPAUSE)
+            {
+                foreach (AnimationState animClipInList in objAnimLogic.animationObject)
+                {
+                    if (objAnimLogic.animationObject.IsPlaying(animClipInList.name))
+                    {
+                        objAnimLogic.animationObject[animClipInList.name].speed = fLastSpeedBeforePause;
+                        break;
+                    }
+                }
+            }
+
             if (objAnimLogic.eActionType == CAnimation.EActionType.E_STOP)
             {
                 objAnimLogic.animationObject.Stop();
@@ -110,9 +135,11 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
 
     }
 
+    float fLastSpeedBeforePause = 1.0f;
 
     protected override void RaceResetted_RevertToDefault()
     {
+        fLastSpeedBeforePause = 1.0f;
         foreach (var objAnimLogic in animationObjects)
         {
             if (objAnimLogic == null || objAnimLogic.animationObject == null)
@@ -125,34 +152,11 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
                 objAnimLogic.animationObject.AddClip(objAnimLogic.clipToPlay, objAnimLogic.clipToPlay.name);
 
             objAnimLogic.animationObject[objAnimLogic.clipToPlay.name].speed = 1.0f;
-
-
-          //  objAnimLogic.animationObject.Rewind();
-
-            if (objAnimLogic.bRaceRestartUseFirstFrameAsDefault == true)
-            {
-                // set this one as default
-                objAnimLogic.animationObject.clip = objAnimLogic.clipToPlay;
-
-                objAnimLogic.animationObject.Stop();
-                objAnimLogic.clipToPlay.SampleAnimation(objAnimLogic.animationObject.gameObject, 0.0f);
-            }
         }
     }
 
+
     protected override void OnRaceTimerJustStarted_SyncAndRunAnimsImpl()
     {
-        foreach (var objAnimLogic in animationObjects)
-        {
-            if (objAnimLogic == null || objAnimLogic.animationObject == null)
-                continue;
-
-            if(objAnimLogic.bAutoPlayOnRaceStart == true)
-            {
-                objAnimLogic.animationObject.Rewind();
-                objAnimLogic.animationObject.Play();
-            }
-
-        }
     }
 }
