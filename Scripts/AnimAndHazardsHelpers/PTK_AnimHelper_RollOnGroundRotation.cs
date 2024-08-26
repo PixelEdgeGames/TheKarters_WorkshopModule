@@ -18,8 +18,8 @@ public class PTK_AnimHelper_RollOnGroundRotation : MonoBehaviour
     }
     [Header("See Cyan Preview Line in SceneView")]
     public EAllowedRollDir eAllowedRollDir = EAllowedRollDir.E0_ALL_DIRECTIONS;
-    public float fRollCircleSizeMultiplier = 1.0f;
-
+    public float fRollRadiusSizeMultiplier = 1.0f;
+    public float fRollDir = 1.0f;
     private Vector3 lastPosition;
     Quaternion initialRot = Quaternion.identity;
 
@@ -66,6 +66,10 @@ public class PTK_AnimHelper_RollOnGroundRotation : MonoBehaviour
         UpdateRolling();
     }
 
+    private Vector3 GetVelocityInDirection(Vector3 vVelocity, Vector3 vDir)
+    {
+        return vDir * (Vector3.Dot(vVelocity, vDir));
+    }
     void UpdateRolling()
     {
         if (bCanPlayAnimation == false)
@@ -73,7 +77,7 @@ public class PTK_AnimHelper_RollOnGroundRotation : MonoBehaviour
 
         if (bApplyRollingMovement == true)
         {
-            if(bInitLastPos == true)
+            if (bInitLastPos == true)
             {
                 bInitLastPos = false;
                 lastPosition = transform.position;
@@ -87,26 +91,26 @@ public class PTK_AnimHelper_RollOnGroundRotation : MonoBehaviour
             }
             else if (eAllowedRollDir == EAllowedRollDir.E1_LOCAL_FORWARD_DIRECTION)
             {
-                deltaPosition = Vector3.ProjectOnPlane(deltaPosition, transform.forward);
+                deltaPosition = GetVelocityInDirection(deltaPosition, Vector3.Cross(transform.forward, Vector3.up).normalized);
             }
             else if (eAllowedRollDir == EAllowedRollDir.E2_LOCAL_RIGHT_DIRECTION)
             {
-                deltaPosition = Vector3.ProjectOnPlane(deltaPosition, transform.right);
+                deltaPosition = GetVelocityInDirection(deltaPosition, Vector3.Cross(transform.right, Vector3.up).normalized);
             }
             else if (eAllowedRollDir == EAllowedRollDir.E3_LOCAL_UP_DIRECTION)
             {
-                deltaPosition = Vector3.ProjectOnPlane(deltaPosition, transform.up);
+                deltaPosition = GetVelocityInDirection(deltaPosition, Vector3.Cross(transform.up, Vector3.up).normalized);
             }
 
             // Calculate the rotation amount
             float distanceMoved = deltaPosition.magnitude;
 
             // Calculate the roll amount based on the sphere's circumference
-            float rollAmount = (distanceMoved / (fRollCircleSizeMultiplier*transform.lossyScale.x * 2.0f * Mathf.PI)) * 360.0f * 1.0f;
+            float rollAmount = (distanceMoved / (fRollRadiusSizeMultiplier * transform.lossyScale.x * 2.0f * Mathf.PI)) * 360.0f * 1.0f;
 
 
             // Determine the rotation axis based on movement direction
-            Vector3 rotationAxis = Vector3.Cross(-deltaPosition.normalized, Vector3.up);
+            Vector3 rotationAxis = Vector3.Cross(-deltaPosition.normalized* fRollDir, Vector3.up);
 
 
             // Apply the rotation
@@ -160,7 +164,7 @@ public class PTK_AnimHelper_RollOnGroundRotation : MonoBehaviour
         }
         else if (eAllowedRollDir == EAllowedRollDir.E2_LOCAL_RIGHT_DIRECTION)
         {
-            DrawBezierArrow(position, position + transform.right * 2.0f,55.5f, Color.cyan);
+            DrawBezierArrow(position, position + transform.right * 2.0f, 55.5f, Color.cyan);
         }
         else if (eAllowedRollDir == EAllowedRollDir.E3_LOCAL_UP_DIRECTION)
         {
