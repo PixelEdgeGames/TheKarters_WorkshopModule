@@ -32,6 +32,15 @@ public class PTK_RaceRestart_AutoPlayAnimationAndSync : MonoBehaviour
 
         if (animationTarget != null)
             animationClipForRaceRestart = animationTarget.clip;
+
+        if(animationClipForRaceRestart == null)
+        {
+            foreach(AnimationState anim in animationTarget)
+            {
+                animationClipForRaceRestart = anim.clip;
+                break;
+            }
+        }
     }
 
     private void OnRaceRestart()
