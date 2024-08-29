@@ -313,7 +313,7 @@ public class CPC_Event
     public List<GameObject> assignedFollowers = new List<GameObject>();
 }
 
-public class CPC_CameraPath : MonoBehaviour
+public class CPC_BezierPath : MonoBehaviour
 {
     public float fLastCalculatedPathLength = 0;
     

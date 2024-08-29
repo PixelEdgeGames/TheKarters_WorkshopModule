@@ -18,10 +18,10 @@ public enum CPC_ENewWaypointMode
     WorldCenter
 }
 
-[CustomEditor(typeof(CPC_CameraPath))]
+[CustomEditor(typeof(CPC_BezierPath))]
 public class CPC_CameraPathInspector : Editor
 {
-    private CPC_CameraPath t;
+    private CPC_BezierPath t;
     private ReorderableList pointReorderableList;
     private ReorderableList followerReorderableList;
     private ReorderableList eventReorderableList;
@@ -83,7 +83,7 @@ public class CPC_CameraPathInspector : Editor
     {
         EditorApplication.update += Update;
 
-        t = (CPC_CameraPath)target;
+        t = (CPC_BezierPath)target;
         if (t == null) return;
 
         SetupEditorVariables();
@@ -850,7 +850,7 @@ public class CPC_CameraPathInspector : Editor
     void RunAndDrawEventFollowersCheckboxList(SerializedProperty element)
     {
         SerializedProperty assignedFollowers = element.FindPropertyRelative("assignedFollowers");
-        CPC_CameraPath cameraPath = (CPC_CameraPath)serializedObject.targetObject;
+        CPC_BezierPath cameraPath = (CPC_BezierPath)serializedObject.targetObject;
 
         foreach (var follower in cameraPath.followers)
         {
