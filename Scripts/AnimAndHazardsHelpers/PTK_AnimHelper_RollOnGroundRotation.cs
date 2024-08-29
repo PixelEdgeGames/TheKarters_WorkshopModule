@@ -154,9 +154,6 @@ public class PTK_AnimHelper_RollOnGroundRotation : MonoBehaviour
 
         if (eAllowedRollDir == EAllowedRollDir.E0_ALL_DIRECTIONS)
         {
-            DrawBezierArrow(position, position + transform.forward * 2.0f, 55.5f, Color.cyan);
-            DrawBezierArrow(position, position + transform.right * 2.0f, 55.5f, Color.cyan);
-            DrawBezierArrow(position, position + transform.up * 2.0f, 55.5f, Color.cyan);
         }
         else if (eAllowedRollDir == EAllowedRollDir.E1_LOCAL_FORWARD_DIRECTION)
         {

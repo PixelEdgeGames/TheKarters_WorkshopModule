@@ -93,8 +93,11 @@ namespace PathCreation {
             this.Space = space;
             this.IsClosed = isClosed;
         }
+
+        public bool bUseManualAssignedPoints = false;
         public BezierPath(IEnumerable<Vector3> points,List<float> anchorsAnglesForMainPoints, ControlMode _controlMode, bool isClosed = false, PathSpace space = PathSpace.xyz)
         {
+            bUseManualAssignedPoints = true;
             Vector3[] pointsArray = points.ToArray();
 
             this.points = new List<Vector3>();
@@ -658,6 +661,9 @@ namespace PathCreation {
 
         /// Add/remove the extra 2 controls required for a closed path
         void UpdateClosedState () {
+            if (bUseManualAssignedPoints == true)
+                return;
+
             if (isClosed) {
                 // Set positions for new controls to mirror their counterparts
                 Vector3 lastAnchorSecondControl = points[points.Count - 1] * 2 - points[points.Count - 2];

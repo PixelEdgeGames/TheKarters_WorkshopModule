@@ -177,24 +177,32 @@ namespace PathCreation {
         /// Gets point on path based on distance travelled.
         public Vector3 GetPointAtDistance (float dst, EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop) {
             float t = dst / length;
+            if (t == 1.0f)
+                t -= 0.001f;
             return GetPointAtTime (t, endOfPathInstruction);
         }
 
         /// Gets forward direction on path based on distance travelled.
         public Vector3 GetDirectionAtDistance (float dst, EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop) {
             float t = dst / length;
+            if (t == 1.0f)
+                t -= 0.001f;
             return GetDirection (t, endOfPathInstruction);
         }
 
         /// Gets normal vector on path based on distance travelled.
         public Vector3 GetNormalAtDistance (float dst, EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop) {
             float t = dst / length;
+            if (t == 1.0f)
+                t -= 0.001f;
             return GetNormal (t, endOfPathInstruction);
         }
 
         /// Gets a rotation that will orient an object in the direction of the path at this point, with local up point along the path's normal
         public Quaternion GetRotationAtDistance (float dst, EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop) {
             float t = dst / length;
+            if (t == 1.0f)
+                t -= 0.001f;
             return GetRotation (t, endOfPathInstruction);
         }
 
