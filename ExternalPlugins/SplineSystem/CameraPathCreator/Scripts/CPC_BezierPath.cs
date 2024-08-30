@@ -342,6 +342,7 @@ public class CPC_BezierPath : MonoBehaviour
 
     void Start()
     {
+        bIsObjectSelectedOnGizmos = false;
         foreach (var point in points)
         {
             if (point.curveTypeRotation == CPC_ECurveType.EaseInAndOut) point.rotationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -919,8 +920,9 @@ public class CPC_BezierPath : MonoBehaviour
     }
 
     public float fLastGizmosDrawTime = 0.0f;
-#if UNITY_EDITOR
     public LineRenderer lineRenderer;
+    bool bIsObjectSelectedOnGizmos = false;
+#if UNITY_EDITOR
 
     public bool bAllowSelectingLineRenderer = false;
     void InitializeLineRenderer()
@@ -1016,7 +1018,6 @@ public class CPC_BezierPath : MonoBehaviour
     }
     float fLastLength = 0;
 
-    bool bIsObjectSelectedOnGizmos = false;
     public void OnDrawGizmos()
     {
         if(bAllowSelectingLineRenderer == false)
