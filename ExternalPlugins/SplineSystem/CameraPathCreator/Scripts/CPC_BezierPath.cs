@@ -1068,35 +1068,30 @@ public class CPC_BezierPath : MonoBehaviour
                 if (sampleCount < 3)
                     sampleCount = 3;
 
-              
 
-
+                   float arrowShaftLength = 0.5f; // Length of the arrow shaft
+                 float arrowHeadLength = 0.2f; // Length of the arrowhead
+                 float arrowHeadAngle = 20f; // Angle of the arrowhead
                 for (int i = 0; i < sampleCount; i++)
                 {
                     float t = i / (float)(sampleCount - 1);
                     Vector3 point = GetBezierPositionAtTime(t);
-                    Vector3 tangent = GetBezierTangentAtTime(t);
-                    Vector3 normal = Vector3.Cross(tangent, Vector3.up).normalized; // Assuming an up vector for 2D/XZ paths
-                    Vector3 right = Vector3.Cross(normal, tangent).normalized;
+                    Vector3 tangent = GetBezierTangentAtTime(t).normalized; // Ensure tangent is normalized
 
-                    // Calculate the rotation for the cube
-                    Quaternion rotation = Quaternion.LookRotation(tangent, normal);
+                    // Calculate arrow shaft endpoint
+                    Vector3 arrowShaftEnd = point + tangent * arrowShaftLength;
 
-                    // Draw the front cube (blue)
-                    Matrix4x4 frontMatrix = Matrix4x4.TRS(point, rotation, new Vector3(cubeSize, cubeSize, cubeDepth));
-                    Gizmos.matrix = frontMatrix;
-                    Color32 frontColor = Color.cyan;
-                    frontColor = Color.Lerp(Color.blue,Color.green,Mathf.Pow( Mathf.Abs(Vector3.Dot(rotation*Vector3.forward, Vector3.up)) ,0.9f));
-                    frontColor.a = 255; // Set transparency
-                    Gizmos.color = frontColor;
-                   // Gizmos.DrawCube(Vector3.zero, Vector3.one);
-                    Gizmos.DrawFrustum(Vector3.zero, 90f, 0.25f, 0.01f, 1.78f);
+                    // Draw the arrow shaft using Handles.DrawLine
+                    Handles.color = Color.black; // Set color for the arrow
+                    Handles.DrawLine(point, arrowShaftEnd,4.0f); // Draw arrow shaft
 
+                    // Draw the arrowhead using Handles.ConeHandleCap
+                    Vector3 arrowHeadPosition = arrowShaftEnd;
+                    Quaternion arrowHeadRotation = Quaternion.LookRotation(tangent); // Rotate arrowhead to point in tangent direction
 
-
-                    // Reset Gizmos matrix and color
-                    Gizmos.matrix = Matrix4x4.identity;
-                    Gizmos.color = Color.white;
+                    // Draw arrowhead with Handles.ConeHandleCap
+                    Handles.color = new Color(Handles.color.r, Handles.color.g, Handles.color.b, 0.8f);
+                    Handles.ConeHandleCap(0, arrowHeadPosition, arrowHeadRotation, arrowHeadLength, EventType.Repaint);
                 }
 
                 Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
