@@ -176,8 +176,9 @@ MonoBehaviour:
   followers: []
   events: []
   bIsRuntimeEditingPath: 0
-  fLastGizmosDrawTime: 671.50867
+  fLastGizmosDrawTime: 596.7159
   lineRenderer: {fileID: 6592842544532458308}
+  bAllowSelectingLineRenderer: 0
 --- !u!114 &8632504377289062122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,7 +242,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: c6b3ebb39b4b8e643a28fc2482acf36f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

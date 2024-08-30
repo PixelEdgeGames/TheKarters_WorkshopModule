@@ -922,6 +922,7 @@ public class CPC_BezierPath : MonoBehaviour
 #if UNITY_EDITOR
     public LineRenderer lineRenderer;
 
+    public bool bAllowSelectingLineRenderer = false;
     void InitializeLineRenderer()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -1018,8 +1019,11 @@ public class CPC_BezierPath : MonoBehaviour
     bool bIsObjectSelectedOnGizmos = false;
     public void OnDrawGizmos()
     {
-        if (Selection.activeGameObject == lineRenderer.gameObject)
-            Selection.activeGameObject = this.gameObject;
+        if(bAllowSelectingLineRenderer == false)
+        {
+            if (Selection.activeGameObject == lineRenderer.gameObject)
+                Selection.activeGameObject = this.gameObject;
+        }
 
 
         RefreshLineRenderer();
@@ -1157,13 +1161,21 @@ public class CPC_BezierPath : MonoBehaviour
 
     Vector3 GetBezierTangentAtTime(float t)
     {
+        if (points.Count == 0)
+            return Vector3.forward;
+
         int segmentCount = points.Count - (looped ? 0 : 1);
         float segmentTime = t * segmentCount;
         int currentSegment = Mathf.FloorToInt(segmentTime);
         float segmentFraction = segmentTime - currentSegment;
 
+        if(points.Count > 0)
         currentSegment = currentSegment % points.Count;
-        int nextSegment = (currentSegment + 1) % points.Count;
+
+        int nextSegment = 0;
+
+        if(points.Count > 0)
+            nextSegment =(currentSegment + 1) % points.Count;
 
         // Calculate the derivative of the cubic Bezier curve
         Vector3 p0 = points[currentSegment].positionWorld;
