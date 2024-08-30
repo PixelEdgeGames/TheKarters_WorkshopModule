@@ -17,6 +17,26 @@ PrefabInstance:
       propertyPath: commandBehavioursToRun.Array.data[0]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 19755134462183950, guid: a05b7dd9c2768be43af95d6b58e7dca2,
+        type: 3}
+      propertyPath: commandBehavioursParentsToRun.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19755134462183950, guid: a05b7dd9c2768be43af95d6b58e7dca2,
+        type: 3}
+      propertyPath: commandBehavioursParentsToRun.Array.data[0]
+      value: 
+      objectReference: {fileID: 5404156688035774974}
+    - target: {fileID: 19755134462183950, guid: a05b7dd9c2768be43af95d6b58e7dca2,
+        type: 3}
+      propertyPath: receiveEventsFromAllTriggerInGameObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19755134462183950, guid: a05b7dd9c2768be43af95d6b58e7dca2,
+        type: 3}
+      propertyPath: receiveEventsFromAllTriggerInGameObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 2864974145765428147}
     - target: {fileID: 72700074682125281, guid: a05b7dd9c2768be43af95d6b58e7dca2,
         type: 3}
       propertyPath: m_RootOrder
@@ -84,3 +104,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a05b7dd9c2768be43af95d6b58e7dca2, type: 3}
+--- !u!1 &2864974145765428147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4560034501295548083, guid: a05b7dd9c2768be43af95d6b58e7dca2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1768245553771703552}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5404156688035774974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5941789520320359678, guid: a05b7dd9c2768be43af95d6b58e7dca2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1768245553771703552}
+  m_PrefabAsset: {fileID: 0}

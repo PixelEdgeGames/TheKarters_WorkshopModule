@@ -108,6 +108,7 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
                     // Automatically select and highlight the new trigger in the hierarchy
                     Selection.activeObject = newTrigger;
                     EditorGUIUtility.PingObject(newTrigger);
+                    EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
                 }
 
                 // Show "Delete" button only if there is exactly one instance
@@ -117,6 +118,7 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
                     if (GUILayout.Button("Delete"))
                     {
                         DestroyImmediate(existingTriggers[0]);
+                        EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
                     }
                 }
             }
@@ -132,6 +134,7 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
                     // Automatically select and highlight the new trigger in the hierarchy
                     Selection.activeObject = newTrigger;
                     EditorGUIUtility.PingObject(newTrigger);
+                    EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
                 }
             }
 
@@ -147,11 +150,26 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
 
         if(helper.triggerArrayCommandsExecutorParent != null)
         {
+            EditorGUI.BeginChangeCheck();
+
             helper.triggerArrayCommandsExecutorParent.eCommandBehavioursExecutionMode = (PTK_TriggerArrayCommandsExecutor.ECommandBehaviourExecutionMode)EditorGUILayout.EnumPopup(
-               "Execution Mode",
+               "Command Behaviours Execution",
                helper.triggerArrayCommandsExecutorParent.eCommandBehavioursExecutionMode
            );
+            helper.triggerArrayCommandsExecutorParent.eRunCommandCondition = (PTK_TriggerArrayCommandsExecutor.ECommandsRunCondition)EditorGUILayout.EnumPopup(
+               "When to send commands",
+               helper.triggerArrayCommandsExecutorParent.eRunCommandCondition
+           );
+            helper.triggerArrayCommandsExecutorParent.eRunCommandsMode = (PTK_TriggerArrayCommandsExecutor.ECommandsRunMode)EditorGUILayout.EnumPopup(
+               "Allow Sending Commands Again?",
+               helper.triggerArrayCommandsExecutorParent.eRunCommandsMode
+           );
             GUILayout.Space(10);
+
+            if(EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
+            }
         }
 
         // Apply any modifications made to the serialized object
@@ -160,57 +178,56 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
         }
 
-        List<PTK_TriggerCommandsBehaviour> behavioursToRemove = new List<PTK_TriggerCommandsBehaviour>();
 
         if (helper.triggerArrayCommandsExecutorParent != null)
         {
-            if (helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun.Count > 0)
+            bool bFoundAnyCommand = false;
+
+            for(int iCommandBehParent = 0; iCommandBehParent < helper.triggerArrayCommandsExecutorParent.commandBehavioursParentsToRun.Count;iCommandBehParent++)
             {
-                for (int i = 0; i < helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun.Count; i++)
+                var commandBehavioursToRun = helper.triggerArrayCommandsExecutorParent.commandBehavioursParentsToRun[iCommandBehParent].GetComponentsInChildren<PTK_TriggerCommandsBehaviour>();
+                if (commandBehavioursToRun.Length > 0)
                 {
-                    if (helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i] == null)
+                    for (int i = 0; i < commandBehavioursToRun.Length; i++)
                     {
-                        behavioursToRemove.Add(helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i]);
-                        continue;
+                        bFoundAnyCommand = true;
+                        EditorGUILayout.BeginHorizontal();
+
+                        if (commandBehavioursToRun[i].strBehaviourInfo != "")
+                            GUILayout.Label(commandBehavioursToRun[i].strBehaviourInfo + " Behaviour");
+                        else
+                            GUILayout.Label("Command Behaviour " + (i + 1));
+
+                        GUI.backgroundColor = Color.yellow;
+                        if (GUILayout.Button("Edit"))
+                        {
+                            Selection.activeObject = commandBehavioursToRun[i].gameObject;
+                            EditorGUIUtility.PingObject(commandBehavioursToRun[i].gameObject);
+                        }
+
+                        GUI.backgroundColor = Color.red;
+                        if (GUILayout.Button("Delete"))
+                        {
+                            DestroyImmediate(commandBehavioursToRun[i].gameObject);
+                            EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
+                        }
+                        GUI.backgroundColor = Color.white;
+
+                        EditorGUILayout.EndHorizontal();
                     }
-
-                    EditorGUILayout.BeginHorizontal();
-
-                    if(helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i].strBehaviourInfo != "")
-                        GUILayout.Label(helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i].strBehaviourInfo + " Behaviour");
-                    else
-                        GUILayout.Label("Command Behaviour " + (i + 1));
-
-                    GUI.backgroundColor = Color.yellow;
-                    if (GUILayout.Button("Edit"))
-                    {
-                        Selection.activeObject = helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i].gameObject;
-                        EditorGUIUtility.PingObject(helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i].gameObject);
-                    }
-
-                    GUI.backgroundColor = Color.red;
-                    if (GUILayout.Button("Delete"))
-                    {
-                        DestroyImmediate(helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun[i].gameObject);
-                        helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun.RemoveAt(i);
-                        i--; // Adjust index after removal
-                    }
-                    GUI.backgroundColor = Color.white;
-
-                    EditorGUILayout.EndHorizontal();
+                }
+                else
+                {
                 }
             }
-            else
+
+            if (bFoundAnyCommand == false)
             {
                 GUI.color = Color.red;
                 GUILayout.Label("Commands to Run Empty - Please Create New");
                 GUI.color = Color.white;
             }
 
-            for(int i=0;i< behavioursToRemove.Count;i++)
-            {
-                helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun.Remove(behavioursToRemove[i]);
-            }
 
             // Option to add a new CommandsBehaviour
             GUI.backgroundColor = Color.green;
@@ -222,11 +239,12 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
                 if (helper.commandsBehaviourPrefab != null)
                 {
                     GameObject newBehaviour = (GameObject)PrefabUtility.InstantiatePrefab(helper.commandsBehaviourPrefab.gameObject, helper.commandsBehaviourParent.transform);
-                    helper.triggerArrayCommandsExecutorParent.commandBehavioursToRun.Add(newBehaviour.GetComponent<PTK_TriggerCommandsBehaviour>());
-
+                 
                     // Automatically select and highlight the new commands behaviour in the hierarchy
                     Selection.activeObject = newBehaviour;
                     EditorGUIUtility.PingObject(newBehaviour);
+
+                    EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
                 }
                 else
                 {

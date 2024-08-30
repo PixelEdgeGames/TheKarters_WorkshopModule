@@ -13,6 +13,7 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         E_GAME_VARIABLE_CONDITION
     }
 
+    [System.Serializable]
     public class CTriggerEventData_Player
     {
         public bool bTriggeredByPlayer = false;
@@ -21,6 +22,7 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         public bool bTriggerExited = false;
     }
 
+    [System.Serializable]
     public class CTriggerEventData_Weapon
     {
         public int iGlobalPlayerIndex = 0;
@@ -29,13 +31,87 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         public float fMissileDmgStrengthNormalized = 1.0f;
     }
 
+    [System.Serializable]
+    public class CTriggerEventType
+    {
+        public enum ETriggerType
+        {
+            E0_GAME_VARIABLE,
+            E1_GAME_EVENT,
+            E2_PLAYER_EVENT,
+            E3_PLAYER_COLLISION_WITH_DATA,
+            E4_PLAYER_WEAPON_WITH_DATA,
+        }
 
-    public Action OnTriggerEvent;
-    public Action OnTriggerEvent_ByGameVariableConditions;
-    public Action OnTriggerEvent_ByGameEvent;
-    public Action<int> OnTriggerEvent_ByPlayerEvent;
-    public Action<CTriggerEventData_Player> OnTriggerEvent_ByPlayerCollision;
-    public Action<CTriggerEventData_Weapon> OnTriggerEvent_ByWeaponCollision;
+        public ETriggerType eTriggerType = ETriggerType.E0_GAME_VARIABLE;
+
+        public PTK_ModGameEventTriggerType.EGameEventType e1_GameEventType;
+        public PTK_ModPlayerInRangeEventTriggerType.EPlayerEventType e2_PlayerEventType;
+        public CPlayerEventData e2_PlayerEventData;
+
+        public int iPlayerType_GlobalPlayerIndex = -1;
+        public CTriggerEventData_Player e3_playerCollisionData;
+        public CTriggerEventData_Weapon e4_playerWeaponData;
+
+        [System.Serializable]
+        public class CPlayerEventData
+        {
+            public int iWeaponTypeIndex;
+            public int iBoostType;
+            public float fBoostStrength;
+            public float fBoostDuration;
+        }
+        public CTriggerEventType(ETriggerType _triggerType)
+        {
+            eTriggerType = _triggerType;
+            iPlayerType_GlobalPlayerIndex = -1;
+        }
+        public CTriggerEventType(ETriggerType _triggerType, PTK_ModGameEventTriggerType.EGameEventType _e1_GameEventType)
+        {
+            eTriggerType = _triggerType;
+            e1_GameEventType = _e1_GameEventType;
+            iPlayerType_GlobalPlayerIndex = -1;
+        }
+        public CTriggerEventType(ETriggerType _triggerType, PTK_ModPlayerInRangeEventTriggerType.EPlayerEventType _PlayerEventType, int iGlobalPlayerIndex)
+        {
+            eTriggerType = _triggerType;
+            e2_PlayerEventType = _PlayerEventType;
+            iPlayerType_GlobalPlayerIndex = iGlobalPlayerIndex;
+        }
+        public CTriggerEventType(ETriggerType _triggerType, PTK_ModPlayerInRangeEventTriggerType.EPlayerEventType _PlayerEventType, int iGlobalPlayerIndex, CPlayerEventData _playerEventData)
+        {
+            eTriggerType = _triggerType;
+            e2_PlayerEventType = _PlayerEventType;
+            iPlayerType_GlobalPlayerIndex = iGlobalPlayerIndex;
+            e2_PlayerEventData = _playerEventData;
+        }
+        
+
+        public CTriggerEventType(ETriggerType _triggerType, int iGlobalPlayerIndex)
+        {
+            eTriggerType = _triggerType;
+            iPlayerType_GlobalPlayerIndex = iGlobalPlayerIndex;
+        }
+        public CTriggerEventType(ETriggerType _triggerType, int iGlobalPlayerIndex, CTriggerEventData_Player _playerCollisionData)
+        {
+            eTriggerType = _triggerType;
+            iPlayerType_GlobalPlayerIndex = iGlobalPlayerIndex;
+            e3_playerCollisionData = _playerCollisionData;
+        }
+
+        public CTriggerEventType(ETriggerType _triggerType, int iGlobalPlayerIndex, CTriggerEventData_Weapon _playerWeaponData)
+        {
+            eTriggerType = _triggerType;
+            iPlayerType_GlobalPlayerIndex = iGlobalPlayerIndex;
+            e4_playerWeaponData = _playerWeaponData;
+        }
+
+        private CTriggerEventType()
+        {
+        }
+    }
+
+    public Action<CTriggerEventType> OnTriggerEvent;
 
 
     public abstract ETriggerType GetTriggerType();
@@ -51,8 +127,8 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
             {
                 var commandLauncher = this.gameObject.AddComponent<PTK_TriggerArrayCommandsExecutor>();
 
-                commandLauncher.triggersToReceiveDataOnTriggerEvent.Add(this);
-                commandLauncher.commandBehavioursToRun.Add(commandBehaviour);
+                commandLauncher.receiveEventsFromTriggers.Add(this);
+                commandLauncher.receiveEventsFromAllTriggerInGameObjects.Add(this.gameObject);
             }
         }
 

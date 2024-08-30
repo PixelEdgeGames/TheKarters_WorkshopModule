@@ -79,9 +79,11 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     int iPlayersInsideVolumeCount = 0;
 
+    int iFirstLastGlobalPlayerIndex = -1;
     private void Update()
     {
         int iThisFramePlayersInsideVolume = 0;
+        int iPlayerInsideVolume = -1;
         for (int iPlayerIndex = 0; iPlayerIndex < bAreGlobalPlayersWithinVolumesRange.Length; iPlayerIndex++)
         {
             bAreGlobalPlayersWithinVolumesRange[iPlayerIndex] = false;
@@ -89,18 +91,25 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
             for (int iVolume = 0; iVolume < checkPlayersInVolumes.Count; iVolume++)
             {
                 bAreGlobalPlayersWithinVolumesRange[iPlayerIndex] |= checkPlayersInVolumes[iVolume].bAreGlobalPlayersWithinRange[iPlayerIndex];
+
             }
 
             if (bAreGlobalPlayersWithinVolumesRange[iPlayerIndex] == true)
+            {
+                if (iPlayerInsideVolume == -1)
+                    iPlayerInsideVolume = iPlayerIndex;
+
                 iThisFramePlayersInsideVolume++;
+            }
         }
 
         if(iPlayersInsideVolumeCount == 0 && iThisFramePlayersInsideVolume > 0)
         {
-            if(eventTypesConditionsToCheck.Contains(EPlayerEventType.E_VOLUME_HAS_AT_LEAST_ONE_PLAYER_EVENT))
+            iFirstLastGlobalPlayerIndex = iPlayerInsideVolume;
+
+            if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_VOLUME_HAS_AT_LEAST_ONE_PLAYER_EVENT))
             {
-                OnTriggerEvent?.Invoke();
-                OnTriggerEvent_ByPlayerEvent?.Invoke(-1);
+                OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_VOLUME_HAS_AT_LEAST_ONE_PLAYER_EVENT, iFirstLastGlobalPlayerIndex));
             }
         }
 
@@ -108,9 +117,10 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
         {
             if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_VOLUME_EMPTY_LAST_PLAYER_LEFT))
             {
-                OnTriggerEvent?.Invoke();
-                OnTriggerEvent_ByPlayerEvent?.Invoke(-1);
+                OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_VOLUME_EMPTY_LAST_PLAYER_LEFT, iFirstLastGlobalPlayerIndex));
             }
+
+            iFirstLastGlobalPlayerIndex = -1;
         }
 
         iPlayersInsideVolumeCount = iThisFramePlayersInsideVolume;
@@ -125,8 +135,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_JUMPED_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT,EPlayerEventType.E_ANY_PLAYER_IN_RANGE_JUMPED_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -138,8 +147,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_LANDED_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_LANDED_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -151,8 +159,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_DIED_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_DIED_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -164,8 +171,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_KILLED_SOMEONE_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndexWhoKilled);
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_KILLED_SOMEONE_EVENT, iGlobalPlayerIndexWhoKilled));
         }
     }
 
@@ -177,8 +183,10 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_RECEIVED_WEAPON_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            CTriggerEventType.CPlayerEventData playerEventData = new CTriggerEventType.CPlayerEventData();
+            playerEventData.iWeaponTypeIndex = iWeaponType;
+
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_RECEIVED_WEAPON_EVENT, iGlobalPlayerIndex, playerEventData));
         }
     }
 
@@ -190,8 +198,10 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_WEAPON_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            CTriggerEventType.CPlayerEventData playerEventData = new CTriggerEventType.CPlayerEventData();
+            playerEventData.iWeaponTypeIndex = iWeaponType;
+
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_WEAPON_EVENT, iGlobalPlayerIndex, playerEventData));
         }
     }
 
@@ -203,8 +213,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_MADE_TRICK_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_MADE_TRICK_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -216,8 +225,11 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_BOOST_EVENT))
         {
-            OnTriggerEvent?.Invoke();
-            OnTriggerEvent_ByPlayerEvent?.Invoke(iGlobalPlayerIndex);
+            CTriggerEventType.CPlayerEventData playerEventData = new CTriggerEventType.CPlayerEventData();
+            playerEventData.iBoostType = iBoostType;
+            playerEventData.fBoostStrength = fBoostStrength;
+            playerEventData.fBoostDuration = fBoostDuration;
+            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_BOOST_EVENT, iGlobalPlayerIndex, playerEventData));
         }
     }
 }

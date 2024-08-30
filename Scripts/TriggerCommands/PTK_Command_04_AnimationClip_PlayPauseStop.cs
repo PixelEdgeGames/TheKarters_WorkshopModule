@@ -6,7 +6,7 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E03_ENABLE_DISABLE_COMMANDS_EXECUTOR;
+        return ETriggerCommandType.E04_ANIMATION_CLIP_PLAY_PAUSE_STOP;
     }
     [System.Serializable]
     public class CAnimation
@@ -37,6 +37,9 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
     {
     }
 
+    public override void OnDestroy()
+    {
+    }
     protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
         CommandExecuted();

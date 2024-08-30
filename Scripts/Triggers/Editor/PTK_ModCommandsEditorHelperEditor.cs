@@ -14,6 +14,8 @@ public class PTK_ModCommandsEditorHelperEditor : Editor
         typeof(PTK_Command_02_ModTriggerCommandExecutor_ManualReset),
         typeof(PTK_Command_03_ModTriggerCommandExecutor_EnableDisable),
         typeof(PTK_Command_04_AnimationClip_PlayPauseStop),
+        typeof(PTK_Command_05_PlayerLogicEffects),
+        typeof(PTK_Command_06_CustomCommands),
         // Add more command types here as needed
     };
     
@@ -42,6 +44,7 @@ public class PTK_ModCommandsEditorHelperEditor : Editor
                 if (GUILayout.Button("Remove"))
                 {
                     DestroyImmediate(existingComponent);
+                    EditorUtility.SetDirty(helper.gameObject);
                 }
             }
             else
@@ -51,8 +54,11 @@ public class PTK_ModCommandsEditorHelperEditor : Editor
                 if (GUILayout.Button("Add"))
                 {
                     helper.gameObject.AddComponent(commandType);
+                    EditorUtility.SetDirty(helper.gameObject);
                 }
             }
+
+
 
             GUI.backgroundColor = Color.white;
 
