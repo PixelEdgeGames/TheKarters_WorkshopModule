@@ -1,5 +1,127 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1919769241
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1919769242}
+  - component: {fileID: 1919769246}
+  - component: {fileID: 1919769245}
+  - component: {fileID: 1919769244}
+  - component: {fileID: 1919769243}
+  m_Layer: 8
+  m_Name: BigFlatPlane (87)
+  m_TagString: PTK_GroundTypeTag
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1919769242
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919769241}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -1253.6, y: 0, z: -0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
+  m_Children: []
+  m_Father: {fileID: 2021127796104366577}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!33 &1919769246
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919769241}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &1919769245
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919769241}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1919769244
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919769241}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 4294967295
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6031261870a8bca42b7f7f1fa03f30fc, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1919769243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919769241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e11826b5955ca546bed8678dca76874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 1919769245}
+  groundSettings:
+    eFrictionType: 0
+    eDrivingAudioSFX: 0
+    eDrivingParticleEffect_1: 0
+    eDrivingParticleEffect_2: 0
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
+    eLogicEffect_1: 2
+    eLogicEffect_2: 0
+    eLogicEffect_3: 0
+    eLogicEffect_4: 0
+    eLogicEffect_5: 0
+    eLogicEffect_6: 0
 --- !u!1 &1543633994490183838
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2021127796104366577}
   m_Layer: 8
-  m_Name: Temp Quads to show setups
+  m_Name: GroundTypes Examples
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,6 +162,7 @@ Transform:
   - {fileID: 5070810497718545460}
   - {fileID: 5070810498387559431}
   - {fileID: 5070810499580368761}
+  - {fileID: 1919769242}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -70,13 +193,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810497718545463}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -1229, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -955.2, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810497718545456
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -117,7 +240,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 58c6772d3f599dc4c9f7fc66a287ddbc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -154,11 +277,11 @@ MonoBehaviour:
   collider: {fileID: 5070810497718545459}
   groundSettings:
     eFrictionType: 3
-    eDrivingAudioSFX: 1
+    eDrivingAudioSFX: 2
     eDrivingParticleEffect_1: 12
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
+    eSkideMarksType: 4
+    previewSkidemarkColor: {r: 0.6, g: 0.8, b: 1, a: 0.65}
     eLogicEffect_1: 0
     eLogicEffect_2: 0
     eLogicEffect_3: 0
@@ -192,13 +315,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810497962717719}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -746, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -579.5, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810497962717712
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -239,7 +362,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 1691276f139e52745a9b2bc961905c90, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -281,7 +404,7 @@ MonoBehaviour:
     eDrivingParticleEffect_2: 0
     eSkideMarksType: 0
     previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
-    eLogicEffect_1: 0
+    eLogicEffect_1: 5
     eLogicEffect_2: 0
     eLogicEffect_3: 0
     eLogicEffect_4: 0
@@ -314,13 +437,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498048791891}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -986, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -764.4, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498048791884
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -361,7 +484,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 43f0f7c2803f80d4f9899b295156ed80, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -401,9 +524,9 @@ MonoBehaviour:
     eDrivingAudioSFX: 0
     eDrivingParticleEffect_1: 10
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
-    eLogicEffect_1: 0
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
+    eLogicEffect_1: 11
     eLogicEffect_2: 0
     eLogicEffect_3: 0
     eLogicEffect_4: 0
@@ -436,13 +559,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498124845843}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -334, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -193.5, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498124845836
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -483,7 +606,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 78311e56a85c15641b446bfc72a82584, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -519,12 +642,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 5070810498124845839}
   groundSettings:
-    eFrictionType: 1
+    eFrictionType: 2
     eDrivingAudioSFX: 1
     eDrivingParticleEffect_1: 4
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
     eLogicEffect_1: 0
     eLogicEffect_2: 0
     eLogicEffect_3: 0
@@ -558,13 +681,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498165235705}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -637.4, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -479.7, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498165235698
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -605,7 +728,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 8dfac59a18c5b31468e3dd46ae8c1f1f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -645,9 +768,9 @@ MonoBehaviour:
     eDrivingAudioSFX: 0
     eDrivingParticleEffect_1: 7
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
-    eLogicEffect_1: 0
+    eSkideMarksType: 3
+    previewSkidemarkColor: {r: 0, g: 0.5, b: 0, a: 0.65}
+    eLogicEffect_1: 12
     eLogicEffect_2: 0
     eLogicEffect_3: 0
     eLogicEffect_4: 0
@@ -680,13 +803,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498279085605}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -217.1, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -96.9, y: 0, z: -0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498279085790
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -727,7 +850,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: b11d8f57162ecce4aaefc9c576ba4ada, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -767,8 +890,8 @@ MonoBehaviour:
     eDrivingAudioSFX: 1
     eDrivingParticleEffect_1: 3
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
+    eSkideMarksType: 8
+    previewSkidemarkColor: {r: 1, g: 1, b: 1, a: 1}
     eLogicEffect_1: 0
     eLogicEffect_2: 0
     eLogicEffect_3: 0
@@ -802,13 +925,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498387559430}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -1357, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -1052.1, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498387559427
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -849,7 +972,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 22e813fcf29005b44bf672cf85c91db9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -889,9 +1012,9 @@ MonoBehaviour:
     eDrivingAudioSFX: 0
     eDrivingParticleEffect_1: 13
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
-    eLogicEffect_1: 0
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
+    eLogicEffect_1: 5
     eLogicEffect_2: 0
     eLogicEffect_3: 0
     eLogicEffect_4: 0
@@ -924,13 +1047,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498708833222}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -1105, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -858.9, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498708833219
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -971,7 +1094,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 7c99d71681c4aed4aba91f2d48756d79, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1011,8 +1134,8 @@ MonoBehaviour:
     eDrivingAudioSFX: 1
     eDrivingParticleEffect_1: 11
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
     eLogicEffect_1: 0
     eLogicEffect_2: 0
     eLogicEffect_3: 0
@@ -1046,13 +1169,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498748782302}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -536.7, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -383.7, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498748782299
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1093,7 +1216,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: dc22dd0107bdb9e489e682f9b7e3fda7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1129,12 +1252,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 5070810498748782298}
   groundSettings:
-    eFrictionType: 1
+    eFrictionType: 2
     eDrivingAudioSFX: 1
     eDrivingParticleEffect_1: 6
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
     eLogicEffect_1: 0
     eLogicEffect_2: 0
     eLogicEffect_3: 0
@@ -1168,13 +1291,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810498770539060}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -102.20001, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810498770539057
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1215,7 +1338,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 6b44cafafcf5ac44987b513e123c0163, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1290,13 +1413,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810499156633975}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -434.8, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -290.5, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810499156633968
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1337,7 +1460,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: a17c5fbfcac26db4b83f753f9736a0a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1377,8 +1500,8 @@ MonoBehaviour:
     eDrivingAudioSFX: 1
     eDrivingParticleEffect_1: 5
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
+    eSkideMarksType: 12
+    previewSkidemarkColor: {r: 1, g: 1, b: 0.6, a: 0.65}
     eLogicEffect_1: 0
     eLogicEffect_2: 0
     eLogicEffect_3: 0
@@ -1412,13 +1535,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810499335238838}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -859, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -670.5, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810499335238835
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1459,7 +1582,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: c1957902e90222849b895d185a99e743, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1499,9 +1622,9 @@ MonoBehaviour:
     eDrivingAudioSFX: 0
     eDrivingParticleEffect_1: 9
     eDrivingParticleEffect_2: 0
-    eSkideMarksType: 2
-    previewSkidemarkColor: {r: 0, g: 1, b: 0, a: 0.65}
-    eLogicEffect_1: 0
+    eSkideMarksType: 0
+    previewSkidemarkColor: {r: 0, g: 0, b: 0, a: 1}
+    eLogicEffect_1: 9
     eLogicEffect_2: 0
     eLogicEffect_3: 0
     eLogicEffect_4: 0
@@ -1534,13 +1657,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5070810499580368760}
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -8.899994, y: -51.975, z: 2663.8}
-  m_LocalScale: {x: -107.95831, y: 261.25537, z: 77.84434}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -1151, y: 0, z: 0}
+  m_LocalScale: {x: -107.95831, y: 51.00168, z: 77.84434}
   m_Children: []
   m_Father: {fileID: 2021127796104366577}
   m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5070810499580368757
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1581,7 +1704,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8ceeb3728cda562439bcc372b23a9a24, type: 3}
+  - {fileID: 2100000, guid: 761db38bf24176a43acc9d6843970088, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
