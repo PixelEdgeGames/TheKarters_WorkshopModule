@@ -326,6 +326,7 @@ public class CPC_BezierPath : MonoBehaviour
     public bool looped = true;
     public bool alwaysShow = true;
     public bool showInGame = false;
+    public float fSplineWidth = 0.3f;
 
     public List<CPC_Follower> followers = new List<CPC_Follower>();
     public List<CPC_Event> events = new List<CPC_Event>();
@@ -930,8 +931,6 @@ public class CPC_BezierPath : MonoBehaviour
         }
 
         // Set LineRenderer properties
-        lineRenderer.startWidth = 0.3f;
-        lineRenderer.endWidth = 0.3f;
         lineRenderer.useWorldSpace = true;
         lineRenderer.alignment = LineAlignment.TransformZ;
         lineRenderer.textureMode = LineTextureMode.Tile;
@@ -966,9 +965,10 @@ public class CPC_BezierPath : MonoBehaviour
         }
 
 
-        lineRenderer.sharedMaterial.mainTextureScale = new Vector2(1.0f, 0.33f);
+        lineRenderer.sharedMaterial.mainTextureScale = new Vector2(1.0f, (fSplineWidth/0.3f)* 0.33f);
+        lineRenderer.sharedMaterial.mainTextureOffset = new Vector2(0.0f,0.0f -( (fSplineWidth / 0.3f)) * 0.5f);
 
-        float fDistSum = 0.0f;
+        float fDistSum = transform.position.magnitude + fSplineWidth;
 
         for (int i = 0; i < points.Count; i++)
         {
@@ -1005,6 +1005,8 @@ public class CPC_BezierPath : MonoBehaviour
             lineRenderer.transform.localPosition = Vector3.zero;
             lineRenderer.transform.localRotation = Quaternion.Euler(90.0F, 0.0F, 0.0F); // MAKE IT FLAT
             fLastLength = fDistSum;
+            lineRenderer.startWidth = fSplineWidth;
+            lineRenderer.endWidth = fSplineWidth;
         }
     }
     float fLastLength = 0;
@@ -1021,27 +1023,31 @@ public class CPC_BezierPath : MonoBehaviour
         {
             if (points.Count >= 2)
             {
+               
                 Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
 
                 float fDistSum = 0.0f;
 
                 for (int i = 0; i < points.Count; i++)
                 {
-                    if (i < points.Count - 1)
+                    if (false)
                     {
-                        var index = points[i];
-                        var indexNext = points[i + 1];
-                        UnityEditor.Handles.DrawBezier(index.positionWorld, indexNext.positionWorld, index.positionWorld + index.handleNextWorld,
-                            indexNext.positionWorld + indexNext.handlePrevWorld, ((UnityEditor.Selection.activeGameObject == gameObject) ? visual.pathColor : visual.inactivePathColor), null, 5);
+                        if (i < points.Count - 1)
+                        {
+                            var index = points[i];
+                            var indexNext = points[i + 1];
+                            UnityEditor.Handles.DrawBezier(index.positionWorld, indexNext.positionWorld, index.positionWorld + index.handleNextWorld,
+                                indexNext.positionWorld + indexNext.handlePrevWorld, ((UnityEditor.Selection.activeGameObject == gameObject) ? visual.pathColor : visual.inactivePathColor), null, 5);
+                        }
+                        else if (looped)
+                        {
+                            var index = points[i];
+                            var indexNext = points[0];
+                            UnityEditor.Handles.DrawBezier(index.positionWorld, indexNext.positionWorld, index.positionWorld + index.handleNextWorld,
+                                indexNext.positionWorld + indexNext.handlePrevWorld, ((UnityEditor.Selection.activeGameObject == gameObject) ? visual.pathColor : visual.inactivePathColor), null, 5);
+                        }
                     }
-                    else if (looped)
-                    {
-                        var index = points[i];
-                        var indexNext = points[0];
-                        UnityEditor.Handles.DrawBezier(index.positionWorld, indexNext.positionWorld, index.positionWorld + index.handleNextWorld,
-                            indexNext.positionWorld + indexNext.handlePrevWorld, ((UnityEditor.Selection.activeGameObject == gameObject) ? visual.pathColor : visual.inactivePathColor), null, 5);
-                    }
-
+                   
                     if(i>0)
                     {
                         fDistSum += Vector3.Magnitude(points[i - 1].positionWorld - points[i].positionWorld);

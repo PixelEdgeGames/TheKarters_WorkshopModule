@@ -464,6 +464,13 @@ public class CPC_CameraPathInspector : Editor
         visualFoldout = EditorGUILayout.Foldout(visualFoldout, "Visual");
       //  alwaysShowProperty.boolValue = GUILayout.Toggle(alwaysShowProperty.boolValue, alwaysShowContent);
         alwaysShowLineRendererProperty.boolValue = GUILayout.Toggle(alwaysShowLineRendererProperty.boolValue, "Show In Game");
+
+        SerializedProperty splineWidthProperty = serializedObjectTarget.FindProperty("fSplineWidth");
+
+        // Display a float field in the editor and update the SerializedProperty's value
+        splineWidthProperty.floatValue = EditorGUILayout.Slider("Spline Width",splineWidthProperty.floatValue/0.3f,1.0f,5.0f)*0.3f;
+
+
         GUILayout.EndHorizontal();
         if (visualFoldout)
         {
