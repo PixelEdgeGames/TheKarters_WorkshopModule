@@ -46,11 +46,11 @@ public class PTK_ProceduralAnimSynced : MonoBehaviour
         }
     }
 
-    [Header("Local Rotation")]
+    [Header("Ensure Initial LocalRot is 0,0,0")]
     public AnimationSettings localRotation = new AnimationSettings();
 
-    [Header("Move Between A and B")]
-    public AnimationSettings moveBetweenAB = new AnimationSettings();
+    [Header("Ensure Initial LocalPos is 0,0,0")]
+    public AnimationSettings localMoveBetweenAB = new AnimationSettings();
 
     private AnimationSettings previousLocalRotation = new AnimationSettings();
     private AnimationSettings previousMoveBetweenAB = new AnimationSettings();
@@ -101,7 +101,7 @@ public class PTK_ProceduralAnimSynced : MonoBehaviour
         if (!canRunAnimations) return;
 
         UpdateAnimation(localRotation, previousLocalRotation);
-        UpdateAnimation(moveBetweenAB, previousMoveBetweenAB);
+        UpdateAnimation(localMoveBetweenAB, previousMoveBetweenAB);
     }
 
     private void UpdateAnimation(AnimationSettings current, AnimationSettings previous)
@@ -140,12 +140,12 @@ public class PTK_ProceduralAnimSynced : MonoBehaviour
             moveTween = null;
         }
 
-        if(moveBetweenAB.enabled == true)
+        if(localMoveBetweenAB.enabled == true)
         {
-            moveTween = transform.DOLocalMove(moveBetweenAB.to+ initialLocalPosition, 1.0f / Mathf.Max(moveBetweenAB.speed, 0.0001f))
-                .From(moveBetweenAB.from + initialLocalPosition)
-                .SetEase(ConvertEMoveTypeToEase(moveBetweenAB.easeType))
-                .SetLoops(-1, moveBetweenAB.loopType)
+            moveTween = transform.DOLocalMove(localMoveBetweenAB.to+ initialLocalPosition, 1.0f / Mathf.Max(localMoveBetweenAB.speed, 0.0001f))
+                .From(localMoveBetweenAB.from + initialLocalPosition)
+                .SetEase(ConvertEMoveTypeToEase(localMoveBetweenAB.easeType))
+                .SetLoops(-1, localMoveBetweenAB.loopType)
                 .SetAutoKill(false);
         }
     }
@@ -178,16 +178,16 @@ public class PTK_ProceduralAnimSynced : MonoBehaviour
 
     private void ResetPosAndRot()
     {
-        if (initialLocalRotation == Quaternion.identity)
-            initialLocalRotation = transform.localRotation;
+       // if (initialLocalRotation == Quaternion.identity)
+      //      initialLocalRotation = transform.localRotation;
 
-        if (initialLocalPosition == Vector3.zero)
-            initialLocalPosition = transform.localPosition;
+      //  if (initialLocalPosition == Vector3.zero)
+      //     initialLocalPosition = transform.localPosition;
 
         if (initialForward == Vector3.zero)
             initialForward = transform.forward;
 
-        transform.localPosition = initialLocalPosition + (moveBetweenAB.enabled ? moveBetweenAB.from : Vector3.zero);
+        transform.localPosition = initialLocalPosition + (localMoveBetweenAB.enabled ? localMoveBetweenAB.from : Vector3.zero);
         transform.localRotation = initialLocalRotation * (localRotation.enabled ? Quaternion.Euler(localRotation.from) : Quaternion.identity);
 
         if (moveTween != null)
