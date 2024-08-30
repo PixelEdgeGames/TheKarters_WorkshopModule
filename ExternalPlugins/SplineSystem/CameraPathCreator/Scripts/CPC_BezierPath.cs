@@ -364,11 +364,13 @@ public class CPC_BezierPath : MonoBehaviour
     {
         if (Application.isPlaying == true && lineRenderer != null)
         {
-            if (showInGame == true || bIsRuntimeEditingPath)
+            if (showInGame == true || bIsRuntimeEditingPath || bIsObjectSelectedOnGizmos)
                 lineRenderer.gameObject.SetActive(true);
             else
                 lineRenderer.gameObject.SetActive(false);
         }
+
+        bIsObjectSelectedOnGizmos = false;
     }
 
     public void RuntimeEditingEnded()
@@ -1010,6 +1012,8 @@ public class CPC_BezierPath : MonoBehaviour
         }
     }
     float fLastLength = 0;
+
+    bool bIsObjectSelectedOnGizmos = false;
     public void OnDrawGizmos()
     {
         if (Selection.activeGameObject == lineRenderer.gameObject)
@@ -1021,6 +1025,7 @@ public class CPC_BezierPath : MonoBehaviour
         fLastGizmosDrawTime = Time.time;
         if (UnityEditor.Selection.activeGameObject == gameObject) //// || alwaysShow)
         {
+            bIsObjectSelectedOnGizmos = true;
             if (points.Count >= 2)
             {
                
