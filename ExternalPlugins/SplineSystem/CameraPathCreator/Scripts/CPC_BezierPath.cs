@@ -977,6 +977,8 @@ public class CPC_BezierPath : MonoBehaviour
             if (i > 0)
             {
                 fDistSum += Vector3.Magnitude(points[i - 1].positionWorld - points[i].positionWorld);
+                fDistSum += Vector3.Magnitude(points[i - 1].handleNextWorld - points[i].handleNextWorld);
+                fDistSum += Vector3.Magnitude(points[i - 1].handlePrevWorld - points[i].handlePrevWorld);
             }
         }
 
