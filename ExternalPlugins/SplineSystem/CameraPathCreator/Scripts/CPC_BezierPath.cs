@@ -1069,8 +1069,8 @@ public class CPC_BezierPath : MonoBehaviour
                     sampleCount = 3;
 
 
-                   float arrowShaftLength = 0.5f; // Length of the arrow shaft
-                 float arrowHeadLength = 0.2f; // Length of the arrowhead
+                   float arrowShaftLength = 0.5f * (fSplineWidth / 0.3f) * 1.0f; // Length of the arrow shaft
+                 float arrowHeadLength = 0.2f * (fSplineWidth / 0.3f) * 1.0f; // Length of the arrowhead
                  float arrowHeadAngle = 20f; // Angle of the arrowhead
                 for (int i = 0; i < sampleCount; i++)
                 {
@@ -1083,15 +1083,15 @@ public class CPC_BezierPath : MonoBehaviour
 
                     // Draw the arrow shaft using Handles.DrawLine
                     Handles.color = Color.black; // Set color for the arrow
-                    Handles.DrawLine(point, arrowShaftEnd,4.0f); // Draw arrow shaft
+                    Handles.DrawLine(point, arrowShaftEnd,4.0f + (fSplineWidth/0.3f)*1.0f); // Draw arrow shaft
 
                     // Draw the arrowhead using Handles.ConeHandleCap
-                    Vector3 arrowHeadPosition = arrowShaftEnd;
+                    Vector3 arrowHeadPosition = arrowShaftEnd + tangent * arrowShaftLength*0.2f;
                     Quaternion arrowHeadRotation = Quaternion.LookRotation(tangent); // Rotate arrowhead to point in tangent direction
 
                     // Draw arrowhead with Handles.ConeHandleCap
                     Handles.color = new Color(Handles.color.r, Handles.color.g, Handles.color.b, 0.8f);
-                    Handles.ConeHandleCap(0, arrowHeadPosition, arrowHeadRotation, arrowHeadLength, EventType.Repaint);
+                    Handles.ConeHandleCap(0, arrowHeadPosition, arrowHeadRotation, arrowHeadLength , EventType.Repaint);
                 }
 
                 Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
