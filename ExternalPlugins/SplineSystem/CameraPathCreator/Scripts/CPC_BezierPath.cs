@@ -1120,8 +1120,10 @@ public class CPC_BezierPath : MonoBehaviour
                 if (evt.iWaypointIndex >= 0 && evt.iWaypointIndex < points.Count)
                 {
                     Vector3 eventPosition = GetBezierPosition(evt.iWaypointIndex, evt.fWaypointNormalizedDist);
-                    UnityEditor.Handles.color = new Color( Color.cyan.r, Color.cyan.g, Color.cyan.b,0.5f);
-                    UnityEditor.Handles.SphereHandleCap(0, eventPosition, Quaternion.identity, 0.4f, EventType.Repaint);
+                    UnityEditor.Handles.color = Color.black;
+                    UnityEditor.Handles.SphereHandleCap(0, eventPosition, Quaternion.identity, 0.6f + 0.6f * (fSplineWidth / 0.3f) * 0.5f, EventType.Repaint);
+                    UnityEditor.Handles.color = new Color( Color.cyan.r, Color.cyan.g, Color.cyan.b,0.9f);
+                    UnityEditor.Handles.SphereHandleCap(0, eventPosition, Quaternion.identity, 0.4f + 0.4f * (fSplineWidth / 0.3f) * 0.5f, EventType.Repaint);
                     UnityEditor.Handles.color = Color.black;
 
                     float fDistFromCam = (Camera.current.transform.position - eventPosition).magnitude/50.0f;
