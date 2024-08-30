@@ -970,19 +970,19 @@ public class CPC_BezierPath : MonoBehaviour
         lineRenderer.sharedMaterial.mainTextureScale = new Vector2(1.0f, (fSplineWidth/0.3f)* 0.33f);
         lineRenderer.sharedMaterial.mainTextureOffset = new Vector2(0.0f,0.0f -( (fSplineWidth / 0.3f)) * 0.5f);
 
-        float fDistSum = transform.position.magnitude + fSplineWidth;
+        float fBezierChangedVal = transform.position.magnitude + fSplineWidth + (looped ? 1.0f : 0.0f);
 
         for (int i = 0; i < points.Count; i++)
         {
             if (i > 0)
             {
-                fDistSum += Vector3.Magnitude(points[i - 1].positionWorld - points[i].positionWorld);
-                fDistSum += Vector3.Magnitude(points[i - 1].handleNextWorld - points[i].handleNextWorld);
-                fDistSum += Vector3.Magnitude(points[i - 1].handlePrevWorld - points[i].handlePrevWorld);
+                fBezierChangedVal += Vector3.Magnitude(points[i - 1].positionWorld - points[i].positionWorld);
+                fBezierChangedVal += Vector3.Magnitude(points[i - 1].handleNextWorld - points[i].handleNextWorld);
+                fBezierChangedVal += Vector3.Magnitude(points[i - 1].handlePrevWorld - points[i].handlePrevWorld);
             }
         }
 
-        int sampleCount = (int)(fDistSum / (2.5f));  // Number of samples along the path
+        int sampleCount = (int)(fBezierChangedVal / (2.5f));  // Number of samples along the path
 
         if (sampleCount < 3)
             sampleCount = 3;
@@ -991,7 +991,7 @@ public class CPC_BezierPath : MonoBehaviour
         // lineRenderer.positionCount = iSampleCountBezierLineRenderer;
 
        
-        if (fLastLength != fDistSum)
+        if (fLastLength != fBezierChangedVal)
         {
             List<Vector3> positions = new List<Vector3>();
             for (int i = 0; i < iSampleCountBezierLineRenderer; i++)
@@ -1008,7 +1008,7 @@ public class CPC_BezierPath : MonoBehaviour
             lineRenderer.SetPositions(positions.ToArray());
             lineRenderer.transform.localPosition = Vector3.zero;
             lineRenderer.transform.localRotation = Quaternion.Euler(90.0F, 0.0F, 0.0F); // MAKE IT FLAT
-            fLastLength = fDistSum;
+            fLastLength = fBezierChangedVal;
             lineRenderer.startWidth = fSplineWidth;
             lineRenderer.endWidth = fSplineWidth;
         }
