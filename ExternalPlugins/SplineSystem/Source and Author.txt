@@ -1,2 +1,8 @@
 Icch_howw
 https://assetstore.unity.com/packages/tools/camera/camera-path-creator-84074
+
+Sebastian Lague
+https://assetstore.unity.com/packages/tools/utilities/b-zier-path-creator-136082?srsltid=AfmBOop8TaAm3cJqO3AVZN3qRgOrL1DdDR4k3N30qMWkQzoCh-pjb_Ol
+
+The Karters 2 - Sebastian Boczek
+Improvements and new tools to Camera path creator
