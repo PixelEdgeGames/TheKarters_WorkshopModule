@@ -69,6 +69,7 @@ public class CPC_CameraPathInspector : Editor
     private SerializedProperty visualHandleProperty;
     private SerializedProperty loopedProperty;
     private SerializedProperty alwaysShowProperty;
+    private SerializedProperty alwaysShowLineRendererProperty;
     private SerializedProperty followersProperty;
     private SerializedProperty eventsProperty;
 
@@ -141,6 +142,8 @@ public class CPC_CameraPathInspector : Editor
                 Handles.color = Color.white;
             }
         }
+
+        t.RefreshLineRenderer();
     }
 
     void SelectIndex(int index)
@@ -171,6 +174,7 @@ public class CPC_CameraPathInspector : Editor
         visualHandleProperty = serializedObjectTarget.FindProperty("visual.handleColor");
         loopedProperty = serializedObjectTarget.FindProperty("looped");
         alwaysShowProperty = serializedObjectTarget.FindProperty("alwaysShow");
+        alwaysShowLineRendererProperty = serializedObjectTarget.FindProperty("showInGame");
         playOnAwakeProperty = serializedObjectTarget.FindProperty("playOnAwake");
         speedProperty = serializedObjectTarget.FindProperty("fBezierSpeed");
         followersProperty = serializedObjectTarget.FindProperty("followers");
@@ -458,7 +462,8 @@ public class CPC_CameraPathInspector : Editor
         EditorGUI.BeginChangeCheck();
         GUILayout.BeginHorizontal();
         visualFoldout = EditorGUILayout.Foldout(visualFoldout, "Visual");
-        alwaysShowProperty.boolValue = GUILayout.Toggle(alwaysShowProperty.boolValue, alwaysShowContent);
+      //  alwaysShowProperty.boolValue = GUILayout.Toggle(alwaysShowProperty.boolValue, alwaysShowContent);
+        alwaysShowLineRendererProperty.boolValue = GUILayout.Toggle(alwaysShowLineRendererProperty.boolValue, "Show In Game");
         GUILayout.EndHorizontal();
         if (visualFoldout)
         {

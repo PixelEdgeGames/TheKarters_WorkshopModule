@@ -325,6 +325,7 @@ public class CPC_BezierPath : MonoBehaviour
     public CPC_Visual visual;
     public bool looped = true;
     public bool alwaysShow = true;
+    public bool showInGame = false;
 
     public List<CPC_Follower> followers = new List<CPC_Follower>();
     public List<CPC_Event> events = new List<CPC_Event>();
@@ -360,7 +361,13 @@ public class CPC_BezierPath : MonoBehaviour
     }
    public void Update()
     {
-
+        if (Application.isPlaying == true && lineRenderer != null)
+        {
+            if (showInGame == true || bIsRuntimeEditingPath)
+                lineRenderer.gameObject.SetActive(true);
+            else
+                lineRenderer.gameObject.SetActive(false);
+        }
     }
 
     public void RuntimeEditingEnded()
@@ -910,14 +917,111 @@ public class CPC_BezierPath : MonoBehaviour
 
     public float fLastGizmosDrawTime = 0.0f;
 #if UNITY_EDITOR
+    public LineRenderer lineRenderer;
+
+    void InitializeLineRenderer()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer == null)
+        {
+            GameObject debugLineRendererPreview = new GameObject("debugLineRendererPreview");
+            debugLineRendererPreview.transform.parent = this.transform;
+            lineRenderer = debugLineRendererPreview.AddComponent<LineRenderer>();
+        }
+
+        // Set LineRenderer properties
+        lineRenderer.startWidth = 0.3f;
+        lineRenderer.endWidth = 0.3f;
+        lineRenderer.useWorldSpace = true;
+        lineRenderer.alignment = LineAlignment.TransformZ;
+        lineRenderer.textureMode = LineTextureMode.Tile;
+        // Load texture from Resources folder
+        Texture2D texture = Resources.Load<Texture2D>("CheckerLineRenderer");
+        if (texture != null)
+        {
+            // Create a new material with the texture
+            Material lineMaterial = new Material(Shader.Find("Unlit/Texture"));
+            lineMaterial.mainTexture = texture;
+            lineRenderer.material = lineMaterial;
+        }
+        else
+        {
+            Debug.LogWarning("CheckerLineRenderer.png not found in Resources folder.");
+        }
+        fLastLength = -1;
+
+     //   lineRenderer.startColor = Color.green* 0.5f + Color.white * 0.2f;
+     //  lineRenderer.endColor = Color.green*0.5f + Color.white * 0.2f;
+    }
+
+
+    public void RefreshLineRenderer()
+    {
+        if (bIsRuntimeEditingPath == false && Application.isPlaying == true)
+            return;
+
+        if (lineRenderer == null)
+        {
+            InitializeLineRenderer();
+        }
+
+
+        lineRenderer.sharedMaterial.mainTextureScale = new Vector2(1.0f, 0.33f);
+
+        float fDistSum = 0.0f;
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            if (i > 0)
+            {
+                fDistSum += Vector3.Magnitude(points[i - 1].positionWorld - points[i].positionWorld);
+            }
+        }
+
+        int sampleCount = (int)(fDistSum / (2.5f));  // Number of samples along the path
+
+        if (sampleCount < 3)
+            sampleCount = 3;
+
+        int iSampleCountBezierLineRenderer = sampleCount * 10;
+        // lineRenderer.positionCount = iSampleCountBezierLineRenderer;
+
+       
+        if (fLastLength != fDistSum)
+        {
+            List<Vector3> positions = new List<Vector3>();
+            for (int i = 0; i < iSampleCountBezierLineRenderer; i++)
+            {
+                float t = i / (float)(iSampleCountBezierLineRenderer - 1);
+                Vector3 point = GetBezierPositionAtTime(t);
+                Vector3 tangent = GetBezierTangentAtTime(t);
+
+                positions.Add(point);
+
+            }
+
+            lineRenderer.positionCount = positions.Count;
+            lineRenderer.SetPositions(positions.ToArray());
+            lineRenderer.transform.localPosition = Vector3.zero;
+            lineRenderer.transform.localRotation = Quaternion.Euler(90.0F, 0.0F, 0.0F); // MAKE IT FLAT
+            fLastLength = fDistSum;
+        }
+    }
+    float fLastLength = 0;
     public void OnDrawGizmos()
     {
+        if (Selection.activeGameObject == lineRenderer.gameObject)
+            Selection.activeGameObject = this.gameObject;
+
+
+        RefreshLineRenderer();
+
         fLastGizmosDrawTime = Time.time;
-        if (UnityEditor.Selection.activeGameObject == gameObject || alwaysShow)
+        if (UnityEditor.Selection.activeGameObject == gameObject) //// || alwaysShow)
         {
             if (points.Count >= 2)
             {
-                Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+                Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
 
                 float fDistSum = 0.0f;
 
@@ -950,6 +1054,9 @@ public class CPC_BezierPath : MonoBehaviour
 
                 if (sampleCount < 3)
                     sampleCount = 3;
+
+              
+
 
                 for (int i = 0; i < sampleCount; i++)
                 {
@@ -1005,9 +1112,14 @@ public class CPC_BezierPath : MonoBehaviour
                 if (evt.iWaypointIndex >= 0 && evt.iWaypointIndex < points.Count)
                 {
                     Vector3 eventPosition = GetBezierPosition(evt.iWaypointIndex, evt.fWaypointNormalizedDist);
-                    UnityEditor.Handles.color = Color.cyan;
-                    UnityEditor.Handles.SphereHandleCap(0, eventPosition, Quaternion.identity, 1.0f, EventType.Repaint);
-                    UnityEditor.Handles.Label(eventPosition, $"Event {i}", new GUIStyle { fontStyle = FontStyle.Bold, fontSize = 12, normal = new GUIStyleState { textColor = Color.cyan } });
+                    UnityEditor.Handles.color = new Color( Color.cyan.r, Color.cyan.g, Color.cyan.b,0.5f);
+                    UnityEditor.Handles.SphereHandleCap(0, eventPosition, Quaternion.identity, 0.4f, EventType.Repaint);
+                    UnityEditor.Handles.color = Color.black;
+
+                    float fDistFromCam = (Camera.current.transform.position - eventPosition).magnitude/50.0f;
+                    UnityEditor.Handles.Label(eventPosition + Vector3.up* fDistFromCam*0.12f, $"Event {i}", new GUIStyle { fontStyle = FontStyle.Bold, fontSize = 13, normal = new GUIStyleState { textColor = new Color(0.0f, 0.0f, 0.0f, 1.5f) } });
+                    UnityEditor.Handles.Label(eventPosition, $"Event {i}", new GUIStyle { fontStyle = FontStyle.Bold, fontSize = 13, normal = new GUIStyleState { textColor = new Color(Color.cyan.r, Color.cyan.g, Color.cyan.b, 0.5f) } });
+                    UnityEditor.Handles.Label(eventPosition - Vector3.up * fDistFromCam * 0.1f, $"Event {i}", new GUIStyle { fontStyle = FontStyle.Bold, fontSize = 13, normal = new GUIStyleState { textColor = new Color(1.0f, 1.0f, 1.0f, 1.5f) } }) ;
                 }
             }
         }
