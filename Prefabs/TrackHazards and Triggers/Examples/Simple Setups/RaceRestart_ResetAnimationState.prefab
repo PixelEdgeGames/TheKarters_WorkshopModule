@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7336011935031222381}
   - component: {fileID: 7336011935031222354}
-  - component: {fileID: 7336011935031222355}
+  - component: {fileID: 676178325679107916}
   m_Layer: 0
   m_Name: RaceRestart_ResetAnimationState
   m_TagString: Untagged
@@ -80,7 +80,7 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &7336011935031222355
+--- !u!114 &676178325679107916
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,12 +89,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7336011935031222352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a722732e6017db4abcb6ea632bfad87, type: 3}
+  m_Script: {fileID: 11500000, guid: 36fe0217a40a37a44be14abb672618b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eAnimType: 0
+  bAutoPlay: 0
   animationTarget: {fileID: 7336011935031222354}
-  animationClipForRaceRestart: {fileID: 7400000, guid: 42ce9aa3a1d4fe84483f0199114457e1,
-    type: 2}
+  animatorTarget: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: 735ba8df65429274e827f4cd6ea4c4fb, type: 2}
+  bUseAnimatorTriggers: 0
+  strAnimatorTriggerName_OnRaceRestart: 
+  strAnimatorTrigger_OnRaceBeginAfterCountdown: 
 --- !u!1 &7336011936234518550
 GameObject:
   m_ObjectHideFlags: 0

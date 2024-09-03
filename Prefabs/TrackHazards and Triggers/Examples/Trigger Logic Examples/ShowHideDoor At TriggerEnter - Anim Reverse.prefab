@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2152561922200738268}
   - component: {fileID: 2152561922200738271}
-  - component: {fileID: 2152561922200738269}
+  - component: {fileID: 6387021060911633661}
   m_Layer: 0
   m_Name: ShowHideDoor At TriggerEnter - Anim Reverse
   m_TagString: Untagged
@@ -81,7 +81,7 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &2152561922200738269
+--- !u!114 &6387021060911633661
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,13 +90,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2152561922200738270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb955a1e02c2d704285c103061946c1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36fe0217a40a37a44be14abb672618b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eAnimType: 0
+  eResetMode: 1
   animationTarget: {fileID: 2152561922200738271}
-  animationClipForRaceRestart: {fileID: 7400000, guid: c467204f7afbbc547ac11678ecefb841,
-    type: 2}
-  eFrameType: 0
+  animatorTarget: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: c467204f7afbbc547ac11678ecefb841, type: 2}
+  bUseAnimatorTriggers: 0
+  strAnimatorTriggerName_OnRaceRestart: 
+  strAnimatorTrigger_OnRaceBeginAfterCountdown: 
 --- !u!1 &2152561922363040773
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationObjects:
-  - animationObject: {fileID: 2152561922200738271}
+  - animatorTypeObject: {fileID: 0}
+    animationTypeObject: {fileID: 2152561922200738271}
     eActionType: 1
     clipToPlay: {fileID: 7400000, guid: c467204f7afbbc547ac11678ecefb841, type: 2}
     fTransitionTime: 0.3
@@ -504,7 +509,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationObjects:
-  - animationObject: {fileID: 2152561922200738271}
+  - animatorTypeObject: {fileID: 0}
+    animationTypeObject: {fileID: 2152561922200738271}
     eActionType: 0
     clipToPlay: {fileID: 7400000, guid: c467204f7afbbc547ac11678ecefb841, type: 2}
     fTransitionTime: 0.3
@@ -715,12 +721,12 @@ PrefabInstance:
     - target: {fileID: 9183186796108680419, guid: 579f6be9dd36d0745927a433035c09c6,
         type: 3}
       propertyPath: iUniquePhysicsTriggerID
-      value: 1289239031
+      value: 493414861
       objectReference: {fileID: 0}
     - target: {fileID: 9183186796108680419, guid: 579f6be9dd36d0745927a433035c09c6,
         type: 3}
       propertyPath: iUniquePhysicsTriggerIDCratedForObjectInstance
-      value: -398518
+      value: -1858088
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 579f6be9dd36d0745927a433035c09c6, type: 3}

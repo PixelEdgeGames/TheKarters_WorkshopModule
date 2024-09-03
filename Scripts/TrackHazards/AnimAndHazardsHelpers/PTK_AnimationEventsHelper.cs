@@ -7,34 +7,15 @@ using UnityEngine.Playables;
 public class PTK_AnimationEventsHelper : MonoBehaviour
 {
     [SerializeField]
-    private Animation animationComponent; // Animation component to check
-
-    [SerializeField]
-    private AnimationClip animationClip; // Animation clip to check against
-
-    [SerializeField]
     public CEvent animRestartedDefaultStateEvents;
 
     [SerializeField]
     public List<CEvent> events = new List<CEvent>();
 
 
-    private float previousTime;
-    private float animationLength;
 
     void Awake()
     {
-        if (animationClip != null)
-        {
-            animationLength = animationClip.length;
-        }
-        else
-        {
-            Debug.LogWarning("AnimationClip is not set!");
-        }
-
-        previousTime = -1;
-
         foreach (var e in events)
         {
             foreach (var psEvent in e.particleSystemEvents)
@@ -65,64 +46,7 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
     void Update()
     {
-        if (animationComponent != null && animationClip != null)
-        {
-            animationClip.legacy = true;
-
-            if (animationComponent.GetClip(animationClip.name) == null)
-                animationComponent.AddClip(animationClip, animationClip.name);
-
-            AnimationState animState = animationComponent[animationClip.name];
-
-            if (animState != null && animState.enabled && animState.weight > 0)
-            {
-                float currentTime = animState.time % (animState.length > 0 ? animState.length : 0.001f) ; // divide by length for looped anims
-
-                if (currentTime < previousTime) // Handle looping
-                {
-                    TriggerPassedEvents(0, animationLength);
-                }
-                else
-                {
-                    TriggerPassedEvents(previousTime, currentTime);
-                }
-
-                previousTime = currentTime;
-            }
-        }
-    }
-
-    private void TriggerPassedEvents(float startTime, float endTime)
-    {
-        float normalizedStartTime = startTime / animationLength;
-        float normalizedEndTime = endTime / animationLength;
-
-        foreach (var e in events)
-        {
-            float eventTimeNormalized = e.fEventTime;
-
-            switch (e.timeType)
-            {
-                case CEvent.EventTimeType.E0_FRAME_NR:
-                    // Assuming we are checking by frame number, convert it to normalized time.
-                    // This would depend on the frame rate. Here, we assume 60 FPS as an example.
-                    eventTimeNormalized = e.fEventTime / (animationLength * 60f);
-                    break;
-
-                case CEvent.EventTimeType.E1_TIME:
-                    eventTimeNormalized = e.fEventTime / animationLength;
-                    break;
-
-                case CEvent.EventTimeType.E2_NORMALIZED_TIME:
-                    eventTimeNormalized = e.fEventTime;
-                    break;
-            }
-
-            if (eventTimeNormalized >= normalizedStartTime && eventTimeNormalized <= normalizedEndTime)
-            {
-                e.TriggerEvents(eventTimeNormalized);
-            }
-        }
+      
     }
 
     [Serializable]
@@ -201,7 +125,7 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
                     ps.Play();
                     break;
                 case ParticleSystemActionType.PauseParticles:
-                    ps.Pause();
+                    ps.Stop(); // pause looks weird when particles are frozen
                     break;
                 case ParticleSystemActionType.StopParticles:
                     ps.Stop();
@@ -266,10 +190,8 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
     [Serializable]
     public class CEvent
     {
-        public enum EventTimeType { E0_FRAME_NR, E1_TIME, E2_NORMALIZED_TIME }
-
-        public EventTimeType timeType;
-        public float fEventTime;
+        [Header("Name ID - Used in AnimationClip Event - function TK2_RunAnimationEvent")]
+        public string strAnimationEventNameID;
 
 
         [Header("Game Objects")]
@@ -330,6 +252,18 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
             foreach (var goEvent in gameObjectEvents)
             {
                 goEvent.Execute();
+            }
+        }
+    }
+
+    public void TK2_RunAnimationEventID(string strEventNameID)
+    {
+        Debug.LogError("Show log");
+        for (int i = 0; i < events.Count; i++)
+        {
+            if(events[i].strAnimationEventNameID == strEventNameID)
+            {
+                events[i].TriggerEvents(0);
             }
         }
     }

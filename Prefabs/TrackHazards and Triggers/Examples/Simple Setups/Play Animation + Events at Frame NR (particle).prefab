@@ -45,8 +45,8 @@ GameObject:
   - component: {fileID: 637312480978202169}
   - component: {fileID: 637312480978202566}
   - component: {fileID: 637312480978202567}
-  - component: {fileID: 637312480978202564}
   - component: {fileID: 637312480978202565}
+  - component: {fileID: 1450107929494856996}
   m_Layer: 0
   m_Name: SphereAnimated
   m_TagString: Untagged
@@ -146,21 +146,6 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &637312480978202564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637312480978202563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a722732e6017db4abcb6ea632bfad87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animationTarget: {fileID: 637312480978202567}
-  animationClipForRaceRestart: {fileID: 7400000, guid: c0b32fe78fe7f0a40b3786df8bf92616,
-    type: 2}
 --- !u!114 &637312480978202565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,11 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f8fa21f36fc964eab077103b186b3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationComponent: {fileID: 637312480978202567}
-  animationClip: {fileID: 7400000, guid: c0b32fe78fe7f0a40b3786df8bf92616, type: 2}
   animRestartedDefaultStateEvents:
-    timeType: 0
-    fEventTime: 0
+    strAnimationEventNameID: 
     gameObjectEvents: []
     particleSystemEvents:
     - particleSystem: {fileID: 637312481984259162}
@@ -190,8 +172,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   events:
-  - timeType: 0
-    fEventTime: 50
+  - strAnimationEventNameID: ID_PlayParticles
     gameObjectEvents: []
     particleSystemEvents:
     - particleSystem: {fileID: 637312481984259162}
@@ -203,8 +184,7 @@ MonoBehaviour:
     eventsToCall:
       m_PersistentCalls:
         m_Calls: []
-  - timeType: 0
-    fEventTime: 80
+  - strAnimationEventNameID: ID_StopParticles
     gameObjectEvents: []
     particleSystemEvents:
     - particleSystem: {fileID: 637312481984259162}
@@ -216,6 +196,26 @@ MonoBehaviour:
     eventsToCall:
       m_PersistentCalls:
         m_Calls: []
+--- !u!114 &1450107929494856996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637312480978202563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36fe0217a40a37a44be14abb672618b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eAnimType: 0
+  eResetMode: 0
+  animationTarget: {fileID: 637312480978202567}
+  animatorTarget: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: c0b32fe78fe7f0a40b3786df8bf92616, type: 2}
+  bUseAnimatorTriggers: 0
+  strAnimatorTriggerName_OnRaceRestart: 
+  strAnimatorTrigger_OnRaceBeginAfterCountdown: 
 --- !u!1 &637312481984259161
 GameObject:
   m_ObjectHideFlags: 0

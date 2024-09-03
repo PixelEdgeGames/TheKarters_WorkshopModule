@@ -234,7 +234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4692838529951005739}
   - component: {fileID: 4692838529951005738}
-  - component: {fileID: 4692838529951005736}
+  - component: {fileID: 8390927485833236539}
   m_Layer: 0
   m_Name: GameCondition_HideIn20secRaceTimeShowIn40sec
   m_TagString: Untagged
@@ -274,7 +274,7 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &4692838529951005736
+--- !u!114 &8390927485833236539
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -283,13 +283,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4692838529951005749}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb955a1e02c2d704285c103061946c1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36fe0217a40a37a44be14abb672618b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eAnimType: 0
+  bAutoPlay: 1
   animationTarget: {fileID: 4692838529951005738}
-  animationClipForRaceRestart: {fileID: 7400000, guid: c467204f7afbbc547ac11678ecefb841,
-    type: 2}
-  eFrameType: 0
+  animatorTarget: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: c467204f7afbbc547ac11678ecefb841, type: 2}
+  bUseAnimatorTriggers: 0
+  strAnimatorTriggerName_OnRaceRestart: 
+  strAnimatorTrigger_OnRaceBeginAfterCountdown: 
 --- !u!1001 &4692838528108361980
 PrefabInstance:
   m_ObjectHideFlags: 0
