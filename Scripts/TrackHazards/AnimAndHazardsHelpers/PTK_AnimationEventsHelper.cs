@@ -191,7 +191,7 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
     public class CEvent
     {
         [Header("Name ID - Used in AnimationClip Event - function TK2_RunAnimationEvent")]
-        public string strAnimationEventNameID;
+        public string strEventNameID;
 
 
         [Header("Game Objects")]
@@ -261,7 +261,7 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
         Debug.LogError("Show log");
         for (int i = 0; i < events.Count; i++)
         {
-            if(events[i].strAnimationEventNameID == strEventNameID)
+            if(events[i].strEventNameID == strEventNameID)
             {
                 events[i].TriggerEvents(0);
             }

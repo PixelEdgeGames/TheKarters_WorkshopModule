@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animRestartedDefaultStateEvents:
-    strAnimationEventNameID: 
+    strEventNameID: 
     gameObjectEvents: []
     particleSystemEvents:
     - particleSystem: {fileID: 637312481984259162}
@@ -172,7 +172,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   events:
-  - strAnimationEventNameID: ID_PlayParticles
+  - strEventNameID: 
     gameObjectEvents: []
     particleSystemEvents:
     - particleSystem: {fileID: 637312481984259162}
@@ -184,7 +184,7 @@ MonoBehaviour:
     eventsToCall:
       m_PersistentCalls:
         m_Calls: []
-  - strAnimationEventNameID: ID_StopParticles
+  - strEventNameID: 
     gameObjectEvents: []
     particleSystemEvents:
     - particleSystem: {fileID: 637312481984259162}
@@ -208,12 +208,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36fe0217a40a37a44be14abb672618b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eAnimType: 0
-  eResetMode: 0
-  animationTarget: {fileID: 637312480978202567}
   animatorTarget: {fileID: 0}
+  ePlayMode: 0
   animationClip: {fileID: 7400000, guid: c0b32fe78fe7f0a40b3786df8bf92616, type: 2}
-  bPlayBlendTree: 0
   strBlendTreeName: Blend Tree
   bUseAnimatorTriggers: 0
   strAnimatorTriggerName_OnRaceRestart: 

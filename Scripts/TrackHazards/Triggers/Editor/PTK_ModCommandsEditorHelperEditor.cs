@@ -15,7 +15,6 @@ public class PTK_ModCommandsEditorHelperEditor : Editor
         { typeof(PTK_Command_02_ModTriggerCommandExecutor_ManualReset), "Trigger Command Executor: Manual Reset" },
         { typeof(PTK_Command_03_ModTriggerCommandExecutor_EnableDisable), "Trigger Command Executor: Enable/Disable" },
         { typeof(PTK_Command_07_AnimatorCommands), "Animator Commands" },
-        { typeof(PTK_Command_04_AnimationClip_PlayPauseStop), "Animation Clip: Play/Pause" },
         { typeof(PTK_Command_05_PlayerLogicEffects), "Player Logic Effects" },
         { typeof(PTK_Command_06_CustomCommands), "Custom Commands" }
     };

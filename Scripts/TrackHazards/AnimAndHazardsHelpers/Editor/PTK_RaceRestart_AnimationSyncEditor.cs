@@ -9,85 +9,56 @@ public class PTK_RaceRestart_AnimationSyncEditor : Editor
         // Get the target script
         PTK_RaceRestart_AnimationSync script = (PTK_RaceRestart_AnimationSync)target;
 
-        // Display the animation type dropdown
-        script.eAnimType = (PTK_RaceRestart_AnimationSync.EAnimType)EditorGUILayout.EnumPopup("Animation Type", script.eAnimType);
 
         // Separator
         EditorGUILayout.Space();
 
-        if(script.animatorTarget == null && script.animationTarget == null)
+        if(script.animatorTarget == null )
         {
             script.animatorTarget = script.GetComponent<Animator>();
-            script.animationTarget = script.GetComponent<Animation>();
         }
 
-        if(script.animatorTarget == null && script.animationTarget == null)
+        if(script.animatorTarget == null )
         {
-            EditorGUILayout.HelpBox("No Animator or Animation component found.", MessageType.Warning);
+            EditorGUILayout.HelpBox("No Animator component found.", MessageType.Warning);
             return;
         }
 
 
         EditorGUILayout.LabelField("Settings", EditorStyles.boldLabel);
-        script.eResetMode = (PTK_RaceRestart_AnimationSync.EMode)EditorGUILayout.EnumPopup("Reset Mode", script.eResetMode);
 
 
         GUILayout.Space(10);
 
-        bool bDrawAnimator = false;
+        // Show Animator and related fields
+        EditorGUILayout.LabelField("Animator Target", EditorStyles.boldLabel);
+        script.animatorTarget = (Animator)EditorGUILayout.ObjectField("Animator", script.animatorTarget, typeof(Animator), true);
 
-        if(script.eAnimType == PTK_RaceRestart_AnimationSync.EAnimType.E0_AUTO_DETECTED)
+
+        GUILayout.Space(10);
+        // Display option to use Animator triggers
+        script.ePlayMode = (PTK_RaceRestart_AnimationSync.EPlayMode)EditorGUILayout.EnumPopup("PlayMode", script.ePlayMode);
+        if (script.ePlayMode == PTK_RaceRestart_AnimationSync.EPlayMode.E1_BLEND_TREE)
         {
-            bDrawAnimator = script.animatorTarget != null;
-        }else if(script.eAnimType == PTK_RaceRestart_AnimationSync.EAnimType.E1_ANIMATOR)
+            GUI.backgroundColor = Color.green * 2;
+            EditorGUILayout.LabelField("Race Rastart Tip: Please set default paramter values used by Blend Tree in animator", GUI.skin.box);
+            GUI.backgroundColor = Color.white;
+            script.strBlendTreeName = EditorGUILayout.TextField("Play BlendTree Name", script.strBlendTreeName);
+
+            GUILayout.Space(5);
+        }else
         {
-            bDrawAnimator = true;
-        }
-        else
-        {
-            bDrawAnimator = false;
-        }
-
-        if (bDrawAnimator == true)
-        {
-
-            // Show Animator and related fields
-            EditorGUILayout.LabelField("Animator Target", EditorStyles.boldLabel);
-            script.animatorTarget = (Animator)EditorGUILayout.ObjectField("Animator", script.animatorTarget, typeof(Animator), true);
-
-            DrawAnimClips(script);
-
-            GUILayout.Space(10);
-            // Display option to use Animator triggers
-            EditorGUILayout.LabelField("Optional", EditorStyles.boldLabel);
-            script.bPlayBlendTree = EditorGUILayout.Toggle("Use Blend Treee", script.bPlayBlendTree);
-            if(script.bPlayBlendTree == true)
-            {
-                GUI.backgroundColor = Color.yellow*2;
-                EditorGUILayout.LabelField("Race Rastart Tip: Please set default values used by Blend Tree in animator",GUI.skin.box);
-                GUI.backgroundColor = Color.white;
-                script.strBlendTreeName = EditorGUILayout.TextField("BlendTree Name", script.strBlendTreeName);
-            }
-
-            if(script.bPlayBlendTree == true)
-                GUILayout.Space(5);
-
-            script.bUseAnimatorTriggers = EditorGUILayout.Toggle("Use Animator Triggers", script.bUseAnimatorTriggers);
-            if (script.bUseAnimatorTriggers)
-            {
-                script.strAnimatorTriggerName_OnRaceRestart = EditorGUILayout.TextField("TriggerName - On Race Restart", script.strAnimatorTriggerName_OnRaceRestart);
-                script.strAnimatorTrigger_OnRaceBeginAfterCountdown = EditorGUILayout.TextField("TriggerName On Race Begin", script.strAnimatorTrigger_OnRaceBeginAfterCountdown);
-            }
-        }
-        else
-        {
-            // Show Legacy Animation and related fields
-            EditorGUILayout.LabelField("Legacy Animation Target", EditorStyles.boldLabel);
-            script.animationTarget = (Animation)EditorGUILayout.ObjectField("Animation", script.animationTarget, typeof(Animation), true);
             DrawAnimClips(script);
         }
 
-        
+        script.bUseAnimatorTriggers = EditorGUILayout.Toggle("Use Animator Triggers", script.bUseAnimatorTriggers);
+        if (script.bUseAnimatorTriggers)
+        {
+            script.strAnimatorTriggerName_OnRaceRestart = EditorGUILayout.TextField("TriggerName - On Race Restart", script.strAnimatorTriggerName_OnRaceRestart);
+            script.strAnimatorTrigger_OnRaceBeginAfterCountdown = EditorGUILayout.TextField("TriggerName On Race Begin", script.strAnimatorTrigger_OnRaceBeginAfterCountdown);
+        }
+
+
 
         // Apply changes to the serialized object
         if (GUI.changed)
@@ -103,14 +74,16 @@ public class PTK_RaceRestart_AnimationSyncEditor : Editor
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Space(5);
-            script.animationClip = (AnimationClip)EditorGUILayout.ObjectField("Animation Clip", script.animationClip, typeof(AnimationClip), true);
+            script.animationClip = (AnimationClip)EditorGUILayout.ObjectField("Play Animation Clip", script.animationClip, typeof(AnimationClip), true);
 
             GUILayout.BeginHorizontal();
             GUI.backgroundColor = Color.red;
-            EditorGUILayout.HelpBox("No Default Animation Clip Found.", MessageType.Warning);
+            EditorGUILayout.HelpBox("No Default Animation Clip Found. Assign clip or change to Blend Tree", MessageType.Warning);
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Fix - Auto Assign", GUILayout.Height(40), GUILayout.Width(200)))
             {
+                if(script.animatorTarget != null)
+                EditorUtility.SetDirty(script.animatorTarget);
                 script.AssignFromObject();
             }
             GUI.backgroundColor = Color.white;

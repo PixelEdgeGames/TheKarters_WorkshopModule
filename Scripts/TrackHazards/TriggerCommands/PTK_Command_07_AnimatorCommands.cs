@@ -13,10 +13,44 @@ public class PTK_Command_07_AnimatorCommands : PTK_TriggerCommandBase
     {
         public Animator animatorTypeObject;
 
+        [Header("Cross-Fade Play Anim")]
+        public List<CClipToPlay> animClipToPlay = new List<CClipToPlay>();
+        public List<CBlendTreeToPlay> blendTreeToPlay = new List<CBlendTreeToPlay>();
+        [Header("Pause/Resume")]
+        public List<CPauseResumeState> pauseResumeEvent = new List<CPauseResumeState>();
+
+        [Header("Animator Control")]
         public List<CTrigger> triggers = new List<CTrigger>();
         public List<CBool> booleans = new List<CBool>();
         public List<CFloat> floats = new List<CFloat>();
         public List<CInt> integers = new List<CInt>();
+       
+        [System.Serializable]
+        public class CPauseResumeState
+        {
+            public enum EState
+            {
+                PAUSE,
+                RESUME
+            }
+
+            public EState eStateToSet = EState.PAUSE;
+        }
+
+        [System.Serializable]
+        public class CClipToPlay
+        {
+            public AnimationClip clipToPlay;
+            public float fTransitionTime = 0.1f;
+        }
+
+        [System.Serializable]
+        public class CBlendTreeToPlay
+        {
+            public string strBlendTreeName = "Blend Tree";
+            public float fTransitionTime = 0.1f;
+        }
+
 
         [System.Serializable]
         public class CTrigger
@@ -54,13 +88,20 @@ public class PTK_Command_07_AnimatorCommands : PTK_TriggerCommandBase
     }
 
 
-    public CAnimatorCalls[] animatorCallsToSend;
+    public List<CAnimatorCalls> animatorCallsToSend = new List<CAnimatorCalls>();
 
     public static List<CAnimatorCalls.CFloat> currentAnimatorsFloatValsInterp = new List<CAnimatorCalls.CFloat>();
 
     public override void Awake()
     {
-       
+        for (int i = 0; i < animatorCallsToSend.Count; i++)
+        {
+            if (animatorCallsToSend[i].animatorTypeObject == null)
+            {
+                Debug.LogError("PTK_Command_07_AnimatorCommands trigger command Animator Value - Animator is NULL - please assign it!");
+            }
+        }
+
     }
     public override void Start()
     {
@@ -101,7 +142,26 @@ public class PTK_Command_07_AnimatorCommands : PTK_TriggerCommandBase
             if (objAnimLogic.animatorTypeObject == null)
                 continue;
 
-            for(int i=0;i<objAnimLogic.triggers.Count;i++)
+
+            for (int i = 0; i < objAnimLogic.animClipToPlay.Count; i++)
+            {
+                objAnimLogic.animatorTypeObject.CrossFade(objAnimLogic.animatorTypeObject.GetLayerName(0) + "." + objAnimLogic.animClipToPlay[i].clipToPlay.name, objAnimLogic.animClipToPlay[i].fTransitionTime, 0, 0);
+            }
+
+            for (int i = 0; i < objAnimLogic.blendTreeToPlay.Count; i++)
+            {
+                objAnimLogic.animatorTypeObject.CrossFade(objAnimLogic.animatorTypeObject.GetLayerName(0) + "." + objAnimLogic.blendTreeToPlay[i].strBlendTreeName, objAnimLogic.blendTreeToPlay[i].fTransitionTime, 0, 0);
+            }
+            for (int i = 0; i < objAnimLogic.pauseResumeEvent.Count; i++)
+            {
+                if (objAnimLogic.pauseResumeEvent[i].eStateToSet == CAnimatorCalls.CPauseResumeState.EState.PAUSE)
+                    objAnimLogic.animatorTypeObject.speed = 0.0f;
+
+                if (objAnimLogic.pauseResumeEvent[i].eStateToSet == CAnimatorCalls.CPauseResumeState.EState.RESUME)
+                    objAnimLogic.animatorTypeObject.speed = 1.0f;
+            }
+            
+            for (int i=0;i<objAnimLogic.triggers.Count;i++)
             {
                 objAnimLogic.animatorTypeObject.SetTrigger(objAnimLogic.triggers[i].strTriggerName);
             }

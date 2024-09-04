@@ -6,32 +6,18 @@ using UnityEngine;
 [AddComponentMenu("_PixelTools/Modding/Animation/PTK_RaceRestart_AnimationSync", 0)]
 public class PTK_RaceRestart_AnimationSync : MonoBehaviour
 {
-    public enum EAnimType
-    {
-        E0_AUTO_DETECTED,
-        E1_ANIMATOR,
-        E2_LEGACY_ANIMATION
-    }
 
-    public enum EMode
-    {
-        E0_RESET_AND_AUTO_PLAY,
-        E1_ONLY_RESET_USING_FIRST_FRAME,
-        E2_ONLY_RESET_USING_LAST_FRAME
-    }
-
-
-    public EAnimType eAnimType = EAnimType.E0_AUTO_DETECTED;
-    [Header("Reset Mode")]
-    public EMode eResetMode = EMode.E0_RESET_AND_AUTO_PLAY;
-
-    [Header("Assign Animation or Aniamtor")]
-    public Animation animationTarget;
     public Animator animatorTarget;
+    public enum EPlayMode
+    {
+        E0_ANIM_CLIP,
+        E1_BLEND_TREE
+    }
+    public EPlayMode ePlayMode = EPlayMode.E0_ANIM_CLIP;
+
     public AnimationClip animationClip;
 
     [Header("Not Required")]
-    public bool bPlayBlendTree = false;
     public string strBlendTreeName = "Blend Tree";
 
     public bool bUseAnimatorTriggers = false;
@@ -47,14 +33,22 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
         PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart += OnRaceTimerStart;
         PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted += OnRaceRestart;
 
+        if(animatorTarget == null)
+        {
+            Debug.LogError("Animator target was not assigned - trying to get it automatically");
+            animatorTarget = this.GetComponent<Animator>();
+        }
         // if for some reason animation was removed and user didnt noticed that
-        if (animationClip == null)
+        if (animationClip == null && ePlayMode == EPlayMode.E0_ANIM_CLIP)
+        {
+            Debug.LogError("Set to play anim clip but anim clip not found - trying to get it automatically");
+
             AssignFromObject();
+        }
 
-
+        /*
         if(animatorTarget != null)
         {
-
            if (ContainsEmptyAnimationClip(animatorTarget) == false)
             {
                 AnimationClip  emptyAnimatorClip = new AnimationClip();
@@ -63,8 +57,8 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
 
                 AddClipToAnimatorController(animatorTarget, emptyAnimatorClip);
             }
-
         }
+        */
 
         OnRaceRestart();
     }
@@ -78,29 +72,12 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
     [EasyButtons.Button]
     public void AssignFromObject()
     {
-        animationTarget = this.GetComponent<Animation>();
-
-        if (animationTarget != null)
-        {
-            animationClip = animationTarget.clip;
-
-            if (animationClip == null)
-            {
-                foreach (AnimationState anim in animationTarget)
-                {
-                    animationClip = anim.clip;
-                    break;
-                }
-            }
-        }
-
         animatorTarget = this.GetComponent<Animator>();
 
         if (animatorTarget != null)
         {
             // Get the Animator component attached to this GameObject
             Animator animator = animatorTarget;
-
 
             // Get the runtime animator controller
             RuntimeAnimatorController controller = animator.runtimeAnimatorController;
@@ -118,10 +95,11 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
                 // Assuming the first animation clip is the default one
 
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                AnimationClip defaultClip = controller.animationClips[0];
+                AnimationClip defaultClip = null;
                 foreach (AnimationClip clip in controller.animationClips)
                 {
-                    // Compare the clip name with the current state's fullPathHash or shortNameHash
+                    // Compare
+                    // the clip name with the current state's fullPathHash or shortNameHash
                     if (stateInfo.IsName(clip.name))
                     {
                         defaultClip = clip; // Return the matching clip
@@ -138,7 +116,7 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
         }
     }
 
-
+    /*
     void AddClipToAnimatorController(Animator animator, AnimationClip clip)
     {
         AnimatorController animatorController = animator.runtimeAnimatorController as AnimatorController;
@@ -187,9 +165,11 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
         }
         return false;
     }
+    */
 
     private void OnRaceRestart()
     {
+
         if (animatorTarget != null)
         {
             animatorTarget.speed = 1.0f;
@@ -198,79 +178,9 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
             //animatorTarget.Update(0f);
             animatorTarget.StopPlayback();
 
-        }
 
-        if (animationTarget != null)
-        {
-            animationTarget.Stop();
-        }
-
-        if (animationTarget != null)
-        {
-            if (animationClip != null)
-            {
-                if (animationClip != null)
-                    animationClip.legacy = true;
-
-                if (animationTarget.GetClip(animationClip.name) == null)
-                    animationTarget.AddClip(animationClip, animationClip.name);
-
-                animationTarget.clip = animationClip;
-            }
-        }
-
-        if (animationClip != null)
-        {
-            if(animationTarget != null)
-                animationClip.SampleAnimation(animationTarget.gameObject, eResetMode == EMode.E2_ONLY_RESET_USING_LAST_FRAME ? 1.0f : 0.0f);
-
-            if (animatorTarget != null)
-            {
-                // to avoid playing other animation
-                animatorTarget.Play(animatorTarget.GetLayerName(0) + "." + strEmptyAnimationClipName);
-                animatorTarget.StopPlayback();
-
-                bool bEnabledBeforeSample = animatorTarget.enabled;
-                animatorTarget.enabled = false;
-
-                animationClip.SampleAnimation(animatorTarget.gameObject, eResetMode == EMode.E2_ONLY_RESET_USING_LAST_FRAME ? 1.0f : 0.0f);
-
-                animatorTarget.enabled = bEnabledBeforeSample;
-
-            }
-        }
-
-
-        if (bUseAnimatorTriggers == true && strAnimatorTriggerName_OnRaceRestart != "")
-        {
-            if(animatorTarget != null)
-                animatorTarget.SetTrigger(strAnimatorTriggerName_OnRaceRestart);
-        }
-    }
-
-    [EasyButtons.Button]
-    public void SampleAnim()
-    {
-        animationClip.SampleAnimation(animatorTarget.gameObject, eResetMode == EMode.E2_ONLY_RESET_USING_LAST_FRAME ? 1.0f : 0.0f);
-    }
-    private void OnRaceTimerStart()
-    {
-        if (eResetMode != EMode.E0_RESET_AND_AUTO_PLAY)
-            return;
-
-        if (animationTarget != null)
-        {
-            animationTarget.clip = animationClip;
-
-            animationTarget.Stop();
-            animationTarget.Play();
-        }
-
-
-        if (animatorTarget != null)
-        {
-            string strAnimToPlay = "";
-            if (bPlayBlendTree == true)
+            string strAnimToPlay = strEmptyAnimationClipName;
+            if (ePlayMode == EPlayMode.E1_BLEND_TREE)
             {
                 strAnimToPlay = strBlendTreeName;
             }
@@ -284,6 +194,24 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
                 string strLayerNameWithAnim = animatorTarget.GetLayerName(0) + "." + strAnimToPlay;
                 animatorTarget.Play(strLayerNameWithAnim);
             }
+
+
+            if (bUseAnimatorTriggers == true && strAnimatorTriggerName_OnRaceRestart != "")
+            {
+                if (animatorTarget != null)
+                    animatorTarget.SetTrigger(strAnimatorTriggerName_OnRaceRestart);
+            }
+
+            animatorTarget.speed = 0.0f;
+        }
+
+    }
+
+    private void OnRaceTimerStart()
+    {
+        if (animatorTarget != null)
+        {
+            animatorTarget.speed = 1.0f; // resume
 
             if (bUseAnimatorTriggers == true && strAnimatorTrigger_OnRaceBeginAfterCountdown != "")
             {
