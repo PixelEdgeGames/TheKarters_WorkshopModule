@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
+
 using UnityEngine;
 
 [AddComponentMenu("_PixelTools/Modding/Animation/PTK_RaceRestart_AnimationSync", 0)]

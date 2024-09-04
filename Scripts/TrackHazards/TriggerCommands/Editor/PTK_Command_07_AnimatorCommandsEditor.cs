@@ -139,7 +139,7 @@ public class PTK_Command_07_AnimatorCommandsEditor : Editor
         Color originalColor = GUI.backgroundColor;
         GUI.backgroundColor = Color.green;
         // Add button to add the selected type
-        if (GUILayout.Button("Add New", GUILayout.Width(100)))
+        if (GUILayout.Button("Add", GUILayout.Width(100)))
         {
             // Add item based on selected category
             switch (selectedCategoryIndex[iAnimatorIndex])
