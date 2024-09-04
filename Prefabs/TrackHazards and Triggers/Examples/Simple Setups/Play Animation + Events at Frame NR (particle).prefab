@@ -213,6 +213,8 @@ MonoBehaviour:
   animationTarget: {fileID: 637312480978202567}
   animatorTarget: {fileID: 0}
   animationClip: {fileID: 7400000, guid: c0b32fe78fe7f0a40b3786df8bf92616, type: 2}
+  bPlayBlendTree: 0
+  strBlendTreeName: Blend Tree
   bUseAnimatorTriggers: 0
   strAnimatorTriggerName_OnRaceRestart: 
   strAnimatorTrigger_OnRaceBeginAfterCountdown: 

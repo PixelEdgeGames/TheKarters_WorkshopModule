@@ -31,11 +31,16 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
     public AnimationClip animationClip;
 
     [Header("Not Required")]
+    public bool bPlayBlendTree = false;
+    public string strBlendTreeName = "Blend Tree";
+
     public bool bUseAnimatorTriggers = false;
     public string strAnimatorTriggerName_OnRaceRestart;
     public string strAnimatorTrigger_OnRaceBeginAfterCountdown;
 
-    AnimationClip emptyAnimatorClip;
+
+    public static string strEmptyAnimationClipName = "PTK_EmptyAnimClip";
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -46,12 +51,19 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
         if (animationClip == null)
             AssignFromObject();
 
-        emptyAnimatorClip = new AnimationClip();
-        emptyAnimatorClip.name = "Empty";
 
         if(animatorTarget != null)
         {
-            AddClipToAnimatorController(animatorTarget, emptyAnimatorClip);
+
+           if (ContainsEmptyAnimationClip(animatorTarget) == false)
+            {
+                AnimationClip  emptyAnimatorClip = new AnimationClip();
+                emptyAnimatorClip.name = strEmptyAnimationClipName;
+                emptyAnimatorClip.wrapMode = WrapMode.Once;
+
+                AddClipToAnimatorController(animatorTarget, emptyAnimatorClip);
+            }
+
         }
 
         OnRaceRestart();
@@ -138,10 +150,49 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
         newState.name = clip.name;
     }
 
+    bool DoesAnimationClipExistInAnimator(Animator animator, string clipName)
+    {
+        AnimatorController animatorController = animator.runtimeAnimatorController as AnimatorController;
+        // Loop through all layers in the AnimatorController
+        foreach (AnimatorControllerLayer layer in animatorController.layers)
+        {
+            // Loop through all states in the layer
+            foreach (ChildAnimatorState state in layer.stateMachine.states)
+            {
+                // Check if the state's motion is an AnimationClip and matches the name
+                if (state.state.motion is AnimationClip clip && clip.name == clipName)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+   public static bool ContainsEmptyAnimationClip(Animator animator)
+    {
+        AnimatorController animatorController = animator.runtimeAnimatorController as AnimatorController;
+        // Loop through all layers in the AnimatorController
+        foreach (AnimatorControllerLayer layer in animatorController.layers)
+        {
+            // Loop through all states in the layer
+            foreach (ChildAnimatorState state in layer.stateMachine.states)
+            {
+                // Check if the state's motion is an AnimationClip and matches the name
+                if (state.state.name == PTK_RaceRestart_AnimationSync.strEmptyAnimationClipName)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void OnRaceRestart()
     {
         if (animatorTarget != null)
         {
+            animatorTarget.speed = 1.0f;
             animatorTarget.StopPlayback();
             animatorTarget.Rebind();
             //animatorTarget.Update(0f);
@@ -175,10 +226,16 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
 
             if (animatorTarget != null)
             {
+                // to avoid playing other animation
+                animatorTarget.Play(animatorTarget.GetLayerName(0) + "." + strEmptyAnimationClipName);
+                animatorTarget.StopPlayback();
+
+                bool bEnabledBeforeSample = animatorTarget.enabled;
+                animatorTarget.enabled = false;
+
                 animationClip.SampleAnimation(animatorTarget.gameObject, eResetMode == EMode.E2_ONLY_RESET_USING_LAST_FRAME ? 1.0f : 0.0f);
 
-                // to avoid playing other animation
-                animatorTarget.Play(animatorTarget.GetLayerName(0) + "." + emptyAnimatorClip.name);
+                animatorTarget.enabled = bEnabledBeforeSample;
 
             }
         }
@@ -191,7 +248,11 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
         }
     }
 
-
+    [EasyButtons.Button]
+    public void SampleAnim()
+    {
+        animationClip.SampleAnimation(animatorTarget.gameObject, eResetMode == EMode.E2_ONLY_RESET_USING_LAST_FRAME ? 1.0f : 0.0f);
+    }
     private void OnRaceTimerStart()
     {
         if (eResetMode != EMode.E0_RESET_AND_AUTO_PLAY)
@@ -208,9 +269,19 @@ public class PTK_RaceRestart_AnimationSync : MonoBehaviour
 
         if (animatorTarget != null)
         {
-            if (animationClip != null)
+            string strAnimToPlay = "";
+            if (bPlayBlendTree == true)
             {
-                string strLayerNameWithAnim = animatorTarget.GetLayerName(0) + "." + animationClip.name;
+                strAnimToPlay = strBlendTreeName;
+            }
+            else if (animationClip != null)
+            {
+                strAnimToPlay = animationClip.name;
+            }
+
+            if (strAnimToPlay != "")
+            {
+                string strLayerNameWithAnim = animatorTarget.GetLayerName(0) + "." + strAnimToPlay;
                 animatorTarget.Play(strLayerNameWithAnim);
             }
 

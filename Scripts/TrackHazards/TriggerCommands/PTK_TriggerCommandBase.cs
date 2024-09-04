@@ -12,9 +12,10 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
         E01_ENABLE_DISABLE_GAME_OBJECT,
         E02_COMMANDS_EXECUTOR_MANUAL_RESET,
         E03_ENABLE_DISABLE_COMMANDS_EXECUTOR,
-        E04_ANIMATION_CLIP_PLAY_PAUSE_STOP,
+        E04_ANIMATION_CLIP_PLAY_PAUSE,
         E05_PLAYER_LOGIC_EFFECTS,
         E06_CUSTOM_COMMANDS,
+        E07_ANIMATOR_COMMANDS,
 
         __COUNT
     }
@@ -24,6 +25,7 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
     public abstract void Awake();
     public abstract void Start();
     public abstract void OnDestroy();
+   // public abstract void Update(); // we will use it only in commands that need it
 
     protected abstract void RaceResetted_RevertToDefault();
     protected abstract void OnRaceTimerJustStarted_SyncAndRunAnimsImpl();

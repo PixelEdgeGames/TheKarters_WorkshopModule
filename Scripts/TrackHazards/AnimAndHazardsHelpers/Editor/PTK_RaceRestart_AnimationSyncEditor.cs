@@ -60,6 +60,18 @@ public class PTK_RaceRestart_AnimationSyncEditor : Editor
             GUILayout.Space(10);
             // Display option to use Animator triggers
             EditorGUILayout.LabelField("Optional", EditorStyles.boldLabel);
+            script.bPlayBlendTree = EditorGUILayout.Toggle("Use Blend Treee", script.bPlayBlendTree);
+            if(script.bPlayBlendTree == true)
+            {
+                GUI.backgroundColor = Color.yellow*2;
+                EditorGUILayout.LabelField("Race Rastart Tip: Please set default values used by Blend Tree in animator",GUI.skin.box);
+                GUI.backgroundColor = Color.white;
+                script.strBlendTreeName = EditorGUILayout.TextField("BlendTree Name", script.strBlendTreeName);
+            }
+
+            if(script.bPlayBlendTree == true)
+                GUILayout.Space(5);
+
             script.bUseAnimatorTriggers = EditorGUILayout.Toggle("Use Animator Triggers", script.bUseAnimatorTriggers);
             if (script.bUseAnimatorTriggers)
             {

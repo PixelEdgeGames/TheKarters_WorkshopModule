@@ -8,14 +8,12 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
 {
     protected override ETriggerCommandType GetCommandType()
     {
-        return ETriggerCommandType.E04_ANIMATION_CLIP_PLAY_PAUSE_STOP;
+        return ETriggerCommandType.E04_ANIMATION_CLIP_PLAY_PAUSE;
     }
     [System.Serializable]
     public class CAnimation
     {
-        [Header("Target - Select and Assign One")]
         public Animator animatorTypeObject;
-        public Animation animationTypeObject;
 
         public EActionType eActionType;
         public AnimationClip clipToPlay;
@@ -25,10 +23,8 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
         public enum EActionType
         {
             E_PLAY,
-            E_PLAY_REVERSED,
             E_PAUSE,
-            E_UNPAUSE,
-            E_STOP
+            E_UNPAUSE
         }
     }
 
@@ -74,11 +70,6 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
         {
             if (objAnimLogic == null )
                 continue;
-
-            if(objAnimLogic.animationTypeObject != null)
-            {
-                ProcessAnimationTypeObject(objAnimLogic);
-            }
 
             if (objAnimLogic.animatorTypeObject != null)
             {
@@ -135,16 +126,6 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
             }
         }
 
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_PLAY_REVERSED)
-        {
-            objAnimLogic.animatorTypeObject.speed = -1.0f;
-
-            if (objAnimLogic.clipToPlay != null)
-            {
-                objAnimLogic.animatorTypeObject.CrossFade(objAnimLogic.animatorTypeObject.GetLayerName(0) + "." + objAnimLogic.clipToPlay.name, objAnimLogic.fTransitionTime_1, 0, 0);
-            }
-        }
-
         if (objAnimLogic.eActionType == CAnimation.EActionType.E_PAUSE)
         {
             fLastSpeedBeforePause = objAnimLogic.animatorTypeObject.speed;
@@ -155,116 +136,14 @@ public class PTK_Command_04_AnimationClip_PlayPauseStop : PTK_TriggerCommandBase
         {
             objAnimLogic.animatorTypeObject.speed = fLastSpeedBeforePause;
         }
-
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_STOP)
-        {
-            objAnimLogic.animatorTypeObject.speed = 0.0f;
-        }
     }
 
-    void ProcessAnimationTypeObject(CAnimation objAnimLogic)
-    {
-        if (objAnimLogic.animationTypeObject == null)
-            return;
-
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_PLAY)
-        {
-            objAnimLogic.clipToPlay.legacy = true;
-
-            if (objAnimLogic.animationTypeObject.GetClip(objAnimLogic.clipToPlay.name) == null)
-                objAnimLogic.animationTypeObject.AddClip(objAnimLogic.clipToPlay, objAnimLogic.clipToPlay.name);
-
-            if (objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].normalizedTime == 1)
-                objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].normalizedTime = 0.0f;
-
-            objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].speed = 1.0f;
-
-            if (objAnimLogic.animationTypeObject.isPlaying == false)
-            {
-                if (objAnimLogic.animationTypeObject.clip == null)
-                    objAnimLogic.animationTypeObject.clip = objAnimLogic.clipToPlay;
-
-                objAnimLogic.animationTypeObject.Play();
-            }
-
-            objAnimLogic.animationTypeObject.CrossFade(objAnimLogic.clipToPlay.name, objAnimLogic.fTransitionTime_1);
-        }
-
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_PLAY_REVERSED)
-        {
-            objAnimLogic.clipToPlay.legacy = true;
-
-            if (objAnimLogic.animationTypeObject.GetClip(objAnimLogic.clipToPlay.name) == null)
-                objAnimLogic.animationTypeObject.AddClip(objAnimLogic.clipToPlay, objAnimLogic.clipToPlay.name);
-
-            if (objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].normalizedTime == 0)
-                objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].normalizedTime = 1.0f;
-
-            objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].speed = -1.0f;
-
-
-            if (objAnimLogic.animationTypeObject.isPlaying == false)
-            {
-                if (objAnimLogic.animationTypeObject.clip == null)
-                    objAnimLogic.animationTypeObject.clip = objAnimLogic.clipToPlay;
-
-                objAnimLogic.animationTypeObject.Play();
-            }
-
-            objAnimLogic.animationTypeObject.CrossFade(objAnimLogic.clipToPlay.name, objAnimLogic.fTransitionTime_1);
-        }
-
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_PAUSE)
-        {
-            foreach (AnimationState animClipInList in objAnimLogic.animationTypeObject)
-            {
-                if (objAnimLogic.animationTypeObject.IsPlaying(animClipInList.name))
-                {
-                    fLastSpeedBeforePause = objAnimLogic.animationTypeObject[animClipInList.name].speed;
-                    objAnimLogic.animationTypeObject[animClipInList.name].speed = 0.0f;
-                    Debug.LogError("Playing clip name: " + animClipInList.name);
-                    break;
-                }
-            }
-        }
-
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_UNPAUSE)
-        {
-            foreach (AnimationState animClipInList in objAnimLogic.animationTypeObject)
-            {
-                if (objAnimLogic.animationTypeObject.IsPlaying(animClipInList.name))
-                {
-                    objAnimLogic.animationTypeObject[animClipInList.name].speed = fLastSpeedBeforePause;
-                    break;
-                }
-            }
-        }
-
-        if (objAnimLogic.eActionType == CAnimation.EActionType.E_STOP)
-        {
-            objAnimLogic.animationTypeObject.Stop();
-        }
-    }
-
+    
     float fLastSpeedBeforePause = 1.0f;
 
     protected override void RaceResetted_RevertToDefault()
     {
         fLastSpeedBeforePause = 1.0f;
-
-        foreach (var objAnimLogic in animationObjects)
-        {
-            if (objAnimLogic == null || objAnimLogic.animationTypeObject == null)
-                continue;
-
-            objAnimLogic.clipToPlay.legacy = true;
-
-            var clipInside = objAnimLogic.animationTypeObject.GetClip(objAnimLogic.clipToPlay.name);
-            if (clipInside == null)
-                objAnimLogic.animationTypeObject.AddClip(objAnimLogic.clipToPlay, objAnimLogic.clipToPlay.name);
-
-            objAnimLogic.animationTypeObject[objAnimLogic.clipToPlay.name].speed = 1.0f;
-        }
     }
 
 
