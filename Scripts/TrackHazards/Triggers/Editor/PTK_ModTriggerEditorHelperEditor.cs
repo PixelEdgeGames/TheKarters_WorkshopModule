@@ -154,7 +154,7 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
 
         GUILayout.Space(20);
         EditorGUILayout.Space(); 
-        EditorGUILayout.LabelField("Command Behaviours", centeredStyle, GUILayout.ExpandWidth(true));
+        EditorGUILayout.LabelField("Settings", centeredStyle, GUILayout.ExpandWidth(true));
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         if(helper.triggerArrayCommandsExecutorParent != null)
@@ -187,6 +187,10 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             EditorUtility.SetDirty(helper.triggerArrayCommandsExecutorParent);
         }
 
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Command Behaviours", centeredStyle, GUILayout.ExpandWidth(true));
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        EditorGUILayout.Space();
 
         if (helper.triggerArrayCommandsExecutorParent != null)
         {
@@ -200,14 +204,18 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
                     for (int i = 0; i < commandBehavioursToRun.Length; i++)
                     {
                         bFoundAnyCommand = true;
-                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.BeginHorizontal(GUI.skin.box);
+
+                        GUIStyle boldStyle = new GUIStyle(EditorStyles.boldLabel);
 
                         if (commandBehavioursToRun[i].strBehaviourInfo != "")
-                            GUILayout.Label(commandBehavioursToRun[i].strBehaviourInfo + " Behaviour");
+                            GUILayout.Label("Command Behaviour " + (i + 1).ToString() + " " + commandBehavioursToRun[i].strBehaviourInfo,boldStyle);
                         else
-                            GUILayout.Label("Command Behaviour " + (i + 1));
+                            GUILayout.Label("Command Behaviour "+ (i + 1).ToString(), boldStyle);
 
-                        commandBehavioursToRun[i].fExecuteDelay = EditorGUILayout.FloatField(commandBehavioursToRun[i].fExecuteDelay);
+
+
+                    //    commandBehavioursToRun[i].fExecuteDelay = EditorGUILayout.FloatField(commandBehavioursToRun[i].fExecuteDelay);
 
                         GUI.backgroundColor = Color.yellow;
                         if (GUILayout.Button("Edit"))

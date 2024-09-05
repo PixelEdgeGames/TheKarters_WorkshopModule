@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +16,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             E1_BOUNCE,
             E2_KILL_PLAYER,
             E3_DAMAGE_PLAYER,
-
+            E4_MOVE_PLAYER_FROM_TO,
 
             MORE_COMING_SOON = 9999
         }
@@ -123,6 +122,31 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     }
 
     [System.Serializable]
+    public class CPlayerEffect_E4_MovePlayerFromTo : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+        public enum EMoveType
+        {
+            E_FAST_MOVE_FROM_TO,
+            E_TELEPORT_FROM_TO,
+            E_PARACHUTE
+        }
+
+        [Header("Targets - From, To")]
+        public Transform toPointQuad;
+        [Header("Bezier")]
+        public PTK_BezierSpline bezierSpline;
+        public float fMoveWithVelocity = 80.0f;
+        public EMoveType eMoveType = EMoveType.E_FAST_MOVE_FROM_TO;
+
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E4_MOVE_PLAYER_FROM_TO; // change me to correct one!
+        }
+    }
+
+
+    [System.Serializable]
     public class CPlayerEffect_MoreComingSoon : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
         public bool bAreYouThatExcited = false;
@@ -139,11 +163,13 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E2_Kill KillPlayer = new CPlayerEffect_E2_Kill(); // !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E3_Damage DamagePlayer = new CPlayerEffect_E3_Damage(); // !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E4_MovePlayerFromTo movePlayerFromTo = new CPlayerEffect_E4_MovePlayerFromTo();// !! add item to list inside AddAllEffectsToList !!
     void AddAllEffectsToList()
     {
         playerEffects.Add(BounceEffect);
         playerEffects.Add(KillPlayer);
         playerEffects.Add(DamagePlayer);
+        playerEffects.Add(movePlayerFromTo);
         playerEffects.Add(MoreComingSoon);
     }
 
