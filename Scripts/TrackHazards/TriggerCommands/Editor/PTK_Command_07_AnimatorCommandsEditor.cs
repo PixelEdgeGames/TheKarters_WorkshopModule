@@ -17,8 +17,18 @@ public class PTK_Command_07_AnimatorCommandsEditor : Editor
         serializedObject.Update();
 
         GUILayout.Space(10);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Execute Delay");
+        serializedObject.FindProperty("fExecuteDelay").floatValue = EditorGUILayout.FloatField(serializedObject.FindProperty("fExecuteDelay").floatValue,GUILayout.Width(50));
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+
         GUI.backgroundColor = Color.green;
         EditorGUILayout.LabelField("Animator Commands", EditorStyles.boldLabel);
+
+
 
         // Button to add a new animator
         if (GUILayout.Button("Add New Animator"))

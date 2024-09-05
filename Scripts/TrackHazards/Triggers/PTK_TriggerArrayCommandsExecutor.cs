@@ -175,7 +175,11 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
             bReceivedSignalsFromAllTriggers &= recivedTriggerEventsPreview[i].bSignalReceived;
             bReceivedSignalFromAtLeasOne |= recivedTriggerEventsPreview[i].bSignalReceived;
 
-            triggersWithReceivedSignals.Add(recivedTriggerEventsPreview[i]);
+            // only if we received signal so we have data - we can have E0_WHEN_RECIVED_EVENT_FROM_ANY_TRIGGER and this will have null data if there are for example 2 triggers but only one received data
+            if (recivedTriggerEventsPreview[i].bSignalReceived == true)
+            {
+                triggersWithReceivedSignals.Add(recivedTriggerEventsPreview[i]);
+            }
         }
 
         bool bCanSendCommand = false;

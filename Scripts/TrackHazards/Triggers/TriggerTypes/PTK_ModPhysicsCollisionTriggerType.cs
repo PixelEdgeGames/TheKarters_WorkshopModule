@@ -85,9 +85,13 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
 
         this.tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
 
+        var childObjects = this.GetComponentsInChildren<Collider>();
+
+        for(int i=0;i< childObjects.Length;i++)
+            childObjects[i].tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
 
 
-      
+
     }
 
 

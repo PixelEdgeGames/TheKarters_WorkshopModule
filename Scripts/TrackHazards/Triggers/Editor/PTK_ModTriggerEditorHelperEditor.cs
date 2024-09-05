@@ -32,6 +32,7 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
         {
             helper.PlayerOrBulletPhysicsCollisionBox,
             helper.PlayerOrBulletPhysicsCollisionSphere,
+            helper.PlayerOrBulletPhysicsCollisionMultiple,
             helper.PlayerEventTriggerBox,
             helper.PlayerEventTriggerSphere,
             helper.GameEventTrigger,
@@ -40,6 +41,7 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
         var triggersCategory = new List<string>
         {
             "Player or Bullet Collision",
+            "",
             "",
             "Player Events",
             "",
@@ -141,6 +143,13 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             GUI.backgroundColor = Color.white;
 
             EditorGUILayout.EndHorizontal();
+            if (iIndex == 3)
+            {
+                GUIStyle rightAlignedLabel = new GUIStyle(GUI.skin.label);
+                rightAlignedLabel.alignment = TextAnchor.MiddleRight;
+                rightAlignedLabel.fontStyle = FontStyle.Italic;
+                GUILayout.Label("(ColliderGroup - Colliders must be created inside)", rightAlignedLabel);
+            }
         }
 
         GUILayout.Space(20);
@@ -197,6 +206,8 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
                             GUILayout.Label(commandBehavioursToRun[i].strBehaviourInfo + " Behaviour");
                         else
                             GUILayout.Label("Command Behaviour " + (i + 1));
+
+                        commandBehavioursToRun[i].fExecuteDelay = EditorGUILayout.FloatField(commandBehavioursToRun[i].fExecuteDelay);
 
                         GUI.backgroundColor = Color.yellow;
                         if (GUILayout.Button("Edit"))

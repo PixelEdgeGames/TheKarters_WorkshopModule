@@ -47,13 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bModTriggerCommandExecutorEnabled: 1
-  objectsWithTriggersToReceiveDataOnTriggerEvent:
-  - {fileID: 4560034501295548083}
-  triggersToReceiveDataOnTriggerEvent: []
+  receiveEventsFromAllTriggerInGameObjects: []
+  receiveEventsFromTriggers: []
   eRunCommandCondition: 0
   eRunCommandsMode: 0
   eCommandBehavioursExecutionMode: 0
-  commandBehavioursToRun: []
+  commandBehavioursParentsToRun: []
 --- !u!114 &4206002407235417969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,6 +73,8 @@ MonoBehaviour:
   PlayerOrBulletPhysicsCollisionBox: {fileID: 7956203414574651193, guid: 579f6be9dd36d0745927a433035c09c6,
     type: 3}
   PlayerOrBulletPhysicsCollisionSphere: {fileID: 1874614294854238211, guid: 974834ea0a7578344ac72e3d45469466,
+    type: 3}
+  PlayerOrBulletPhysicsCollisionMultiple: {fileID: 1451399654252784370, guid: 908e3f4d48c1ed449beeec7e9a954d45,
     type: 3}
   GameEventTrigger: {fileID: 6890199144606083135, guid: 3d2aed034ab6192428437ebbdb85e5b7,
     type: 3}

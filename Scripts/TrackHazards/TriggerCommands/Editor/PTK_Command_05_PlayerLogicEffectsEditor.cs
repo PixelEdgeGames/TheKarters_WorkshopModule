@@ -17,6 +17,13 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
         // Start scroll view
         EditorGUILayout.BeginScrollView(Vector2.zero);
 
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Execute Delay");
+        script.fExecuteDelay =  EditorGUILayout.FloatField(script.fExecuteDelay, GUILayout.Width(50));
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.Space(10);
+
         // Get all fields of the target object
         FieldInfo[] fields = script.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 

@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(PTK_TriggerCommandsBehaviour))]
 public abstract class PTK_TriggerCommandBase : MonoBehaviour
 {
+    public float fExecuteDelay = 0.0f;
+
     public enum ETriggerCommandType
     {
         E00_ENABLE_DISABLE_TRIGGER,
@@ -15,6 +17,7 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
         E05_PLAYER_LOGIC_EFFECTS,
         E06_CUSTOM_COMMANDS,
         E07_ANIMATOR_COMMANDS,
+        
 
         __COUNT
     }
@@ -33,11 +36,37 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
 
     public void Execute(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
     {
-        ExecuteImpl(recivedTriggerSignals);
+        if(fExecuteDelay > 0)
+        {
+            StartCoroutine(ExecuteDelayed(recivedTriggerSignals));
+        }else
+        {
+            ExecuteImpl(recivedTriggerSignals);
+        }
     }
 
     public void Execute(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
     {
+        if (fExecuteDelay > 0)
+        {
+            StartCoroutine(ExecuteDelayed(recivedTriggerSignal));
+        }
+        else
+        {
+            ExecuteImpl(recivedTriggerSignal);
+        }
+    }
+
+    IEnumerator ExecuteDelayed(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
+    {
+        yield return new WaitForSeconds(fExecuteDelay);
+
+        ExecuteImpl(recivedTriggerSignals);
+    }
+    IEnumerator ExecuteDelayed(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
+    {
+        yield return new WaitForSeconds(fExecuteDelay);
+
         ExecuteImpl(recivedTriggerSignal);
     }
 
@@ -49,6 +78,7 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
     {
         if(bAlreadyResetted == false)
         {
+            StopAllCoroutines();
             RaceResetted_RevertToDefault();
             bAlreadyResetted = true;
             bAlreadyTimerStartEventLaunched = false;

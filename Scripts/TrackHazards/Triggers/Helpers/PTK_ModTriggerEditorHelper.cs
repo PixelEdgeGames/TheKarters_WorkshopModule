@@ -12,6 +12,7 @@ public class PTK_ModTriggerEditorHelper : MonoBehaviour
 
     public GameObject PlayerOrBulletPhysicsCollisionBox;
     public GameObject PlayerOrBulletPhysicsCollisionSphere;
+    public GameObject PlayerOrBulletPhysicsCollisionMultiple;
     public GameObject GameEventTrigger;
     public GameObject PlayerEventTriggerBox;
     public GameObject PlayerEventTriggerSphere;
