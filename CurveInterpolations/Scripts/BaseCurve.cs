@@ -138,8 +138,17 @@ public abstract class BaseCurve
         int low = 0, high = il - 1;
         float comparison;
 
+
+        int iTryCount = 0;
         while (low <= high)
         {
+            iTryCount++;
+
+            if(iTryCount > 1000)
+            {
+                Debug.LogError("Infinite loop!");
+                break;
+            }
 
             i = Mathf.FloorToInt((float)(low + (high - low)) / 2f);
 

@@ -127,14 +127,15 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         public enum EMoveType
         {
             E_FAST_MOVE_FROM_TO,
-            E_TELEPORT_FROM_TO,
-            E_PARACHUTE
+            E_TELEPORT_FROM_TO
         }
 
         [Header("Targets - From, To")]
-        public Transform toPointQuad;
+        public Transform toPointsParent;
         [Header("Bezier")]
         public PTK_BezierSpline bezierSpline;
+        public bool bMoveReverse = false;
+
         public float fMoveWithVelocity = 80.0f;
         public EMoveType eMoveType = EMoveType.E_FAST_MOVE_FROM_TO;
 

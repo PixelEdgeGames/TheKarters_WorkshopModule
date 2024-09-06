@@ -990,12 +990,15 @@ public class CPC_BezierPath : MonoBehaviour
         if (sampleCount < 3)
             sampleCount = 3;
 
-        int iSampleCountBezierLineRenderer = sampleCount * 10;
+        int iSampleCountBezierLineRenderer = 500;
         // lineRenderer.positionCount = iSampleCountBezierLineRenderer;
 
        
         if (fLastLength != fBezierChangedVal)
         {
+            if (iSampleCountBezierLineRenderer != lineRenderer.positionCount)
+                lineRenderer.positionCount = iSampleCountBezierLineRenderer;
+
             List<Vector3> positions = new List<Vector3>();
             for (int i = 0; i < iSampleCountBezierLineRenderer; i++)
             {
@@ -1006,9 +1009,10 @@ public class CPC_BezierPath : MonoBehaviour
                 positions.Add(point);
 
             }
-
-            lineRenderer.positionCount = positions.Count;
             lineRenderer.SetPositions(positions.ToArray());
+
+
+            //lineRenderer.SetPositions(positions.ToArray());
             lineRenderer.transform.localPosition = Vector3.zero;
             lineRenderer.transform.localRotation = Quaternion.Euler(90.0F, 0.0F, 0.0F); // MAKE IT FLAT
             fLastLength = fBezierChangedVal;
@@ -1028,7 +1032,6 @@ public class CPC_BezierPath : MonoBehaviour
 
 
         RefreshLineRenderer();
-
         fLastGizmosDrawTime = Time.time;
         if (UnityEditor.Selection.activeGameObject == gameObject) //// || alwaysShow)
         {
@@ -1074,6 +1077,8 @@ public class CPC_BezierPath : MonoBehaviour
                     sampleCount = 3;
 
 
+                sampleCount = Mathf.Min(sampleCount, 100);
+
                    float arrowShaftLength = 0.5f * (fSplineWidth / 0.3f) * 1.0f; // Length of the arrow shaft
                  float arrowHeadLength = 0.2f * (fSplineWidth / 0.3f) * 1.0f; // Length of the arrowhead
                  float arrowHeadAngle = 20f; // Angle of the arrowhead
@@ -1105,6 +1110,7 @@ public class CPC_BezierPath : MonoBehaviour
             for (int i = 0; i < points.Count; i++)
             {
                 var index = points[i];
+                index.rotation.Normalize();
                 Gizmos.matrix = Matrix4x4.TRS(index.positionWorld, index.rotation, Vector3.one*3.0f);
                 Gizmos.color = visual.frustrumColor;
                 Gizmos.DrawFrustum(Vector3.zero, 90f, 0.25f, 0.01f, 1.78f);

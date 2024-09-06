@@ -671,6 +671,7 @@ public class CPC_CameraPathInspector : Editor
             }
 
             t.GenerateVertexPath(); // so we can get next point on curve if not looped
+            EditorUtility.SetDirty(t);
             SceneView.RepaintAll();
         }
         GUI.backgroundColor = Color.white;
@@ -687,6 +688,21 @@ public class CPC_CameraPathInspector : Editor
         if (EditorGUI.EndChangeCheck())
         {
             PlayerPrefs.SetInt("CPC_waypointMode", (int)waypointMode);
+        }
+
+        if(GUILayout.Button("Reverse Bezier Dir"))
+        {
+            t.points.Reverse();
+            for(int i=0;i< t.points.Count;i++)
+            {
+                var temp = t.points[i].handlePrevWorld;
+                t.points[i].handlePrevWorld = t.points[i].handleNextWorld;
+                t.points[i].handleNextWorld = temp;
+            }
+            
+            t.GenerateVertexPath(); // so we can get next point on curve if not looped
+            EditorUtility.SetDirty(t);
+            SceneView.RepaintAll();
         }
         GUILayout.EndHorizontal();
     }
