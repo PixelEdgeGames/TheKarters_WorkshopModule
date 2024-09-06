@@ -16,13 +16,16 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             E1_BOUNCE,
             E2_KILL_PLAYER,
             E3_DAMAGE_PLAYER,
-            E4_MOVE_PLAYER_FROM_TO,
+            E4_QUICK_DASH_MOVEMENT_WAYPOINTS,
+            E4_QUICK_DASH_MOVEMENT_BEZIER,
+            E4_QUICK_DASH_MOVEMENT_TELEPORT,
 
             MORE_COMING_SOON = 9999
         }
 
         public bool bExecute = false;
         public abstract EEffectType GetEffectType();
+        public abstract void AwakeInit();
     }
 
 
@@ -30,6 +33,10 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public class CPlayerEffect_E1_Bounce : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
         public float fBounceStrength = 50.0f;
+
+        public override void AwakeInit()
+        {
+        }
 
         public override EEffectType GetEffectType()
         {
@@ -57,6 +64,9 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         public bool bSquishPlayer = false;
         public float fSquishDuration = 5.0f;
 
+        public override void AwakeInit()
+        {
+        }
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
@@ -112,6 +122,9 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         
         */
 
+        public override void AwakeInit()
+        {
+        }
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
@@ -122,36 +135,102 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     }
 
     [System.Serializable]
-    public class CPlayerEffect_E4_MovePlayerFromTo : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    public abstract class CPlayerEffect_E4_QuickDashMovementBase : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
-        public enum EMoveType
-        {
-            E_FAST_MOVE_FROM_TO,
-            E_TELEPORT_FROM_TO
-        }
+        public float fMoveWithVelocity = 80.0f;
+        public float fSideDistance = 0.0f;
+    }
 
-        [Header("Targets - From, To")]
-        public Transform toPointsParent;
+    [System.Serializable]
+    public class CPlayerEffect_E4_QuickDashMovement_Waypoints : CPlayerEffect_E4_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
+    {
+        [Header("Waypoints Parent")]
+        public Transform waypointsParent;
+        public bool bMoveReverse = false;
+
+        public override void AwakeInit()
+        {
+            if(waypointsParent != null)
+            {
+                for(int i=0;i< waypointsParent.childCount;i++)
+                {
+                    var meshRenderer = waypointsParent.GetChild(i).GetComponent<MeshRenderer>();
+                    if (meshRenderer != null) meshRenderer.enabled = false;
+
+                    var collider = waypointsParent.GetChild(i).GetComponent<Collider>();
+                    if (collider != null) collider.enabled = false;
+                }
+            }
+           
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E4_QUICK_DASH_MOVEMENT_WAYPOINTS; // change me to correct one!
+        }
+    }
+
+    [System.Serializable]
+    public class CPlayerEffect_E4_QuickDashMovement_BezierSpline : CPlayerEffect_E4_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
+    {
         [Header("Bezier")]
         public PTK_BezierSpline bezierSpline;
         public bool bMoveReverse = false;
 
-        public float fMoveWithVelocity = 80.0f;
-        public float fSideDistance = 0.0f;
-        public EMoveType eMoveType = EMoveType.E_FAST_MOVE_FROM_TO;
 
+        public override void AwakeInit()
+        {
+        }
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E4_MOVE_PLAYER_FROM_TO; // change me to correct one!
+            return EEffectType.E4_QUICK_DASH_MOVEMENT_BEZIER; // change me to correct one!
+        }
+
+        [EasyButtons.Button]
+        public void CreateBezier()
+        {
+
         }
     }
 
 
     [System.Serializable]
+    public class CPlayerEffect_E4_QuickDashMovement_InstantTeleport : CPlayerEffect_E4_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
+    {
+        [Header("Target Pos & Dir")]
+        public Transform targetTransform;
+
+        public override void AwakeInit()
+        {
+            var meshRenderers = targetTransform.GetComponentsInChildren<MeshRenderer>();
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                meshRenderers[i].enabled = false;
+            }
+
+            var colliders = targetTransform.GetComponentsInChildren<Collider>();
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                colliders[i].enabled = false;
+            }
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E4_QUICK_DASH_MOVEMENT_TELEPORT; // change me to correct one!
+        }
+    }
+
+    [System.Serializable]
     public class CPlayerEffect_MoreComingSoon : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
         public bool bAreYouThatExcited = false;
+
+        public override void AwakeInit()
+        {
+        }
+
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
@@ -164,15 +243,24 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E1_Bounce BounceEffect = new CPlayerEffect_E1_Bounce(); // !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E2_Kill KillPlayer = new CPlayerEffect_E2_Kill(); // !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E3_Damage DamagePlayer = new CPlayerEffect_E3_Damage(); // !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E4_QuickDashMovement_Waypoints QuickDashMovement_Waypoints = new CPlayerEffect_E4_QuickDashMovement_Waypoints();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E4_QuickDashMovement_BezierSpline QuickDashMovement_Spline = new CPlayerEffect_E4_QuickDashMovement_BezierSpline();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E4_QuickDashMovement_InstantTeleport QuickDashMovement_InstantTeleport = new CPlayerEffect_E4_QuickDashMovement_InstantTeleport();// !! add item to list inside AddAllEffectsToList !!
+
+
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E4_MovePlayerFromTo movePlayerFromTo = new CPlayerEffect_E4_MovePlayerFromTo();// !! add item to list inside AddAllEffectsToList !!
     void AddAllEffectsToList()
     {
         playerEffects.Add(BounceEffect);
         playerEffects.Add(KillPlayer);
         playerEffects.Add(DamagePlayer);
-        playerEffects.Add(movePlayerFromTo);
+        playerEffects.Add(QuickDashMovement_Waypoints);
+        playerEffects.Add(QuickDashMovement_Spline);
+        playerEffects.Add(QuickDashMovement_InstantTeleport);
         playerEffects.Add(MoreComingSoon);
+
+        for (int i = 0; i < playerEffects.Count; i++)
+            playerEffects[i].AwakeInit();
     }
 
     protected override ETriggerCommandType GetCommandType()
