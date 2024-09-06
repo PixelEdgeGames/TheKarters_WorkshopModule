@@ -137,6 +137,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         public bool bMoveReverse = false;
 
         public float fMoveWithVelocity = 80.0f;
+        public float fSideDistance = 0.0f;
         public EMoveType eMoveType = EMoveType.E_FAST_MOVE_FROM_TO;
 
         // !!! CHANGE ME TO CORRECT ONE
