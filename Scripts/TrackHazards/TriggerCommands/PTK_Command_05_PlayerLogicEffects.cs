@@ -134,11 +134,15 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         //!! \/ create instance below and add to AddAllEffectsToList
     }
 
+
     [System.Serializable]
     public abstract class CPlayerEffect_E4_QuickDashMovementBase : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
-        public float fMoveWithVelocity = 80.0f;
-        public float fSideDistance = 0.0f;
+        public enum EMoveSpeed
+        {
+            E_FAST_120,
+            E_SUPER_FAST_180
+        }
     }
 
     [System.Serializable]
@@ -146,6 +150,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     {
         [Header("Waypoints Parent")]
         public Transform waypointsParent;
+        public EMoveSpeed eMoveSpeed = EMoveSpeed.E_FAST_120;
         public bool bMoveReverse = false;
 
         public override void AwakeInit()
@@ -175,6 +180,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     {
         [Header("Bezier")]
         public PTK_BezierSpline bezierSpline;
+        public EMoveSpeed eMoveSpeed = EMoveSpeed.E_FAST_120;
         public bool bMoveReverse = false;
 
 
