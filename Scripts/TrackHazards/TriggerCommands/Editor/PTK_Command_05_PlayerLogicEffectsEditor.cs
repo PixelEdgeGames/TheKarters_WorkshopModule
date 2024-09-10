@@ -400,7 +400,7 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
             Color original = GUI.backgroundColor;
             GUI.backgroundColor = Color.yellow*1.5f;
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Total Damage: " + (effectType.fDamagePerTick * (effectType.fContinuousDamageDuration / effectType.fDamageTickEverySec)),GUI.skin.box);
+            GUILayout.Label("Total Damage: " + (effectType.iDamagePerTick * (effectType.fContinuousDamageDuration / effectType.fDamageTickEverySec)),GUI.skin.box,GUILayout.Width(300));
             GUILayout.EndHorizontal();
             GUI.backgroundColor = original;
 

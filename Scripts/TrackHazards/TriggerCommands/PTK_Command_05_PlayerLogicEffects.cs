@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
 {
-    public enum EDamageEffectType
+    public enum EPlayerDamageVFXType
     {
         E0_NONE,
         E_POISON,
         E_ELECTRICITY,
         E_FIRE,
-        E_SMOKE,
-        E_FROZEN,
-        E_SQUISH_WAVE
+        E_SMOKE
     }
 
     public static Action<CPlayerEffectBase, int, PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> OnPlayerLogicEffectExecute;
@@ -35,6 +33,8 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             E6_QUICK_DASH_MOVEMENT_WAYPOINTS,
             E6_QUICK_DASH_MOVEMENT_BEZIER,
             E6_QUICK_DASH_MOVEMENT_TELEPORT,
+
+            E7_FROZEN_WHEELS,
 
             MORE_COMING_SOON = 9999
         }
@@ -63,7 +63,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     [System.Serializable]
     public class CPlayerEffect_E2_Kill : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
-        public EDamageEffectType eDeadParticleEffect = EDamageEffectType.E0_NONE;
+        public EPlayerDamageVFXType eDeadParticleEffect = EPlayerDamageVFXType.E0_NONE;
 
         [Header("Squish")]
         public bool bSquishPlayer = false;
@@ -84,7 +84,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     {
         [Header("Damage")]
         public int iDamage = 80;
-        public EDamageEffectType eDamageParticleEffect = EDamageEffectType.E0_NONE;
+        public EPlayerDamageVFXType eDamageVFX = EPlayerDamageVFXType.E0_NONE;
         [Header("Squish")]
         public bool bSquishPlayer = false;
         public float fSquishDuration = 5.0f;
@@ -121,18 +121,18 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         [Header("Custom - Select Custom Preset to edit")]
         public float fContinuousDamageDuration = 5.0f;
         public float fDamageTickEverySec = 1.0f;
-        public float fDamagePerTick = 20.0f;
+        public int iDamagePerTick = 20;
 
 
         [Header("Continuous VFX")]
-        public EDamageEffectType eContinousDamageEffectTick = EDamageEffectType.E0_NONE;
+        public EPlayerDamageVFXType eDamageVFX = EPlayerDamageVFXType.E0_NONE;
 
         EContinousDamageType eContinousPresetLast = EContinousDamageType.E_CUSTOM;
 
         public void EditorUpdate_UseValuesFromPreset()
         {
             if (eContinousPreset == EContinousDamageType.E_CUSTOM && eContinousPresetLast != EContinousDamageType.E_CUSTOM)
-                eContinousDamageEffectTick = EDamageEffectType.E0_NONE;
+                eDamageVFX = EPlayerDamageVFXType.E0_NONE;
 
             eContinousPresetLast = eContinousPreset;
 
@@ -143,16 +143,16 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             switch (eContinousPreset)
             {
                 case PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage.EContinousDamageType.E_POISON_DAMAGE:
-                    fContinuousDamageDuration = 5.0f;
+                    fContinuousDamageDuration = 10.0f;
                     fDamageTickEverySec = 1.0f;
-                    fDamagePerTick = 20.0f;
-                    eContinousDamageEffectTick = EDamageEffectType.E_POISON;
+                    iDamagePerTick = 10;
+                    eDamageVFX = EPlayerDamageVFXType.E_POISON;
                     break;
                 case PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage.EContinousDamageType.E_FIRE_DAMAGE:
                     fContinuousDamageDuration = 3.0f;
                     fDamageTickEverySec = 0.05f;
-                    fDamagePerTick = 2.0f;
-                    eContinousDamageEffectTick = EDamageEffectType.E_FIRE;
+                    iDamagePerTick = 2;
+                    eDamageVFX = EPlayerDamageVFXType.E_FIRE;
                     break;
             }
 
@@ -298,6 +298,22 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     }
 
     [System.Serializable]
+    public class CPlayerEffect_E7_FrozenWheelsEffect : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+        public float fDuration = 5.0f;
+
+        public override void AwakeInit()
+        {
+         
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E7_FROZEN_WHEELS; // change me to correct one!
+        }
+    }
+
+    [System.Serializable]
     public class CPlayerEffect_MoreComingSoon : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
         public bool bAreYouThatExcited = false;
@@ -323,6 +339,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E6_QuickDashMovement_Waypoints QuickDashMovement_Waypoints = new CPlayerEffect_E6_QuickDashMovement_Waypoints();// !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E6_QuickDashMovement_BezierSpline QuickDashMovement_Spline = new CPlayerEffect_E6_QuickDashMovement_BezierSpline();// !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E6_QuickDashMovement_InstantTeleport QuickDashMovement_InstantTeleport = new CPlayerEffect_E6_QuickDashMovement_InstantTeleport();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E7_FrozenWheelsEffect FrozenWheels = new CPlayerEffect_E7_FrozenWheelsEffect();
 
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
     void AddAllEffectsToList()
@@ -338,6 +355,8 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         playerEffects.Add(QuickDashMovement_Waypoints);
         playerEffects.Add(QuickDashMovement_Spline);
         playerEffects.Add(QuickDashMovement_InstantTeleport);
+
+        playerEffects.Add(FrozenWheels);
 
         playerEffects.Add(MoreComingSoon);
 

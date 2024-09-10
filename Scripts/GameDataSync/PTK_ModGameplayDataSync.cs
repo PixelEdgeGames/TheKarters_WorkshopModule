@@ -94,7 +94,10 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         public bool bIsPlayerRespawning = false;
         public bool bIsImmune = false;
         public bool bIsDeathImmune = false;
-        public bool bIsPoisoned = false;
+        public PTK_Command_05_PlayerLogicEffects.EPlayerDamageVFXType eCurrentDamageEffect = PTK_Command_05_PlayerLogicEffects.EPlayerDamageVFXType.E0_NONE;
+        public bool bShowingSquishEffect = false;
+        public bool bShowingHealingEffect = false;
+
 
         public int iCurrentWeaponType;
 
