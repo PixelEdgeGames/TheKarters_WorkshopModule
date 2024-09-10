@@ -114,9 +114,9 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
 
     void DrawPerEffectGUI(PTK_Command_05_PlayerLogicEffects parentScript, PTK_Command_05_PlayerLogicEffects.CPlayerEffectBase effect)
     {
-        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_BezierSpline)
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_BezierSpline)
         {
-            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_BezierSpline effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_BezierSpline;
+            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_BezierSpline effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_BezierSpline;
             if (effectType == null)
                 return;
 
@@ -188,9 +188,9 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
             GUILayout.EndHorizontal();
         }
 
-        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_InstantTeleport)
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_InstantTeleport)
         {
-            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_InstantTeleport effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_InstantTeleport;
+            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_InstantTeleport effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_InstantTeleport;
             if (effectType == null)
                 return;
 
@@ -254,9 +254,9 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
         }
 
 
-        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_Waypoints)
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_Waypoints)
         {
-            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_Waypoints effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_QuickDashMovement_Waypoints;
+            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_Waypoints effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E6_QuickDashMovement_Waypoints;
             if (effectType == null)
                 return;
 
@@ -385,6 +385,31 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
                 GUILayout.EndHorizontal();
             }
         }
+
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage)
+        {
+            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage;
+            if (effectType == null)
+                return;
+
+            EditorGUI.BeginChangeCheck();
+
+            effectType.EditorUpdate_UseValuesFromPreset();
+
+            GUILayout.Space(10);
+            Color original = GUI.backgroundColor;
+            GUI.backgroundColor = Color.yellow*1.5f;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Total Damage: " + (effectType.fDamagePerTick * (effectType.fContinuousDamageDuration / effectType.fDamageTickEverySec)),GUI.skin.box);
+            GUILayout.EndHorizontal();
+            GUI.backgroundColor = original;
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(parentScript);
+            }
+        }
+
     }
 
     private static GameObject CreateTeleportTargetTransformVisuals(PTK_Command_05_PlayerLogicEffects parentScript)
@@ -448,6 +473,12 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
         if (string.IsNullOrEmpty(fieldName))
             return fieldName;
 
-        return string.Concat(fieldName.Select((x, i) => i > 0 && char.IsUpper(x) ? " " + x : x.ToString()));
+        // Insert spaces before uppercase letters
+        string strResult = string.Concat(fieldName.Select((x, i) => i > 0 && char.IsUpper(x) ? " " + x : x.ToString()));
+
+        // Replace underscores with ' - ' (and remove the underscore)
+        strResult = strResult.Replace("_", " -");
+
+        return strResult;
     }
 }

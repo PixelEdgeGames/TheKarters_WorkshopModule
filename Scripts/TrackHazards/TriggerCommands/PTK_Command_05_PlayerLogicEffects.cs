@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
 {
+    public enum EDamageEffectType
+    {
+        E0_NONE,
+        E_POISON,
+        E_ELECTRICITY,
+        E_FIRE,
+        E_SMOKE,
+        E_FROZEN,
+        E_SQUISH_WAVE
+    }
+
     public static Action<CPlayerEffectBase, int, PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> OnPlayerLogicEffectExecute;
 
     [System.Serializable]
@@ -14,11 +25,16 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             E0_NONE,
 
             E1_BOUNCE,
+
             E2_KILL_PLAYER,
             E3_DAMAGE_PLAYER,
-            E4_QUICK_DASH_MOVEMENT_WAYPOINTS,
-            E4_QUICK_DASH_MOVEMENT_BEZIER,
-            E4_QUICK_DASH_MOVEMENT_TELEPORT,
+            E4_CONTINOUS_DAMAGE,
+
+            E5_HEAL_PLAYER,
+
+            E6_QUICK_DASH_MOVEMENT_WAYPOINTS,
+            E6_QUICK_DASH_MOVEMENT_BEZIER,
+            E6_QUICK_DASH_MOVEMENT_TELEPORT,
 
             MORE_COMING_SOON = 9999
         }
@@ -47,19 +63,8 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     [System.Serializable]
     public class CPlayerEffect_E2_Kill : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
-        public enum EParticleEffect
-        {
-            E_NONE,
-            COMING_SOON_PLEASE_UPDATE_LATER
-            /*
-            E_BLACK_SMOKE,
-            E_ELECTRICITY,
-            E_FIRE,
-            E_SQUISH_LIGHT_VFX,
-            E_POISON*/
-        }
+        public EDamageEffectType eDeadParticleEffect = EDamageEffectType.E0_NONE;
 
-        public EParticleEffect eDeadParticleEffect = EParticleEffect.E_NONE;
         [Header("Squish")]
         public bool bSquishPlayer = false;
         public float fSquishDuration = 5.0f;
@@ -77,50 +82,12 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     [System.Serializable]
     public class CPlayerEffect_E3_Damage : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
-        // 1. set GetEffectType enum
-        // 2. add effect to AddAllEffectsToList
-        public enum EParticleEffect
-        {
-            E_NONE,
-            COMING_SOON_PLEASE_UPDATE_LATER
-            /*
-            E_BLACK_SMOKE,
-            E_ELECTRICITY,
-            E_FIRE,
-            E_SQUISH_LIGHT_VFX,
-            E_POISON*/
-        }
-
         [Header("Damage")]
         public int iDamage = 80;
-        public EParticleEffect eDamageParticleEffect = EParticleEffect.E_NONE;
+        public EDamageEffectType eDamageParticleEffect = EDamageEffectType.E0_NONE;
         [Header("Squish")]
         public bool bSquishPlayer = false;
         public float fSquishDuration = 5.0f;
-
-        [Header("Continuous - Coming Soon")]
-        public bool bUseContinuousDamage = false;
-        /*
-        public enum EContinousDamageType
-        {
-            E_POISON_DAMAGE,
-            E_FIRE_DAMAGE,
-            E_CUSTOM
-        }
-
-        [Header("Continuous VFX")]
-        public EParticleEffect eContinousTickFVX = EParticleEffect.E_NONE;
-        public EParticleEffect eContinousConstantVFX = EParticleEffect.E_NONE;
-
-        [Header("Continuous Preset")]
-        public EContinousDamageType eContinousPreset = EContinousDamageType.E_POISON_DAMAGE;
-
-        [Header("Custom Continuous Settings")]
-        public float fContinuousDamageDuration = 5.0f;
-        public float fDamageTickEverySec = 1.0f;
-        public float fDamagePerTick = 20.0f;
-        
-        */
 
         public override void AwakeInit()
         {
@@ -134,9 +101,108 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         //!! \/ create instance below and add to AddAllEffectsToList
     }
 
+    [System.Serializable]
+    public class CPlayerEffect_E4_ContinuousDamage : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+
+        public enum EContinousDamageType
+        {
+            E_POISON_DAMAGE,
+            E_FIRE_DAMAGE,
+            E_CUSTOM
+        }
+
+        [HideInInspector]
+        public bool bSkipFirstDamageTick = false;
+
+        [Header("Preset")]
+        public EContinousDamageType eContinousPreset = EContinousDamageType.E_POISON_DAMAGE;
+
+        [Header("Custom - Select Custom Preset to edit")]
+        public float fContinuousDamageDuration = 5.0f;
+        public float fDamageTickEverySec = 1.0f;
+        public float fDamagePerTick = 20.0f;
+
+
+        [Header("Continuous VFX")]
+        public EDamageEffectType eContinousDamageEffectTick = EDamageEffectType.E0_NONE;
+
+        EContinousDamageType eContinousPresetLast = EContinousDamageType.E_CUSTOM;
+
+        public void EditorUpdate_UseValuesFromPreset()
+        {
+            if (eContinousPreset == EContinousDamageType.E_CUSTOM && eContinousPresetLast != EContinousDamageType.E_CUSTOM)
+                eContinousDamageEffectTick = EDamageEffectType.E0_NONE;
+
+            eContinousPresetLast = eContinousPreset;
+
+
+            if (eContinousPreset == EContinousDamageType.E_CUSTOM)
+                return;
+
+            switch (eContinousPreset)
+            {
+                case PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage.EContinousDamageType.E_POISON_DAMAGE:
+                    fContinuousDamageDuration = 5.0f;
+                    fDamageTickEverySec = 1.0f;
+                    fDamagePerTick = 20.0f;
+                    eContinousDamageEffectTick = EDamageEffectType.E_POISON;
+                    break;
+                case PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage.EContinousDamageType.E_FIRE_DAMAGE:
+                    fContinuousDamageDuration = 3.0f;
+                    fDamageTickEverySec = 0.05f;
+                    fDamagePerTick = 2.0f;
+                    eContinousDamageEffectTick = EDamageEffectType.E_FIRE;
+                    break;
+            }
+
+        }
+
+        public override void AwakeInit()
+        {
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E4_CONTINOUS_DAMAGE; // change me to correct one! 
+        }
+
+        //!! \/ create instance below and add to AddAllEffectsToList
+    }
 
     [System.Serializable]
-    public abstract class CPlayerEffect_E4_QuickDashMovementBase : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    public class CPlayerEffect_E5_HealPlayer : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+
+        [Header("Instant Heal")]
+        public int iHealHP = 100;
+
+        [Header("Continous - Refill")]
+        public bool bUseContinousHPRefill = false;
+        public float fHealhToRefill = 50.0f;
+        public float fRefillHealthInTime = 2.0f;
+
+        [Header("Allow Overflow (Default Max: 300->500)")]
+        public bool bMaxHealthOverflowEnabled = true;
+
+        public override void AwakeInit()
+        {
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E5_HEAL_PLAYER; // change me to correct one! 
+        }
+
+        //!! \/ create instance below and add to AddAllEffectsToList
+    }
+
+
+
+
+
+    [System.Serializable]
+    public abstract class CPlayerEffect_E6_QuickDashMovementBase : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
         public enum EMoveSpeed
         {
@@ -146,7 +212,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     }
 
     [System.Serializable]
-    public class CPlayerEffect_E4_QuickDashMovement_Waypoints : CPlayerEffect_E4_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
+    public class CPlayerEffect_E6_QuickDashMovement_Waypoints : CPlayerEffect_E6_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
     {
         [Header("Waypoints Parent")]
         public Transform waypointsParent;
@@ -171,12 +237,12 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E4_QUICK_DASH_MOVEMENT_WAYPOINTS; // change me to correct one!
+            return EEffectType.E6_QUICK_DASH_MOVEMENT_WAYPOINTS; // change me to correct one!
         }
     }
 
     [System.Serializable]
-    public class CPlayerEffect_E4_QuickDashMovement_BezierSpline : CPlayerEffect_E4_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
+    public class CPlayerEffect_E6_QuickDashMovement_BezierSpline : CPlayerEffect_E6_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
     {
         [Header("Bezier")]
         public PTK_BezierSpline bezierSpline;
@@ -190,7 +256,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E4_QUICK_DASH_MOVEMENT_BEZIER; // change me to correct one!
+            return EEffectType.E6_QUICK_DASH_MOVEMENT_BEZIER; // change me to correct one!
         }
 
         [EasyButtons.Button]
@@ -202,29 +268,32 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
 
 
     [System.Serializable]
-    public class CPlayerEffect_E4_QuickDashMovement_InstantTeleport : CPlayerEffect_E4_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
+    public class CPlayerEffect_E6_QuickDashMovement_InstantTeleport : CPlayerEffect_E6_QuickDashMovementBase // make sure to add instance to playerEffects in Awake() !
     {
         [Header("Target Pos & Dir")]
         public Transform targetTransform;
 
         public override void AwakeInit()
         {
-            var meshRenderers = targetTransform.GetComponentsInChildren<MeshRenderer>();
-            for (int i = 0; i < meshRenderers.Length; i++)
+            if (targetTransform != null)
             {
-                meshRenderers[i].enabled = false;
-            }
+                var meshRenderers = targetTransform.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < meshRenderers.Length; i++)
+                {
+                    meshRenderers[i].enabled = false;
+                }
 
-            var colliders = targetTransform.GetComponentsInChildren<Collider>();
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                colliders[i].enabled = false;
+                var colliders = targetTransform.GetComponentsInChildren<Collider>();
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    colliders[i].enabled = false;
+                }
             }
         }
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E4_QUICK_DASH_MOVEMENT_TELEPORT; // change me to correct one!
+            return EEffectType.E6_QUICK_DASH_MOVEMENT_TELEPORT; // change me to correct one!
         }
     }
 
@@ -249,20 +318,27 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E1_Bounce BounceEffect = new CPlayerEffect_E1_Bounce(); // !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E2_Kill KillPlayer = new CPlayerEffect_E2_Kill(); // !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E3_Damage DamagePlayer = new CPlayerEffect_E3_Damage(); // !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E4_QuickDashMovement_Waypoints QuickDashMovement_Waypoints = new CPlayerEffect_E4_QuickDashMovement_Waypoints();// !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E4_QuickDashMovement_BezierSpline QuickDashMovement_Spline = new CPlayerEffect_E4_QuickDashMovement_BezierSpline();// !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E4_QuickDashMovement_InstantTeleport QuickDashMovement_InstantTeleport = new CPlayerEffect_E4_QuickDashMovement_InstantTeleport();// !! add item to list inside AddAllEffectsToList !!
-
+    public CPlayerEffect_E4_ContinuousDamage DamagePlayer_Continous = new CPlayerEffect_E4_ContinuousDamage();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E5_HealPlayer HealPlayer = new CPlayerEffect_E5_HealPlayer();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E6_QuickDashMovement_Waypoints QuickDashMovement_Waypoints = new CPlayerEffect_E6_QuickDashMovement_Waypoints();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E6_QuickDashMovement_BezierSpline QuickDashMovement_Spline = new CPlayerEffect_E6_QuickDashMovement_BezierSpline();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E6_QuickDashMovement_InstantTeleport QuickDashMovement_InstantTeleport = new CPlayerEffect_E6_QuickDashMovement_InstantTeleport();// !! add item to list inside AddAllEffectsToList !!
 
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
     void AddAllEffectsToList()
     {
         playerEffects.Add(BounceEffect);
+
         playerEffects.Add(KillPlayer);
         playerEffects.Add(DamagePlayer);
+        playerEffects.Add(DamagePlayer_Continous);
+
+        playerEffects.Add(HealPlayer);
+
         playerEffects.Add(QuickDashMovement_Waypoints);
         playerEffects.Add(QuickDashMovement_Spline);
         playerEffects.Add(QuickDashMovement_InstantTeleport);
+
         playerEffects.Add(MoreComingSoon);
 
         for (int i = 0; i < playerEffects.Count; i++)
@@ -308,10 +384,38 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     {
         Debug.LogError("Received signal from command behaviour triggers - for player " + iPlayerIndex);
 
+        bool bContainsDamageEffect = false;
+        for (int i = 0; i < playerEffects.Count; i++)
+        {
+            if (playerEffects[i].bExecute == false)
+                continue;
+
+            if(playerEffects[i].GetEffectType() == CPlayerEffectBase.EEffectType.E3_DAMAGE_PLAYER )
+            {
+                var effectDamage = playerEffects[i] as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E3_Damage;
+
+                if(effectDamage != null)
+                {
+                    if (effectDamage.iDamage > 0)
+                        bContainsDamageEffect = true;
+                }
+            }
+        }
+
         for (int i = 0; i< playerEffects.Count;i++)
         {
             if (playerEffects[i].bExecute == false)
                 continue;
+
+            if (playerEffects[i].GetEffectType() == CPlayerEffectBase.EEffectType.E4_CONTINOUS_DAMAGE)
+            {
+                var effectDamageContinous = playerEffects[i] as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage;
+
+                if (effectDamageContinous != null)
+                {
+                    effectDamageContinous.bSkipFirstDamageTick = bContainsDamageEffect; // so we wont get twice damage at the same time
+                }
+            }
 
             OnPlayerLogicEffectExecute?.Invoke(playerEffects[i],iPlayerIndex, triggerData);
         }
