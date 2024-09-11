@@ -40,6 +40,9 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
     [SerializeField]
     bool _bTriggerByRangedWeaponsDamage = false;
 
+    [Header("[Optional] - Multiple Hits from single weapon")]
+    public bool bTriggerFromEachBulletDamageHit = false;
+
     public bool bEnabledAndDetectedByPlayers
     {
         get
