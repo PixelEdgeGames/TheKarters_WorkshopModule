@@ -22,7 +22,7 @@ public class PTK_PlayersInRangeVolume_SphereFast : PTK_PlayersInRangeVolume_Base
         {
             if (PTK_ModGameplayDataSync.Instance.playersInfo[i].bIsPlayerEnabled == true && Vector3.Magnitude(transform.position - PTK_ModGameplayDataSync.Instance.playersInfo[i].vPosition) < this.transform.lossyScale.x)
             {
-                if (eLookForPlayersOfType == EPlayerType.E1_LOCAL_PLAYER_WITH_CAMERA_ONLY && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalCameraIndex == -1)
+                if (eLookForPlayersOfType == EPlayerType.E1_LOCAL_PLAYER_WITH_CAMERA_ONLY && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalPlayerIndex == -1)
                     bAreGlobalPlayersWithinRange[i] = false; // no camera
                 else
                     bAreGlobalPlayersWithinRange[i] = true;

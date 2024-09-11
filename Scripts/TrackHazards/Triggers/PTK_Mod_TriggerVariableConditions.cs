@@ -114,7 +114,7 @@ public class PTK_Mod_TriggerVariableConditions
                 if(pTK_Mod_Trigger.eTriggerActivationType == PTK_ModGameVariableConditionsTriggerType.ETriggerActivationType.E0_CONDITION_MET ||
                     pTK_Mod_Trigger.eTriggerActivationType == PTK_ModGameVariableConditionsTriggerType.ETriggerActivationType.E2_BOTH_MET_AND_NO_LONGER_MET)
                 {
-                    pTK_Mod_Trigger.OnTriggerEvent?.Invoke(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E0_GAME_VARIABLE));
+                    pTK_Mod_Trigger.InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E0_GAME_VARIABLE));
                 }
 
             }
@@ -126,7 +126,7 @@ public class PTK_Mod_TriggerVariableConditions
                 if (pTK_Mod_Trigger.eTriggerActivationType == PTK_ModGameVariableConditionsTriggerType.ETriggerActivationType.E1_CONDITION_NO_LONGER_MET ||
                     pTK_Mod_Trigger.eTriggerActivationType == PTK_ModGameVariableConditionsTriggerType.ETriggerActivationType.E2_BOTH_MET_AND_NO_LONGER_MET)
                 {
-                    pTK_Mod_Trigger.OnTriggerEvent?.Invoke(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E0_GAME_VARIABLE));
+                    pTK_Mod_Trigger.InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E0_GAME_VARIABLE));
                 }
             }
         }

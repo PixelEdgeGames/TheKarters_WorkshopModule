@@ -17,7 +17,7 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
         E05_PLAYER_LOGIC_EFFECTS,
         E06_CUSTOM_COMMANDS,
         E07_ANIMATOR_COMMANDS,
-        
+        E08_RUN_COMMAND_BEHAVIOUR,
 
         __COUNT
     }
@@ -31,43 +31,43 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
 
     protected abstract void RaceResetted_RevertToDefault();
     protected abstract void OnRaceTimerJustStarted_SyncAndRunAnimsImpl();
-    protected abstract void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals);
-    protected abstract void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal);
+    protected abstract void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour);
+    protected abstract void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal, PTK_TriggerCommandsBehaviour _parentCommandBehaviour);
 
-    public void Execute(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
+    public void Execute(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         if(fExecuteDelay > 0)
         {
-            StartCoroutine(ExecuteDelayed(recivedTriggerSignals));
+            StartCoroutine(ExecuteDelayed(recivedTriggerSignals, _parentCommandBehaviour));
         }else
         {
-            ExecuteImpl(recivedTriggerSignals);
+            ExecuteImpl(recivedTriggerSignals, _parentCommandBehaviour);
         }
     }
 
-    public void Execute(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
+    public void Execute(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         if (fExecuteDelay > 0)
         {
-            StartCoroutine(ExecuteDelayed(recivedTriggerSignal));
+            StartCoroutine(ExecuteDelayed(recivedTriggerSignal, _parentCommandBehaviour));
         }
         else
         {
-            ExecuteImpl(recivedTriggerSignal);
+            ExecuteImpl(recivedTriggerSignal, _parentCommandBehaviour);
         }
     }
 
-    IEnumerator ExecuteDelayed(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
+    IEnumerator ExecuteDelayed(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         yield return new WaitForSeconds(fExecuteDelay);
 
-        ExecuteImpl(recivedTriggerSignals);
+        ExecuteImpl(recivedTriggerSignals, _parentCommandBehaviour);
     }
-    IEnumerator ExecuteDelayed(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
+    IEnumerator ExecuteDelayed(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         yield return new WaitForSeconds(fExecuteDelay);
 
-        ExecuteImpl(recivedTriggerSignal);
+        ExecuteImpl(recivedTriggerSignal, _parentCommandBehaviour);
     }
 
     // multiple triggers can send multiple events and we don't want to run this command multiple times

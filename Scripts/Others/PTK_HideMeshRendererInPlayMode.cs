@@ -5,13 +5,19 @@ using UnityEngine;
 public class PTK_HideMeshRendererInPlayMode : MonoBehaviour
 {
     public static bool bForceShowDebugMeshRenderersInPlayMode = false;
+    [Header("Hide Meshes")]
+    public bool bEnabled = true;
 
+    [Header("Include Childrens")]
     public bool bIncludeChildrenMeshRenderers = false;
 
     // Start is called before the first frame update
     void Start()
     {
         if (bForceShowDebugMeshRenderersInPlayMode == true)
+            return;
+
+        if (bEnabled == false)
             return;
 
         var meshRenderer = this.GetComponent<MeshRenderer>();

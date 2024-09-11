@@ -21,7 +21,7 @@ public class PTK_PlayersInRangeVolume_BoxSlow : PTK_PlayersInRangeVolume_Base
         {
             if (PTK_ModGameplayDataSync.Instance.playersInfo[i].bIsPlayerEnabled == true && IsInside( PTK_ModGameplayDataSync.Instance.playersInfo[i].vPosition) == true)
             {
-                if (eLookForPlayersOfType == EPlayerType.E1_LOCAL_PLAYER_WITH_CAMERA_ONLY && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalCameraIndex == -1)
+                if (eLookForPlayersOfType == EPlayerType.E1_LOCAL_PLAYER_WITH_CAMERA_ONLY && PTK_ModGameplayDataSync.Instance.playersInfo[i].iLocalPlayerIndex == -1)
                     bAreGlobalPlayersWithinRange[i] = false; // no camera
                 else
                     bAreGlobalPlayersWithinRange[i] = true;
@@ -39,7 +39,7 @@ public class PTK_PlayersInRangeVolume_BoxSlow : PTK_PlayersInRangeVolume_Base
 
         // Step 2: Check if the local point is inside the unit box centered at the origin
         // Box dimensions in local space are -0.5 to 0.5 in each axis after adjusting for scale
-        Vector3 halfScale = transform.lossyScale * 0.5f;
+        Vector3 halfScale = Vector3.one * 0.5f;
 
         bool isInside = (localPoint.x >= -halfScale.x && localPoint.x <= halfScale.x) &&
                         (localPoint.y >= -halfScale.y && localPoint.y <= halfScale.y) &&

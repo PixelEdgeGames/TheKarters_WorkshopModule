@@ -10,7 +10,8 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         E_PHYSICS_COLLISION,
         E_GAME_EVENT_TYPE,
         E_PLAYER_IN_RANGE_EVENT_TYPE,
-        E_GAME_VARIABLE_CONDITION
+        E_GAME_VARIABLE_CONDITION,
+        E_AUTO_TRIGGER
     }
 
     [System.Serializable]
@@ -41,6 +42,7 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
             E2_PLAYER_EVENT,
             E3_PLAYER_COLLISION_WITH_DATA,
             E4_PLAYER_WEAPON_WITH_DATA,
+            E5_AUTO_CALLED_TRIGGER
         }
 
         public ETriggerType eTriggerType = ETriggerType.E0_GAME_VARIABLE;
@@ -111,13 +113,23 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         }
     }
 
-    public Action<CTriggerEventType> OnTriggerEvent;
+    public Action<CTriggerEventType> OnTriggerActivated;
 
+
+    [Header("Base Settings")]
+    public bool bIsTriggerEnabled = true;
+
+    [Header("Automation")]
+    public bool bAutoDisableOnTriggerDetected = false;
+    public bool bAutoEnableTriggerAfterDisabled = false;
+    public float fAutoEnableAfterTime = 5.0f;
+    float fTimeWhenTriggerEventCalled = 0.0f;
 
     public abstract ETriggerType GetTriggerType();
 
     public virtual void Start()
     {
+
         var commandBehaviour = this.GetComponent<PTK_TriggerCommandsBehaviour>();
         if (commandBehaviour != null)
         {
@@ -132,17 +144,57 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
             }
         }
 
-        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted += OnRaceResetted;
-        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart += OnRaceTimerJustStarted;
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted += OnRaceResettedPriv;
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart += OnRaceTimerJustStartedPriv;
     }
+
 
     public virtual void OnDestroy()
     {
-        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted -= OnRaceResetted;
-        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart -= OnRaceTimerJustStarted;
+
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted -= OnRaceResettedPriv;
+        PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart -= OnRaceTimerJustStartedPriv;
     }
 
 
+    private void OnRaceTimerJustStartedPriv()
+    {
+        OnRaceTimerJustStarted();
+    }
+
+    private void OnRaceResettedPriv()
+    {
+        fTimeWhenTriggerEventCalled = 0.0f;
+        OnRaceResetted();
+    }
+
+
+    public void InvokeTriggerAction(CTriggerEventType obj)
+    {
+        if (this.gameObject.activeInHierarchy == false || bIsTriggerEnabled == false)
+            return;
+
+        if (OnTriggerActivated != null)
+            OnTriggerActivated(obj);
+
+        fTimeWhenTriggerEventCalled = Time.time;
+
+        if(bAutoDisableOnTriggerDetected == true)
+        {
+        }
+
+        if(bAutoEnableTriggerAfterDisabled == true)
+        {
+            StartCoroutine(AutoEnableTriggerAfterCall());
+        }
+    }
+
+    IEnumerator AutoEnableTriggerAfterCall()
+    {
+        yield return new WaitForSeconds(fAutoEnableAfterTime);
+
+        bIsTriggerEnabled = true;
+    }
     protected virtual void OnRaceTimerJustStarted()
     {
     }

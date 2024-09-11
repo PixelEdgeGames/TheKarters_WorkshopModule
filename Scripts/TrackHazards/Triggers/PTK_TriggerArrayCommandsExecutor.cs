@@ -106,7 +106,7 @@ public class PTK_TriggerArrayCommandsExecutor : MonoBehaviour
                 continue;
 
             int currentIndexLambda = i;
-            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnTriggerEvent += (PTK_ModBaseTrigger.CTriggerEventType triggerTypeAndData) =>
+            recivedTriggerEventsPreview[currentIndexLambda].trigger.OnTriggerActivated += (PTK_ModBaseTrigger.CTriggerEventType triggerTypeAndData) =>
            {
                // we will allow to run logic only if the signal receiver is not disabled
                if(this.gameObject.activeInHierarchy == true)

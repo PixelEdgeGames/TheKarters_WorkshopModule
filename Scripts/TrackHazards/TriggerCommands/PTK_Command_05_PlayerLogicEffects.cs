@@ -384,7 +384,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     {
     }
 
-    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals)
+    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         for(int i=0;i< recivedTriggerSignals.Count;i++)
         {
@@ -393,7 +393,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         }
     }
 
-    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal)
+    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         if(recivedTriggerSignal.triggerTypeAndData.iPlayerType_GlobalPlayerIndex != -1)
             CommandExecutedForPlayer(recivedTriggerSignal.triggerTypeAndData.iPlayerType_GlobalPlayerIndex, recivedTriggerSignal);

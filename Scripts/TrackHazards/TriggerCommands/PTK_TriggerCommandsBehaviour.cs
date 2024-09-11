@@ -47,7 +47,7 @@ public class PTK_TriggerCommandsBehaviour : MonoBehaviour
     {
         for (int i = 0; i < ptkCommands.Length; i++)
         {
-            ptkCommands[i].Execute(recivedTriggerSignalsPreview);
+            ptkCommands[i].Execute(recivedTriggerSignalsPreview,this);
         }
     }
 
@@ -82,7 +82,7 @@ public class PTK_TriggerCommandsBehaviour : MonoBehaviour
     {
         for (int i = 0; i < ptkCommands.Length; i++)
         {
-            ptkCommands[i].Execute(firstTriggerData);
+            ptkCommands[i].Execute(firstTriggerData,this);
         }
     }
 }

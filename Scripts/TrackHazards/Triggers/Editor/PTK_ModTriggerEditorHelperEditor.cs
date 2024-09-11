@@ -36,7 +36,8 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             helper.PlayerEventTriggerBox,
             helper.PlayerEventTriggerSphere,
             helper.GameEventTrigger,
-            helper.GameConditionTrigger
+            helper.GameConditionTrigger,
+            helper.AutoTrigger
         };
         var triggersCategory = new List<string>
         {
@@ -46,7 +47,8 @@ public class PTK_ModTriggerEditorHelperEditor : Editor
             "Player Events",
             "",
             "Game Events",
-            "Game Condition"
+            "Game Condition",
+            "Auto-Timed Trigger"
         };
 
         int iIndex = 0;

@@ -109,7 +109,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
             if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_VOLUME_HAS_AT_LEAST_ONE_PLAYER_EVENT))
             {
-                OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_VOLUME_HAS_AT_LEAST_ONE_PLAYER_EVENT, iFirstLastGlobalPlayerIndex));
+                InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_VOLUME_HAS_AT_LEAST_ONE_PLAYER_EVENT, iFirstLastGlobalPlayerIndex));
             }
         }
 
@@ -117,7 +117,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
         {
             if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_VOLUME_EMPTY_LAST_PLAYER_LEFT))
             {
-                OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_VOLUME_EMPTY_LAST_PLAYER_LEFT, iFirstLastGlobalPlayerIndex));
+                InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_VOLUME_EMPTY_LAST_PLAYER_LEFT, iFirstLastGlobalPlayerIndex));
             }
 
             iFirstLastGlobalPlayerIndex = -1;
@@ -135,7 +135,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_JUMPED_EVENT))
         {
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT,EPlayerEventType.E_ANY_PLAYER_IN_RANGE_JUMPED_EVENT, iGlobalPlayerIndex));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT,EPlayerEventType.E_ANY_PLAYER_IN_RANGE_JUMPED_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -147,7 +147,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_LANDED_EVENT))
         {
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_LANDED_EVENT, iGlobalPlayerIndex));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_LANDED_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -159,7 +159,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_DIED_EVENT))
         {
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_DIED_EVENT, iGlobalPlayerIndex));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_DIED_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -171,7 +171,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_KILLED_SOMEONE_EVENT))
         {
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_KILLED_SOMEONE_EVENT, iGlobalPlayerIndexWhoKilled));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_KILLED_SOMEONE_EVENT, iGlobalPlayerIndexWhoKilled));
         }
     }
 
@@ -186,7 +186,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
             CTriggerEventType.CPlayerEventData playerEventData = new CTriggerEventType.CPlayerEventData();
             playerEventData.iWeaponTypeIndex = iWeaponType;
 
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_RECEIVED_WEAPON_EVENT, iGlobalPlayerIndex, playerEventData));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_RECEIVED_WEAPON_EVENT, iGlobalPlayerIndex, playerEventData));
         }
     }
 
@@ -201,7 +201,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
             CTriggerEventType.CPlayerEventData playerEventData = new CTriggerEventType.CPlayerEventData();
             playerEventData.iWeaponTypeIndex = iWeaponType;
 
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_WEAPON_EVENT, iGlobalPlayerIndex, playerEventData));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_WEAPON_EVENT, iGlobalPlayerIndex, playerEventData));
         }
     }
 
@@ -213,7 +213,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
         if (eventTypesConditionsToCheck.Contains(EPlayerEventType.E_ANY_PLAYER_IN_RANGE_MADE_TRICK_EVENT))
         {
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_MADE_TRICK_EVENT, iGlobalPlayerIndex));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_MADE_TRICK_EVENT, iGlobalPlayerIndex));
         }
     }
 
@@ -229,7 +229,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
             playerEventData.iBoostType = iBoostType;
             playerEventData.fBoostStrength = fBoostStrength;
             playerEventData.fBoostDuration = fBoostDuration;
-            OnTriggerEvent?.Invoke(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_BOOST_EVENT, iGlobalPlayerIndex, playerEventData));
+            InvokeTriggerAction(new CTriggerEventType(CTriggerEventType.ETriggerType.E2_PLAYER_EVENT, EPlayerEventType.E_ANY_PLAYER_IN_RANGE_USED_BOOST_EVENT, iGlobalPlayerIndex, playerEventData));
         }
     }
 }

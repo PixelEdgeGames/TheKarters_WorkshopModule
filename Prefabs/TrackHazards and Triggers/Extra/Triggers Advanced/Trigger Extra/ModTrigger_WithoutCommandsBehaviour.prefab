@@ -84,6 +84,8 @@ MonoBehaviour:
     type: 3}
   GameConditionTrigger: {fileID: 489634069108566538, guid: 9193bb1d057bbe6448241763c47bd2b4,
     type: 3}
+  AutoTrigger: {fileID: 8066200001093879311, guid: 40715b0cbea0f81428e66376cc3f666c,
+    type: 3}
 --- !u!1 &4560034501295548083
 GameObject:
   m_ObjectHideFlags: 0

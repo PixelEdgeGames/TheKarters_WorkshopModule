@@ -57,7 +57,12 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
     public class CPlayerInfo
     {
         public bool bIsPlayerEnabled = false;
-        public int iLocalCameraIndex = -1;
+        public int iLocalPlayerIndex = -1;
+
+        public bool IsLocalPlayerWithCam()
+        {
+            return iLocalPlayerIndex != -1;
+        }
 
         public Vector3 vPosition;
         public Vector3 vVelocity;

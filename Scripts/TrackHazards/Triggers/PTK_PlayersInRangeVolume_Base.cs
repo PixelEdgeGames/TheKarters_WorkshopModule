@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class PTK_PlayersInRangeVolume_Base : MonoBehaviour
 {
+    public bool bShowVolumeMeshInPlaymode = false;
+
     public enum EPlayerType
     {
         E0_ALL_PLAYERS,
@@ -21,10 +23,14 @@ public abstract class PTK_PlayersInRangeVolume_Base : MonoBehaviour
         if (collider != null)
             collider.enabled = false;
 
-        var meshRenderer = this.GetComponent<MeshRenderer>();
 
-        if (meshRenderer != null)
-            meshRenderer.enabled = false;
+        if(bShowVolumeMeshInPlaymode == false)
+        {
+            var meshRenderer = this.GetComponent<MeshRenderer>();
+
+            if (meshRenderer != null)
+                meshRenderer.enabled = false;
+        }
     }
 
     public int GetPlayersInsideVolumeCount()
