@@ -26,7 +26,7 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
         // Cache properties
         fMinimumRaceTimeToTrigger = serializedObject.FindProperty("fMinimumRaceTimeToTrigger");
         fDelayAfterGameObjectEnabled = serializedObject.FindProperty("fDelayAfterGameObjectEnabled");
-        bResetTriggerOnEnabledEvent = serializedObject.FindProperty("bResetTriggerOnEnabledEvent");
+        bResetTriggerOnEnabledEvent = serializedObject.FindProperty("eRepeatCounterResetMode");
         iRepeatCount = serializedObject.FindProperty("iTriggerRepeatCount");
         fRepeatWaitTime = serializedObject.FindProperty("fRepeatWaitTime");
         bUseRandomRepeatWaitTime = serializedObject.FindProperty("bUseRandomRepeatWaitTime");
@@ -50,7 +50,7 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
         serializedObject.Update();
 
         DrawPropertiesExcluding(serializedObject, "fMinimumRaceTimeToTrigger", "fDelayAfterGameObjectEnabled",
-    "bResetTriggerOnEnabledEvent", "iRepeatCount", "fRepeatWaitTime", "bUseRandomRepeatWaitTime",
+    "eRepeatCounterResetMode", "iRepeatCount", "fRepeatWaitTime", "bUseRandomRepeatWaitTime",
     "v2RandomWaitRange", "bStopTriggerAtRaceEnd", "bStopOnFirstPlayerRaceEnd", "bOnlyInRaceGameMode",
     "bOnlyInTimeTrialGameMode", "eLapCondition", "iLapConditionNr", "bTriggerWithPlayerEvents",
     "triggerTargetPlayersSettings", "iTriggerRepeatCount");
@@ -68,13 +68,7 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
 
         GUILayout.Space(10);
 
-        // Section 2: Trigger Settings (grouped)
-        EditorGUILayout.BeginVertical("box");
-        GUI.color = Color.yellow * 1.3f;
-        EditorGUILayout.LabelField("Trigger Settings", EditorStyles.boldLabel);
-        GUI.color = Color.white;
-        EditorGUILayout.PropertyField(bResetTriggerOnEnabledEvent, new GUIContent("Reset On Enable"));
-        EditorGUILayout.EndVertical();
+     
 
         GUILayout.Space(10);
 
@@ -91,6 +85,8 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
         GUI.color = Color.white;
 
         EditorGUILayout.EndHorizontal();
+
+        // Section 2: Trigger Settings (grouped)
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(bUseRandomRepeatWaitTime, new GUIContent("Use Random Wait Time"));
@@ -109,6 +105,14 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
             EditorGUILayout.EndHorizontal();
         }
 
+        EditorGUILayout.EndVertical();
+
+
+        EditorGUILayout.BeginVertical("box");
+        GUI.color = Color.yellow * 1.3f;
+        EditorGUILayout.LabelField("Repeat Counter Reset Settings", EditorStyles.boldLabel);
+        GUI.color = Color.white;
+        EditorGUILayout.PropertyField(bResetTriggerOnEnabledEvent, new GUIContent("Repeat Counter Reset Mode"));
         EditorGUILayout.EndVertical();
 
         GUILayout.Space(10);

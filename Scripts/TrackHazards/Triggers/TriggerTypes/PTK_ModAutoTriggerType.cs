@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
@@ -8,12 +5,17 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
     [Header("How soon after race begin to call trigger")]
     public float fMinimumRaceTimeToTrigger = 0.0f;
     public float fDelayAfterGameObjectEnabled = 0.0f;
-    [Header("Reset trigger when GameObject is re-enabled")]
-    [Tooltip("Allows the trigger to reset and be called again each time the GameObject is activated.")]
-    public bool bResetTriggerOnEnabledEvent = false;
 
     [Header("Repeat per Race count (-1 for infinite)")]
     public int iTriggerRepeatCount = 1;
+
+    public enum ECounterResetMode
+    {
+        E0_ON_RACE_RESTART,
+        E1_ON_RACE_RESTART_AND_EACH_TRIGGER_ENABLED_EVENT
+    }
+    public ECounterResetMode eRepeatCounterResetMode = ECounterResetMode.E0_ON_RACE_RESTART;
+
     [Header("Wait before next trigger")]
     public bool bUseRandomRepeatWaitTime = false;
     public float fRepeatWaitTime = 1.0f;
@@ -104,14 +106,21 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
     {
         fEnabledTime = Time.time;
 
-        if (bResetTriggerOnEnabledEvent == true)
-            OnRaceRestarted();
+        if (eRepeatCounterResetMode == ECounterResetMode.E1_ON_RACE_RESTART_AND_EACH_TRIGGER_ENABLED_EVENT && bIsTriggerEnabled == true)
+            ResetCounter();
     }
     private void OnRaceRestarted()
     {
+        ResetCounter();
+
+        bIsRaceActive = true;
+        bWasTriggerEnabled = true;
+    }
+
+    void ResetCounter()
+    {
         fLastRaceTimeTrigger = -1;
         iCurrentRepeatCount = 0;
-        bIsRaceActive = true;
 
         fFinalWaitBeforeNextTrigger = fRepeatWaitTime;
         if (bUseRandomRepeatWaitTime)
@@ -147,12 +156,26 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
         PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_FirstPlayerFinishedRace -= OnFirstPlayerFinishedRace;
     }
 
-    public void Update()
+    bool bWasTriggerEnabled = false;
+
+    public override void Update()
     {
+        base.Update();
+
+        if (bIsTriggerEnabled == true && bWasTriggerEnabled == false)
+        {
+            if (eRepeatCounterResetMode== ECounterResetMode.E1_ON_RACE_RESTART_AND_EACH_TRIGGER_ENABLED_EVENT)
+                ResetCounter();
+        }
+
         float fCurrentRaceTime = PTK_ModGameplayDataSync.Instance.gameInfo.fCurrentRaceTime;
 
         if (PTK_ModGameplayDataSync.Instance.gameInfo.eRaceState == PTK_ModGameplayDataSync.CGameInfo.ERaceState.E_WAITING_FOR_RACE_START)
             return;
+
+        if (bIsTriggerEnabled == false)
+            return;
+
 
         // Check if race is still active
         if (!bIsRaceActive)

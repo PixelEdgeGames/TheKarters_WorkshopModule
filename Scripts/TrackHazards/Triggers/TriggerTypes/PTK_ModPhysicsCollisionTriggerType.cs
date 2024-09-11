@@ -43,6 +43,7 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
     [Header("[Optional] - Multiple Hits from single weapon")]
     public bool bTriggerFromEachBulletDamageHit = false;
 
+
     public bool bEnabledAndDetectedByPlayers
     {
         get
@@ -77,6 +78,7 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
    
     [Header("Auto Generated - Do not change")]
     public int iUniquePhysicsTriggerID = -1;
+    public Transform extraCollidersParent;
     [HideInInspector]
     public int iUniquePhysicsTriggerIDCratedForObjectInstance = 0;
 
@@ -88,7 +90,7 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
 
         this.tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
 
-        var childObjects = this.GetComponentsInChildren<Collider>();
+        var childObjects = extraCollidersParent.GetComponentsInChildren<Collider>();
 
         for(int i=0;i< childObjects.Length;i++)
             childObjects[i].tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
@@ -106,6 +108,11 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
 
 
 
+    }
+
+    public override void Update()
+    {
+        base.Update();
     }
 
 

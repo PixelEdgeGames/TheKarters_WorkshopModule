@@ -80,8 +80,14 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
     int iPlayersInsideVolumeCount = 0;
 
     int iFirstLastGlobalPlayerIndex = -1;
-    private void Update()
+    public override void Update()
     {
+        base.Update();
+
+        // we want to check if players are in volume all the time to dected correctly after trigger is enabled again (and not have old  players count)
+      //  if (bIsTriggerEnabled == false)
+      //      return;
+
         int iThisFramePlayersInsideVolume = 0;
         int iPlayerInsideVolume = -1;
         for (int iPlayerIndex = 0; iPlayerIndex < bAreGlobalPlayersWithinVolumesRange.Length; iPlayerIndex++)

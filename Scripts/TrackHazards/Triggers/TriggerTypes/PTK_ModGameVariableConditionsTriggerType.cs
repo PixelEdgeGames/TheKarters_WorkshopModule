@@ -44,8 +44,13 @@ public class PTK_ModGameVariableConditionsTriggerType : PTK_ModBaseTrigger
 
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
+
+        if (bIsTriggerEnabled == false)
+            return;
+
         for (int i = 0; i < variableTypeConditions.Count; i++)
         {
             if (variableTypeConditions[i].bIgnoreConditions == true)
@@ -54,4 +59,5 @@ public class PTK_ModGameVariableConditionsTriggerType : PTK_ModBaseTrigger
             variableTypeConditions[i].CheckConditions(this);
         }
     }
+
 }

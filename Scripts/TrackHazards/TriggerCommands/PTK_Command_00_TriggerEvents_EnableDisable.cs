@@ -17,8 +17,14 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
     public PTK_ModBaseTrigger[] triggersToEnable;
     public PTK_ModBaseTrigger[] triggersToDisable;
 
+    [Header("Automation - After Command Executed")]
+    public bool bPostExecute_RevertToDefaultStateWithDelay = false;
+    public float fPostExecute_RevertToDefaulteDelay = 1.0f;
+
+    List<PTK_ModBaseTrigger> triggersToEnableAllPriv = new List<PTK_ModBaseTrigger>();
+    List<PTK_ModBaseTrigger> triggersToDisableAllPriv = new List<PTK_ModBaseTrigger>();
+
     Dictionary<PTK_ModBaseTrigger, bool> defaultEnabledState = new Dictionary<PTK_ModBaseTrigger, bool>();
-    Dictionary<GameObject, bool> defaultEnabledStateGO = new Dictionary<GameObject, bool>();
 
     public override void Awake()
     {
@@ -28,17 +34,34 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
                 continue;
 
             if (defaultEnabledState.ContainsKey(trigger) == false)
-                defaultEnabledState.Add(trigger, trigger.gameObject.activeInHierarchy);
+            {
+                defaultEnabledState.Add(trigger, trigger.bIsTriggerEnabled);
+            }
+
+            if (triggersToEnableAllPriv.Contains(trigger) == false)
+                triggersToEnableAllPriv.Add(trigger);
         }
+
 
         foreach (GameObject trigger in triggerParentsToEnable)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
 
-            if (defaultEnabledStateGO.ContainsKey(trigger) == false)
-                defaultEnabledStateGO.Add(trigger, trigger.gameObject.activeInHierarchy);
+            var modTriggers = trigger.GetComponentsInChildren<PTK_ModBaseTrigger>();
+
+            foreach(var modTrigger in modTriggers)
+            {
+                if (defaultEnabledState.ContainsKey(modTrigger) == false)
+                {
+                    defaultEnabledState.Add(modTrigger, modTrigger.bIsTriggerEnabled);
+                }
+
+                if (triggersToEnableAllPriv.Contains(modTrigger) == false)
+                    triggersToEnableAllPriv.Add(modTrigger);
+            }
         }
+
 
         foreach (PTK_ModBaseTrigger trigger in triggersToDisable)
         {
@@ -46,7 +69,12 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
                 continue;
 
             if (defaultEnabledState.ContainsKey(trigger) == false)
-                defaultEnabledState.Add(trigger, trigger.gameObject.activeInHierarchy);
+            {
+                defaultEnabledState.Add(trigger, trigger.bIsTriggerEnabled);
+            }
+
+            if (triggersToDisableAllPriv.Contains(trigger) == false)
+                triggersToDisableAllPriv.Add(trigger);
         }
 
         foreach (GameObject trigger in triggerParentsToDisable)
@@ -54,8 +82,18 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
             if (trigger == null || trigger.gameObject == null)
                 continue;
 
-            if (defaultEnabledStateGO.ContainsKey(trigger) == false)
-                defaultEnabledStateGO.Add(trigger, trigger.gameObject.activeInHierarchy);
+            var modTriggers = trigger.GetComponentsInChildren<PTK_ModBaseTrigger>();
+
+            foreach (var modTrigger in modTriggers)
+            {
+                if (defaultEnabledState.ContainsKey(modTrigger) == false)
+                {
+                    defaultEnabledState.Add(modTrigger, modTrigger.bIsTriggerEnabled);
+                }
+
+                if(triggersToDisableAllPriv.Contains(modTrigger) == false)
+                    triggersToDisableAllPriv.Add(modTrigger);
+            }
         }
     }
     public override void Start()
@@ -75,59 +113,52 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
         CommandExecuted();
     }
 
+    float fTimeSinceExecuted = 0.0f;
+    private void Update()
+    {
+        if(bPostExecute_RevertToDefaultStateWithDelay == true)
+        {
+            if (fTimeSinceExecuted != 0.0f)
+            {
+                if ((Time.time - fTimeSinceExecuted) > fPostExecute_RevertToDefaulteDelay)
+                {
+                    RaceResetted_RevertToDefault();
+                }
+            }
+        }
+    }
     void CommandExecuted()
     {
-        foreach (PTK_ModBaseTrigger trigger in triggersToEnable)
+        foreach (PTK_ModBaseTrigger trigger in triggersToEnableAllPriv)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
 
-            trigger.gameObject.SetActive(true);
+            trigger.bIsTriggerEnabled = (true);
         }
 
-        foreach (PTK_ModBaseTrigger trigger in triggersToDisable)
+        foreach (PTK_ModBaseTrigger trigger in triggersToDisableAllPriv)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
 
-            trigger.gameObject.SetActive(false);
+            trigger.bIsTriggerEnabled = (false);
         }
 
-
-        foreach (GameObject trigger in triggerParentsToEnable)
-        {
-            if (trigger == null || trigger.gameObject == null)
-                continue;
-
-            trigger.gameObject.SetActive(true);
-        }
-
-        foreach (GameObject trigger in triggerParentsToDisable)
-        {
-            if (trigger == null || trigger.gameObject == null)
-                continue;
-
-            trigger.gameObject.SetActive(false);
-        }
+        fTimeSinceExecuted = Time.time;
     }
 
 
     protected override void RaceResetted_RevertToDefault()
     {
-        foreach(PTK_ModBaseTrigger trigger in defaultEnabledState.Keys)
+        fTimeSinceExecuted = 0.0f;
+
+        foreach (PTK_ModBaseTrigger trigger in defaultEnabledState.Keys)
         {
             if (trigger == null || trigger.gameObject == null)
                 continue;
 
-            trigger.gameObject.SetActive(defaultEnabledState[trigger]);
-        }
-
-        foreach (GameObject trigger in defaultEnabledStateGO.Keys)
-        {
-            if (trigger == null || trigger.gameObject == null)
-                continue;
-
-            trigger.gameObject.SetActive(defaultEnabledStateGO[trigger]);
+            trigger.bIsTriggerEnabled = (defaultEnabledState[trigger]);
         }
     }
 

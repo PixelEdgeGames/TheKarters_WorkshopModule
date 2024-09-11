@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5196806612445537746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7919118300647967233}
+  m_Layer: 0
+  m_Name: TriggerOnEnableDisable_CommandBehaviours
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7919118300647967233
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5196806612445537746}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8007295102350173167}
+  - {fileID: 1604951141366646512}
+  m_Father: {fileID: 365170001928389493}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8066200001093879311
 GameObject:
   m_ObjectHideFlags: 0
@@ -27,7 +59,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 7919118300647967233}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -43,10 +76,213 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8fe967f2a1f3784bbdc43c959e5538d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fMinRaceTimeToStartCalling: 0
-  iRepeatCount: -1
-  fWaitBeforeNextCall: 1
-  bUseRandomWait: 0
-  randomWaitRange: {x: 1, y: 1}
-  bStopWhenRaceEnded: 0
-  bStopWhenFirstPlayerFinishedRace: 0
+  bIsTriggerEnabled: 1
+  automationSettings:
+    bAutoDisableAfterTriggerEvent: 0
+    bAutoEnableWhenTriggerIsDisabled: 0
+    fAutoEnableIfIsDisabledForTime: 5
+    fTimeSinceTriggerIsDisabled: 0
+  onTriggerEnabledDisabledCommands:
+    onTriggerEnabledCommands:
+      bAutoCall_OnRaceRestart_ToResetState: 0
+      bAutoCall_WithRaceBegin_ToResetSynchronized: 0
+      CommandsToCall:
+      - {fileID: 8604201002445984387}
+    onTriggerDisabledCommands:
+      bAutoCall_OnRaceRestart_ToResetState: 0
+      bAutoCall_WithRaceBegin_ToResetSynchronized: 0
+      CommandsToCall:
+      - {fileID: 1022895245300381596}
+  fMinimumRaceTimeToTrigger: 0
+  fDelayAfterGameObjectEnabled: 0
+  bResetTriggerOnEnabledEvent: 0
+  iTriggerRepeatCount: 1
+  bUseRandomRepeatWaitTime: 0
+  fRepeatWaitTime: 1
+  v2RandomWaitRange: {x: 1, y: 1}
+  bStopTriggerAtRaceEnd: 0
+  bStopOnFirstPlayerRaceEnd: 0
+  bOnlyInRaceGameMode: 0
+  bOnlyInTimeTrialGameMode: 0
+  eLapCondition: 0
+  iLapConditionNr: 1
+  bTriggerWithPlayerEvents: 0
+  triggerTargetPlayersSettings:
+    eTriggerOnPlayers: 0
+    ePlayerRacingState: 0
+    ePlayerRacePosMode: 0
+    iRacePosNr: 1
+--- !u!1001 &2693787940926626066
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7919118300647967233}
+    m_Modifications:
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070931590913534460, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_Name
+      value: CommandsBehaviour_OnTriggerEnabled
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bab7b6e70c6e66f459455215babb6580, type: 3}
+--- !u!4 &8007295102350173167 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+    type: 3}
+  m_PrefabInstance: {fileID: 2693787940926626066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8604201002445984387 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5911540646165072785, guid: bab7b6e70c6e66f459455215babb6580,
+    type: 3}
+  m_PrefabInstance: {fileID: 2693787940926626066}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba9fdc091ebc4c4db6e7ac337a1fdc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &6645077931760778253
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7919118300647967233}
+    m_Modifications:
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070931590913534460, guid: bab7b6e70c6e66f459455215babb6580,
+        type: 3}
+      propertyPath: m_Name
+      value: CommandsBehaviour_OnTriggerDisabled
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bab7b6e70c6e66f459455215babb6580, type: 3}
+--- !u!4 &1604951141366646512 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5367694428547267325, guid: bab7b6e70c6e66f459455215babb6580,
+    type: 3}
+  m_PrefabInstance: {fileID: 6645077931760778253}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1022895245300381596 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5911540646165072785, guid: bab7b6e70c6e66f459455215babb6580,
+    type: 3}
+  m_PrefabInstance: {fileID: 6645077931760778253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba9fdc091ebc4c4db6e7ac337a1fdc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

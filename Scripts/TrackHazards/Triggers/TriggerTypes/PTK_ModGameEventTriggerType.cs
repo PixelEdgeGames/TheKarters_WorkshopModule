@@ -56,6 +56,11 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
         gameEvents.OnGameEvent_GameUnpaused -= OnGameEvent_GameUnpaused;
     }
 
+    public override void Update()
+    {
+        base.Update();
+    }
+
     private void OnGameEvent_FirstPlayerFinishedRace()
     {
         if(eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_FIRST_PLAYER_FINISHED_RACE))
