@@ -79,8 +79,6 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
     [Header("Auto Generated - Do not change")]
     public int iUniquePhysicsTriggerID = -1;
     public Transform extraCollidersParent;
-    [HideInInspector]
-    public int iUniquePhysicsTriggerIDCratedForObjectInstance = 0;
 
     public override void Start()
     {
@@ -135,12 +133,26 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
 
     private void OnValidate()
     {
+        if(Application.isPlaying == false)
+        {
+            PTK_ModPhysicsCollisionTriggerType[] allObjects = FindObjectsOfType<PTK_ModPhysicsCollisionTriggerType>(true);
+            foreach (PTK_ModPhysicsCollisionTriggerType obj in allObjects)
+            {
+                if (obj != this && obj.iUniquePhysicsTriggerID == iUniquePhysicsTriggerID)
+                {
+                    GenerateUniqueID();
+                    Debug.LogWarning("Duplicate detected! " + name + " has the same Unique ID as " + obj.name);
+                    break;
+                }
+            }
+        }
+
         EnsureContainsTriggerID();
     }
 
     public void EnsureContainsTriggerID()
     {
-        if (iUniquePhysicsTriggerID == -1 || iUniquePhysicsTriggerID == 0 || (iUniquePhysicsTriggerIDCratedForObjectInstance != this.gameObject.GetInstanceID()))
+        if (iUniquePhysicsTriggerID == -1 || iUniquePhysicsTriggerID == 0 )
             GenerateUniqueID();
     }
     void GenerateUniqueID()
@@ -166,7 +178,6 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
         }
 
         iUniquePhysicsTriggerID = iUniqueIDToSet;
-        iUniquePhysicsTriggerIDCratedForObjectInstance = this.gameObject.GetInstanceID();
     }
 
   
