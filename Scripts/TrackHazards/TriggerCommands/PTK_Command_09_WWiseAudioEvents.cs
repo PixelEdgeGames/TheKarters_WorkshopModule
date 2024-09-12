@@ -113,7 +113,7 @@ public class PTK_Command_09_WWiseAudioEvents : PTK_TriggerCommandBase
         }
 
         [Header("Main")]
-        public List<CEvent> autoEvents = new List<CEvent>();
+        public List<CEvent> audioEvents = new List<CEvent>();
         [Header("Advanced")]
         public List<CSwitch> switches = new List<CSwitch>();
         public List<CState> states = new List<CState>();
@@ -127,11 +127,11 @@ public class PTK_Command_09_WWiseAudioEvents : PTK_TriggerCommandBase
         {
             allEvents.Clear();
 
-            allEvents.AddRange(autoEvents);
             allEvents.AddRange(fValues);
             allEvents.AddRange(iValues);
             allEvents.AddRange(states);
             allEvents.AddRange(switches);
+            allEvents.AddRange(audioEvents); // audio play events at the end so we will play correct item
         }
     }
 
@@ -194,35 +194,38 @@ public class PTK_Command_09_WWiseAudioEvents : PTK_TriggerCommandBase
         for (int i = 0; i < wwiseTargets.Count; i++)
             wwiseTargets[i].InitAllEventsList();
 
-        float fStartPostTime = 0;
+        float fTimeSinceTargetEventStarted = 0;
+        float fTimeSinceTargetEventStartedWithoutDelay = 0;
 
-        while(true)
+        while (true)
         {
             for (int iEventsTarget = 0; iEventsTarget < wwiseTargets.Count; iEventsTarget++)
             {
                 var wwiseTargetWithEvents = wwiseTargets[iEventsTarget];
 
-                if (fStartPostTime >= wwiseTargetWithEvents.fDelay)
+                if (fTimeSinceTargetEventStarted >= wwiseTargetWithEvents.fDelay)
                 {
                     for (int i = 0; i < wwiseTargetWithEvents.allEvents.Count; i++)
                     {
-                        if (wwiseTargetWithEvents.allEvents[i].ShouldSendEventThisFrame(fStartPostTime) == true)
+                        if (wwiseTargetWithEvents.allEvents[i].ShouldSendEventThisFrame(fTimeSinceTargetEventStartedWithoutDelay) == true)
                         {
                             for (int iPlayer = 0; iPlayer < _iGlobalPlayerIndex.Count; iPlayer++)
                             {
                                 OnModWwiseEventTriggered?.Invoke(_iGlobalPlayerIndex[iPlayer], wwiseTargetWithEvents.allEvents[i], wwiseTargetWithEvents.eOrigin, wwiseTargetWithEvents.targetGameObject);
 
-                                Debug.LogError("Playing wwise event: " + wwiseTargetWithEvents.allEvents[i].GetWwiseEventType());
                             }
                         }
                     }
+
+                    // so it will be 0 after fTimeSinceTargetEventStarted delay
+                    fTimeSinceTargetEventStartedWithoutDelay += Time.deltaTime;
 
                 }
 
                 yield return new WaitForEndOfFrame();
 
                 // important at the end!
-                fStartPostTime += Time.deltaTime;
+                fTimeSinceTargetEventStarted += Time.deltaTime;
             }   
         }
 

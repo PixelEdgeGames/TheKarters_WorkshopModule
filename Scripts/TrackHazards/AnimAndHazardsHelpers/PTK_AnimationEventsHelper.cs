@@ -12,8 +12,6 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
     [SerializeField]
     public List<CEvent> events = new List<CEvent>();
 
-
-
     void Awake()
     {
         foreach (var e in events)
@@ -46,7 +44,10 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
     void Update()
     {
-      
+        for (int i = 0; i < events.Count; i++)
+        {
+            events[i].Update();
+        }
     }
 
     [Serializable]
@@ -176,6 +177,21 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
         }
     }
 
+    [System.Serializable]
+    public class CWWiseAudioEvent: BaseEvent
+    {
+        // public float fDelay = 0.0f; // not used - if you decide to use, ensure ShouldSendEventThisFrame wont use fCurrentTimeSinceTriggered because it will be > 0 after delay, so we need time that passed after time for this delay ended (so another time value that will be increased after this delay)
+        public GameObject playInTargetGameObjectPosition;
+
+        [Header("Main")]
+        public List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CEvent> audioEvents = new List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CEvent>();
+        [Header("Advanced")]
+        public List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CSwitch> switches = new List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CSwitch>();
+        public List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CState> states = new List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CState>();
+        public List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CFValue> fValues = new List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CFValue>();
+        public List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CIValue> iValues = new List<PTK_Command_09_WWiseAudioEvents.CWwiseEvents.CIValue>();
+    }
+
     [Serializable]
     public class TimelineEvent : BaseEvent
     {
@@ -243,6 +259,9 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
         [SerializeField]
         public AnimatorEvent[] animatorEvents;
 
+        [Header("Audio Events")]
+        public CWWiseAudioEvent[] wwiseAudioEvents;
+
         [Header("Timeline")]
         [SerializeField]
         public TimelineEvent[] timelineEvents;
@@ -258,7 +277,74 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
             TriggerTimelineEvents();
             TriggerGameObjectEvents();
 
+            fTimeSinceAudioTriggerEvent = 0.0f;
+            bTriggerEventReceived = true;
+
             eventsToCall?.Invoke();
+        }
+
+        bool bTriggerEventReceived = false;
+        float fTimeSinceAudioTriggerEvent = 0.0f;
+        public void Update()
+        {
+            if(bTriggerEventReceived == true)
+            {
+                CheckWWiseTriggerEvents(fTimeSinceAudioTriggerEvent);
+
+                // important that it is at the end
+                fTimeSinceAudioTriggerEvent += Time.deltaTime;
+            }
+        }
+
+        private void CheckWWiseTriggerEvents(float fCurrentTimeSinceTriggered)
+        {
+            foreach(var wwiseAudioGO in wwiseAudioEvents)
+            {
+                if (wwiseAudioGO.playInTargetGameObjectPosition == null)
+                    continue;
+
+
+                foreach (var objEvent in wwiseAudioGO.fValues)
+                {
+                    if (objEvent.ShouldSendEventThisFrame(fCurrentTimeSinceTriggered) == false)
+                        continue;
+
+                    PTK_Command_09_WWiseAudioEvents.OnModWwiseEventTriggered?.Invoke(-1, objEvent, PTK_Command_09_WWiseAudioEvents.CWwiseEvents.EPlayOnTarget.E0_ON_TARGET_GAME_OBJECT, wwiseAudioGO.playInTargetGameObjectPosition);
+                }
+
+                foreach (var objEvent in wwiseAudioGO.iValues)
+                {
+                    if (objEvent.ShouldSendEventThisFrame(fCurrentTimeSinceTriggered) == false)
+                        continue;
+
+                    PTK_Command_09_WWiseAudioEvents.OnModWwiseEventTriggered?.Invoke(-1, objEvent, PTK_Command_09_WWiseAudioEvents.CWwiseEvents.EPlayOnTarget.E0_ON_TARGET_GAME_OBJECT, wwiseAudioGO.playInTargetGameObjectPosition);
+                }
+
+                foreach (var objEvent in wwiseAudioGO.states)
+                {
+                    if (objEvent.ShouldSendEventThisFrame(fCurrentTimeSinceTriggered) == false)
+                        continue;
+
+                    PTK_Command_09_WWiseAudioEvents.OnModWwiseEventTriggered?.Invoke(-1, objEvent, PTK_Command_09_WWiseAudioEvents.CWwiseEvents.EPlayOnTarget.E0_ON_TARGET_GAME_OBJECT, wwiseAudioGO.playInTargetGameObjectPosition);
+                }
+
+                foreach (var objEvent in wwiseAudioGO.switches)
+                {
+                    if (objEvent.ShouldSendEventThisFrame(fCurrentTimeSinceTriggered) == false)
+                        continue;
+
+                    PTK_Command_09_WWiseAudioEvents.OnModWwiseEventTriggered?.Invoke(-1, objEvent, PTK_Command_09_WWiseAudioEvents.CWwiseEvents.EPlayOnTarget.E0_ON_TARGET_GAME_OBJECT, wwiseAudioGO.playInTargetGameObjectPosition);
+                }
+
+                foreach (var objEvent in wwiseAudioGO.audioEvents)
+                {
+                    if (objEvent.ShouldSendEventThisFrame(fCurrentTimeSinceTriggered) == false)
+                        continue;
+
+                    PTK_Command_09_WWiseAudioEvents.OnModWwiseEventTriggered?.Invoke(-1, objEvent, PTK_Command_09_WWiseAudioEvents.CWwiseEvents.EPlayOnTarget.E0_ON_TARGET_GAME_OBJECT, wwiseAudioGO.playInTargetGameObjectPosition);
+                }
+            }
+            
         }
 
         private void TriggerAnimatorEvents()
@@ -311,4 +397,6 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
             }
         }
     }
+
+
 }
