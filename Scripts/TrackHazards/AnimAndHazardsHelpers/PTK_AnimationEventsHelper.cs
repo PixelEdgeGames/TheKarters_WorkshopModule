@@ -84,6 +84,41 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
     }
 
     [Serializable]
+    public class AnimatorAnimPlayEvent : BaseEvent
+    {
+        public Animator animator;
+        [Header("Use Name or AnimClip")]
+        public string strAnimClipName;
+        public AnimationClip animClip;
+        [Header("Cross-Fade Blend")]
+        public float fCrossFadeBlendTime = 0.1f;
+
+        public void Execute()
+        {
+            if (animator == null) return;
+
+            if(fCrossFadeBlendTime == 0.0f)
+            {
+                if (strAnimClipName != "")
+                    animator.Play(strAnimClipName);
+
+                if (animClip != null)
+                    animator.Play(animClip.name);
+            }
+            else
+            {
+                if (strAnimClipName != "")
+                    animator.CrossFade(strAnimClipName, fCrossFadeBlendTime, 0, 0);
+
+                if (animClip != null)
+                    animator.CrossFade(animClip.name, fCrossFadeBlendTime, 0, 0);
+            }
+
+        }
+    }
+
+
+    [Serializable]
     public class ParticleSystemEvent : BaseEvent
     {
         public enum ParticleSystemActionType { PlayParticles, PauseParticles, StopParticles, EmitParticles , StopEmitting }
@@ -202,10 +237,13 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
         [SerializeField]
         public ParticleSystemEvent[] particleSystemEvents;
 
-        [Header("Extra")]
+        [Header("Animator Params")]
+        [SerializeField]
+        public AnimatorAnimPlayEvent[] animatorPlayAnimations;
         [SerializeField]
         public AnimatorEvent[] animatorEvents;
 
+        [Header("Timeline")]
         [SerializeField]
         public TimelineEvent[] timelineEvents;
 
@@ -229,6 +267,12 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
             {
                 animEvent.Execute();
             }
+
+            foreach (var animEvent in animatorPlayAnimations)
+            {
+                animEvent.Execute();
+            }
+            
         }
 
         private void TriggerParticleSystemEvents()

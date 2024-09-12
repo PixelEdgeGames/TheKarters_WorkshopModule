@@ -11,13 +11,14 @@ public class PTK_ModCommandsEditorHelperEditor : Editor
     private Dictionary<Type, string> commandTypesWithNames = new Dictionary<Type, string>
     {
         { typeof(PTK_Command_01_GameObjects_EnableDisable), "Game Objects: Enable/Disable" },
-        { typeof(PTK_Command_00_TriggerEvents_EnableDisable), "Trigger Events: Enable/Disable" },
+        { typeof(PTK_Command_00_TriggerEvents_EnableDisable), "Triggers: Enable/Disable" },
         { typeof(PTK_Command_02_ModTriggerCommandExecutor_ManualReset), "Trigger Command Executor: Manual Reset" },
         { typeof(PTK_Command_03_ModTriggerCommandExecutor_EnableDisable), "Trigger Command Executor: Enable/Disable" },
         { typeof(PTK_Command_07_AnimatorCommands), "Animator Commands" },
         { typeof(PTK_Command_05_PlayerLogicEffects), "Player Logic Effects" },
-        { typeof(PTK_Command_08_RunCommandBehaviour), "Run Command Behaviours" },
-
+        { typeof(PTK_Command_08_RunCommandBehaviour), "Run Other Command Behaviours" },
+        { typeof(PTK_Command_09_WWiseAudioEvents), "Wwise Audio Commands" },
+        
 
         { typeof(PTK_Command_06_CustomCommands), "Custom Commands" }
     };

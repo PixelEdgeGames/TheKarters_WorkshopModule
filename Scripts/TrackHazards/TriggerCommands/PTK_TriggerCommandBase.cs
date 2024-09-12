@@ -18,6 +18,7 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
         E06_CUSTOM_COMMANDS,
         E07_ANIMATOR_COMMANDS,
         E08_RUN_COMMAND_BEHAVIOUR,
+        E09_WWISE_AUDIO_EVENT,
 
         __COUNT
     }
