@@ -82,10 +82,16 @@ public class PTK_RaceRestart_AnimationSyncEditor : Editor
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Fix - Auto Assign", GUILayout.Height(40), GUILayout.Width(200)))
             {
+                // it will refresh animator
+                script.animatorTarget.enabled = false;
+                script.animatorTarget.enabled = true;
+
                 if (script.animatorTarget != null)
                 {
                     EditorUtility.SetDirty(script.animatorTarget);
                 }
+
+
                 script.AssignFromObject();
             }
             GUI.backgroundColor = Color.white;

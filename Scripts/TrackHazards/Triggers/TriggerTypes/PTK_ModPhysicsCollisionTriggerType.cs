@@ -98,6 +98,23 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
 
 
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    public override void OnTriggerEnabledDetected()
+    {
+    }
+    public override void OnTriggerDisabledDetected()
+    {
+    }
+
 
 
     public override void OnDestroy()

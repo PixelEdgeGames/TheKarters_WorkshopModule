@@ -7,7 +7,7 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
     public float fDelayAfterGameObjectEnabled = 0.0f;
 
     [Header("Repeat per Race count (-1 for infinite)")]
-    public int iTriggerRepeatCount = 1;
+    public int iRepeatCount = -1;
 
     public enum ECounterResetMode
     {
@@ -78,6 +78,52 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
         [Header("Race Pos Nr ")]
         [Range(1, 8)]
         public int iRacePosNr = 1;
+
+        public void CheckAndTriggerEventsForPlayers(PTK_ModBaseTrigger modTrigger, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType triggerType)
+        {
+            for (int i = 0; i < PTK_ModGameplayDataSync.Instance.playersInfo.Length; i++)
+            {
+                var playerInfo = PTK_ModGameplayDataSync.Instance.playersInfo[i];
+
+                if (playerInfo.bIsPlayerEnabled == false)
+                    continue;
+
+                if (eTriggerOnPlayers == CTriggerOnPlayersSettings.ETriggerOnPlayersType.E1_LOCAL_WITH_CAMERA_ONLY && playerInfo.IsLocalPlayerWithCam() == false)
+                    continue;
+
+                // only finished players
+                if (ePlayerRacingState == CTriggerOnPlayersSettings.EPlayerRaceState.E2_FINISHED_RACE && playerInfo.bRaceFinished == false)
+                    continue;
+
+                // only still racing players
+                if (ePlayerRacingState == CTriggerOnPlayersSettings.EPlayerRaceState.E1_CURRENTLY_RACING && playerInfo.bRaceFinished == true)
+                    continue;
+
+                bool bIsRacePosConditionCorrect = false;
+
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E0_ANY_RACE_POS)
+                    bIsRacePosConditionCorrect = true;
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E1_WITH_RACE_POS_EQUAL_TO_NR && (playerInfo.iRacePositionIndex + 1) == iRacePosNr)
+                    bIsRacePosConditionCorrect = true;
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E2_WITH_RACE_POS_NOT_EQUAL_TO_NR && (playerInfo.iRacePositionIndex + 1) != iRacePosNr)
+                    bIsRacePosConditionCorrect = true;
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E3_WITH_RACE_POS_HIGHER_THAN_NR && (playerInfo.iRacePositionIndex + 1) > iRacePosNr)
+                    bIsRacePosConditionCorrect = true;
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E4_WITH_RACE_POS_HIGHER_OR_EQUAL_THAN_NR && (playerInfo.iRacePositionIndex + 1) >= iRacePosNr)
+                    bIsRacePosConditionCorrect = true;
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E5_WITH_RACE_POS_LOWER_THAN_NR && (playerInfo.iRacePositionIndex + 1) < iRacePosNr)
+                    bIsRacePosConditionCorrect = true;
+                if (ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E6_WITH_RACE_POS_LOWER_OR_EQUAL_THAN_NR && (playerInfo.iRacePositionIndex + 1) <= iRacePosNr)
+                    bIsRacePosConditionCorrect = true;
+
+                if (bIsRacePosConditionCorrect == false)
+                    continue;
+
+
+                modTrigger.InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(triggerType, i));
+            }
+        }
+
     }
    
 
@@ -102,7 +148,28 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
     }
 
     float fEnabledTime = 0.0f;
-    private void OnEnable()
+    
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    public override void OnTriggerEnabledDetected()
+    {
+        OnEnabledDetected();
+    }
+    public override void OnTriggerDisabledDetected()
+    {
+
+    }
+
+    void OnEnabledDetected()
     {
         fEnabledTime = Time.time;
 
@@ -165,8 +232,10 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
         if (bIsTriggerEnabled == true && bWasTriggerEnabled == false)
         {
             if (eRepeatCounterResetMode== ECounterResetMode.E1_ON_RACE_RESTART_AND_EACH_TRIGGER_ENABLED_EVENT)
-                ResetCounter();
+                OnEnabledDetected(); 
         }
+
+        bWasTriggerEnabled = bIsTriggerEnabled;
 
         float fCurrentRaceTime = PTK_ModGameplayDataSync.Instance.gameInfo.fCurrentRaceTime;
 
@@ -200,7 +269,7 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
         if ( (Time.time-fEnabledTime) >= fDelayAfterGameObjectEnabled &&  fCurrentRaceTime >= fMinimumRaceTimeToTrigger )
         {
             // Check if we can trigger more events based on repeat count
-            if (iCurrentRepeatCount < iTriggerRepeatCount || iTriggerRepeatCount == -1)
+            if (iCurrentRepeatCount < iRepeatCount || iRepeatCount == -1)
             {
                 // Check if enough time has passed since the last trigger call
                 if (fLastRaceTimeTrigger < 0 || fCurrentRaceTime >= (fLastRaceTimeTrigger + fFinalWaitBeforeNextTrigger))
@@ -217,47 +286,8 @@ public class PTK_ModAutoTriggerType : PTK_ModBaseTrigger
     {
         if(bTriggerWithPlayerEvents == true)
         {
-            for(int i=0;i< PTK_ModGameplayDataSync.Instance.playersInfo.Length;i++)
-            {
-                var playerInfo = PTK_ModGameplayDataSync.Instance.playersInfo[i];
+            triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E5_AUTO_CALLED_TRIGGER);
 
-                if (playerInfo.bIsPlayerEnabled == false)
-                    continue;
-
-                if (triggerTargetPlayersSettings.eTriggerOnPlayers == CTriggerOnPlayersSettings.ETriggerOnPlayersType.E1_LOCAL_WITH_CAMERA_ONLY && playerInfo.IsLocalPlayerWithCam() == false)
-                    continue;
-
-                // only finished players
-                if (triggerTargetPlayersSettings.ePlayerRacingState ==  CTriggerOnPlayersSettings.EPlayerRaceState.E2_FINISHED_RACE  && playerInfo.bRaceFinished == false)
-                    continue;
-
-                // only still racing players
-                if (triggerTargetPlayersSettings.ePlayerRacingState == CTriggerOnPlayersSettings.EPlayerRaceState.E1_CURRENTLY_RACING && playerInfo.bRaceFinished == true)
-                    continue;
-
-                bool bIsRacePosConditionCorrect = false;
-
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E0_ANY_RACE_POS)
-                    bIsRacePosConditionCorrect = true;
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E1_WITH_RACE_POS_EQUAL_TO_NR && (playerInfo.iRacePositionIndex + 1) == triggerTargetPlayersSettings.iRacePosNr)
-                    bIsRacePosConditionCorrect = true;
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E2_WITH_RACE_POS_NOT_EQUAL_TO_NR && (playerInfo.iRacePositionIndex + 1) != triggerTargetPlayersSettings.iRacePosNr)
-                    bIsRacePosConditionCorrect = true;
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E3_WITH_RACE_POS_HIGHER_THAN_NR && (playerInfo.iRacePositionIndex + 1) > triggerTargetPlayersSettings.iRacePosNr)
-                    bIsRacePosConditionCorrect = true;
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E4_WITH_RACE_POS_HIGHER_OR_EQUAL_THAN_NR && (playerInfo.iRacePositionIndex + 1) >= triggerTargetPlayersSettings.iRacePosNr)
-                    bIsRacePosConditionCorrect = true;
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E5_WITH_RACE_POS_LOWER_THAN_NR && (playerInfo.iRacePositionIndex + 1) < triggerTargetPlayersSettings.iRacePosNr)
-                    bIsRacePosConditionCorrect = true;
-                if (triggerTargetPlayersSettings.ePlayerRacePosMode == CTriggerOnPlayersSettings.EPlayersRacePosType.E6_WITH_RACE_POS_LOWER_OR_EQUAL_THAN_NR && (playerInfo.iRacePositionIndex + 1) <= triggerTargetPlayersSettings.iRacePosNr)
-                    bIsRacePosConditionCorrect = true;
-
-                if (bIsRacePosConditionCorrect == false)
-                    continue;
-
-
-                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E5_AUTO_CALLED_TRIGGER, i));
-            }
         }
         else
         {

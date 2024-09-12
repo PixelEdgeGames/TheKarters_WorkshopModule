@@ -181,6 +181,7 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
 
         PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceRestarted += OnRaceResettedPriv;
         PTK_ModGameplayDataSync.Instance.gameEvents.OnGameEvent_RaceTimerStart += OnRaceTimerJustStartedPriv;
+
     }
 
 
@@ -193,6 +194,27 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         OnTriggerActivated = null;
     }
 
+
+    bool bWasGameObjectDisabled = false;
+
+
+    public virtual void OnEnable()
+    {
+        // because it will be called on start anyway - so we need if it was disabled or not
+        if(bWasGameObjectDisabled == true)
+        {
+            TriggerEnabledDetected();
+        }
+
+        bWasGameObjectDisabled = false;
+    }
+
+    public virtual void OnDisable()
+    {
+        bWasGameObjectDisabled = true;
+
+        TriggerDisabledDetected();
+    }
 
     bool bRaceStarted = false;
     bool bLastWasEnabled = false;
@@ -248,25 +270,45 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
         autoEnableDisableSettings.fTimeSinceTriggerIsDisabled = 0.0f;
     }
 
+    public abstract void OnTriggerEnabledDetected();
+    public abstract void OnTriggerDisabledDetected();
+
+
+    void TriggerEnabledDetected()
+    {
+        foreach (var behaviour in onTriggerEnabledDisabledCommands.onTriggerEnabledCommands.CommandsToCall)
+        {
+            behaviour.Execute(info);
+        }
+
+        OnTriggerEnabledDetected();
+    }
+
+    void TriggerDisabledDetected()
+    {
+        foreach (var behaviour in onTriggerEnabledDisabledCommands.onTriggerDisabledCommands.CommandsToCall)
+        {
+            behaviour.Execute(info);
+        }
+
+        OnTriggerDisabledDetected();
+
+    }
+
     public virtual void Update()
     {
         if(bRaceStarted == true)
         {
-            if(bIsTriggerEnabled != bLastWasEnabled)
+            if(bIsTriggerEnabled != bLastWasEnabled )
             {
-                if(bIsTriggerEnabled == true)
+
+                if (bIsTriggerEnabled == true)
                 {
-                    foreach (var behaviour in onTriggerEnabledDisabledCommands.onTriggerEnabledCommands.CommandsToCall)
-                    {
-                        behaviour.Execute(info);
-                    }
+                    TriggerEnabledDetected();
                 }
                 else
                 {
-                    foreach (var behaviour in onTriggerEnabledDisabledCommands.onTriggerDisabledCommands.CommandsToCall)
-                    {
-                        behaviour.Execute(info);
-                    }
+                    OnTriggerDisabledDetected();
                 }
             }
 

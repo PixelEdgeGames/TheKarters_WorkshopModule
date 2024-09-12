@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9092849712798706093}
-  - component: {fileID: 4482666135719280545}
   - component: {fileID: 655376102431320718}
   m_Layer: 0
   m_Name: GameCondition_Trigger
@@ -33,21 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4482666135719280545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 489634069108566538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a7a8a69a1f73364f88797f5d000e91c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bShowVolumeMeshInPlaymode: 0
-  eLookForPlayersOfType: 0
-  bAreGlobalPlayersWithinRange: 0000000000000000
 --- !u!114 &655376102431320718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,10 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bIsTriggerEnabled: 1
-  automationSettings:
+  autoEnableDisableSettings:
     bAutoDisableAfterTriggerEvent: 0
     bAutoEnableWhenTriggerIsDisabled: 0
-    fAutoEnableIfIsDisabledForTime: 5
+    fAutoEnableAfterTime: 5
     fTimeSinceTriggerIsDisabled: 0
   onTriggerEnabledDisabledCommands:
     onTriggerEnabledCommands:

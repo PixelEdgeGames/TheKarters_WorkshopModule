@@ -27,7 +27,7 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
         fMinimumRaceTimeToTrigger = serializedObject.FindProperty("fMinimumRaceTimeToTrigger");
         fDelayAfterGameObjectEnabled = serializedObject.FindProperty("fDelayAfterGameObjectEnabled");
         bResetTriggerOnEnabledEvent = serializedObject.FindProperty("eRepeatCounterResetMode");
-        iRepeatCount = serializedObject.FindProperty("iTriggerRepeatCount");
+        iRepeatCount = serializedObject.FindProperty("iRepeatCount");
         fRepeatWaitTime = serializedObject.FindProperty("fRepeatWaitTime");
         bUseRandomRepeatWaitTime = serializedObject.FindProperty("bUseRandomRepeatWaitTime");
         v2RandomWaitRange = serializedObject.FindProperty("v2RandomWaitRange");
@@ -53,7 +53,7 @@ public class PTK_ModAutoTriggerTypeEditor : Editor
     "eRepeatCounterResetMode", "iRepeatCount", "fRepeatWaitTime", "bUseRandomRepeatWaitTime",
     "v2RandomWaitRange", "bStopTriggerAtRaceEnd", "bStopOnFirstPlayerRaceEnd", "bOnlyInRaceGameMode",
     "bOnlyInTimeTrialGameMode", "eLapCondition", "iLapConditionNr", "bTriggerWithPlayerEvents",
-    "triggerTargetPlayersSettings", "iTriggerRepeatCount");
+    "triggerTargetPlayersSettings", "iRepeatCount");
 
         GUILayout.Space(10);
 

@@ -19,8 +19,11 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
         __COUNT
     }
 
-    [Header("Event Type Conditions")]
     public List<EGameEventType> eventTypesConditionsToCheck = new List<EGameEventType>();
+
+    [Header("Allows to use Player Logic Effects Commannds")]
+    public bool bTriggerWithPlayerEvents = false;
+    public PTK_ModAutoTriggerType.CTriggerOnPlayersSettings triggerTargetPlayersSettings = new PTK_ModAutoTriggerType.CTriggerOnPlayersSettings();
 
     public override ETriggerType GetTriggerType()
     {
@@ -40,6 +43,23 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
         gameEvents.OnGameEvent_GamePaused += OnGameEvent_GamePaused;
         gameEvents.OnGameEvent_GameUnpaused += OnGameEvent_GameUnpaused;
 
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    public override void OnTriggerEnabledDetected()
+    {
+    }
+    public override void OnTriggerDisabledDetected()
+    {
     }
 
     public override void OnDestroy()
@@ -65,7 +85,13 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
     {
         if(eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_FIRST_PLAYER_FINISHED_RACE))
         {
-            InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_FIRST_PLAYER_FINISHED_RACE));
+            if(bTriggerWithPlayerEvents == true)
+            {
+                triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT);
+            }else
+            {
+                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_FIRST_PLAYER_FINISHED_RACE));
+            }
         }
     }
 
@@ -73,7 +99,14 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
     {
         if (eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_WHOLE_RACE_FINISHED_EVENT))
         {
-            InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_WHOLE_RACE_FINISHED_EVENT));
+            if (bTriggerWithPlayerEvents == true)
+            {
+                triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT);
+            }
+            else
+            {
+                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_WHOLE_RACE_FINISHED_EVENT));
+            }
         }
     }
 
@@ -82,7 +115,14 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
     {
         if (eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_RACE_RESTARTED_EVENT))
         {
-            InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_RACE_RESTARTED_EVENT));
+            if (bTriggerWithPlayerEvents == true)
+            {
+                triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT);
+            }
+            else
+            {
+                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_RACE_RESTARTED_EVENT));
+            }
         }
     }
 
@@ -90,7 +130,14 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
     {
         if (eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_RACE_RACE_TIMER_START_EVENT))
         {
-            InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_RACE_RACE_TIMER_START_EVENT));
+            if (bTriggerWithPlayerEvents == true)
+            {
+                triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT);
+            }
+            else
+            {
+                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_RACE_RACE_TIMER_START_EVENT));
+            }
         }
     }
 
@@ -98,7 +145,14 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
     {
         if (eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_PAUSE_EVENT))
         {
-            InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_PAUSE_EVENT));
+            if (bTriggerWithPlayerEvents == true)
+            {
+                triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT);
+            }
+            else
+            {
+                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_PAUSE_EVENT));
+            }
         }
     }
 
@@ -106,7 +160,14 @@ public class PTK_ModGameEventTriggerType : PTK_ModBaseTrigger
     {
         if (eventTypesConditionsToCheck.Contains(EGameEventType.E_GAME_UNPAUSE_EVENT))
         {
-            InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_UNPAUSE_EVENT));
+            if (bTriggerWithPlayerEvents == true)
+            {
+                triggerTargetPlayersSettings.CheckAndTriggerEventsForPlayers(this, PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT);
+            }
+            else
+            {
+                InvokeTriggerAction(new PTK_ModBaseTrigger.CTriggerEventType(PTK_ModBaseTrigger.CTriggerEventType.ETriggerType.E1_GAME_EVENT, EGameEventType.E_GAME_UNPAUSE_EVENT));
+            }
         }
     }
 }

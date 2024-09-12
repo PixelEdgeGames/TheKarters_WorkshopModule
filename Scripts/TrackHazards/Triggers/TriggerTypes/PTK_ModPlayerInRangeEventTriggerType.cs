@@ -23,7 +23,6 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
         __COUNT
     }
 
-    [Header("Event Type Conditions")]
     public List<PTK_PlayersInRangeVolume_Base> checkPlayersInVolumes = new List<PTK_PlayersInRangeVolume_Base>();
     public List<EPlayerEventType> eventTypesConditionsToCheck = new List<EPlayerEventType>();
 
@@ -58,6 +57,22 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
         playerEvents.OnPlayerJustReceivedWeapon += OnPlayerEvent_JustReceivedWeapon;
         playerEvents.OnPlayerMadeTrick += OnPlayerEvent_MadeTrick;
         playerEvents.OnPlayerBoostFired += OnPlayerEvent_BoostFired;
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    public override void OnTriggerEnabledDetected()
+    {
+    }
+    public override void OnTriggerDisabledDetected()
+    {
     }
 
 

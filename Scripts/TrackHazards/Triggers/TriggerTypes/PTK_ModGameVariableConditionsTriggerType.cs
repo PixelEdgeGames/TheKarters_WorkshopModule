@@ -13,9 +13,14 @@ public class PTK_ModGameVariableConditionsTriggerType : PTK_ModBaseTrigger
     }
 
 
-    [Header("Trigger if ANY of these conditions are correct")]
     public ETriggerActivationType eTriggerActivationType = ETriggerActivationType.E0_CONDITION_MET;
+    [Header("Trigger if ANY of these conditions are correct")]
     public List<PTK_Mod_TriggerVariableConditions> variableTypeConditions = new List<PTK_Mod_TriggerVariableConditions>();
+
+
+    [Header("Allows to use Player Logic Effects Commannds")]
+    public bool bTriggerWithPlayerEvents = false;
+    public PTK_ModAutoTriggerType.CTriggerOnPlayersSettings triggerTargetPlayersSettings = new PTK_ModAutoTriggerType.CTriggerOnPlayersSettings();
 
     public override ETriggerType GetTriggerType()
     {
@@ -31,6 +36,23 @@ public class PTK_ModGameVariableConditionsTriggerType : PTK_ModBaseTrigger
             variableTypeConditions[i].Awake_InitializeAndAttachToEvents(this);
         }
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    public override void OnTriggerEnabledDetected()
+    {
+    }
+    public override void OnTriggerDisabledDetected()
+    {
+    }
+
 
     public override void OnDestroy()
     {
