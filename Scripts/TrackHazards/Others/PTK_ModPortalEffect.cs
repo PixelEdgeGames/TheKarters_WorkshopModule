@@ -18,9 +18,15 @@ public class PTK_ModPortalEffect : MonoBehaviour
             parentCollider.enabled = false;
     }
 
+    private void Start()
+    {
+        rendererParent.enabled = false;
+    }
     // Update is called once per frame
     void Update()
     {
-        
+        // to override trigger show mesh
+        if (rendererParent.enabled == true)
+            rendererParent.enabled = false;
     }
 }
