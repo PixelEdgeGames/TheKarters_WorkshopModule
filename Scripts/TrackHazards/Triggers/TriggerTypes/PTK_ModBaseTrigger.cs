@@ -116,8 +116,10 @@ public abstract class PTK_ModBaseTrigger : MonoBehaviour
 
     public Action<CTriggerEventType> OnTriggerActivated;
 
-    [Header("Base Settings")]
+    [Header("Base Settings ")]
     public bool bIsTriggerEnabled = true;
+    [Header("Show Debug Mesh - Unused : set global setting in ModTrackData object in scene")]
+    public bool bShowDebugCollider = true;
     private bool bTriggerEnabledInitialState = true;
 
     [Header("Automation - Auto Enable/Disable Settings")]
