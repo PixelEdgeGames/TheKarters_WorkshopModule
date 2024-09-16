@@ -11,7 +11,7 @@ public class PTK_ModTrack : MonoBehaviour
     public bool bTrackIsLooped = true;
 
     [Header("Trigger Meshes")]
-    public bool bDebugShowTriggerCollisionMeshes = true;
+    public bool bForceDebugShowTriggerCollisionMeshes = false ;
 
     [Header("Flip Intro animation side")]
     public bool[] bFlipIntroCamFromRightToLeftForPlayer = new bool[8];

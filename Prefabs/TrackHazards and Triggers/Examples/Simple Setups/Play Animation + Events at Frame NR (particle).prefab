@@ -150,7 +150,9 @@ MonoBehaviour:
       actionType: 2
       bIncludeChildrens: 1
       emitCount: 0
+    animatorPlayAnimations: []
     animatorEvents: []
+    wwiseAudioEvents: []
     timelineEvents: []
     eventsToCall:
       m_PersistentCalls:
@@ -163,7 +165,9 @@ MonoBehaviour:
       actionType: 3
       bIncludeChildrens: 1
       emitCount: 100
+    animatorPlayAnimations: []
     animatorEvents: []
+    wwiseAudioEvents: []
     timelineEvents: []
     eventsToCall:
       m_PersistentCalls:
