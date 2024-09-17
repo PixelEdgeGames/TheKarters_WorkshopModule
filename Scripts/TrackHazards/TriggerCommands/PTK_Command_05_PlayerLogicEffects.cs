@@ -36,8 +36,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
 
             E07_FROZEN_WHEELS,
             E08_BOOST_PAD,
-            E09_WIND_FORCE,
-            E10_CATAPULT,
+            E09_CATAPULT,
 
 
             E99_FLAT_TIRE_UNUSED,
@@ -351,49 +350,40 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         }
     }
 
+   
+
     [System.Serializable]
-    public class CPlayerEffect_E9_Wind : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    public class CPlayerEffect_E09_Catapult : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
-        public Vector3 vWindDirection = Vector3.forward;
-        public float fWindStrength = 20.0f;
-        public EWindMode eWindMode = EWindMode.E0_DISABLED_STOP;
-        public enum EWindMode
-        {
-            E0_DISABLED_STOP,
-            E1_ENABLED_START_ADDING_WIND_FORCE
-        }
+        public Transform catapultDirectionPreview = null;
+        [Range(0.2f,2.0f)]
+        public float fCatapultLaunchVerticalStrength = 0.5f;
+        public float fCatapultForce = 100.0f;
+
+        [Header("If true, player will be rotated to face catapult dir")]
+        public bool bForceOrientPlayerToCatapultDirection = false;
 
         public override void AwakeInit()
         {
+            if (catapultDirectionPreview != null)
+            {
+                var meshRenderers = catapultDirectionPreview.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < meshRenderers.Length; i++)
+                {
+                    meshRenderers[i].enabled = false;
+                }
 
+                var colliders = catapultDirectionPreview.GetComponentsInChildren<Collider>();
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    colliders[i].enabled = false;
+                }
+            }
         }
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E09_WIND_FORCE; // change me to correct one!
-        }
-    }
-
-    [System.Serializable]
-    public class CPlayerEffect_E10_Catapult : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
-    {
-        public Vector3 vCatapultDirection = Vector3.forward;
-        public float fCatapultForce = 40.0f;
-        [Header("Allows for very long catapult effect")]
-        public float fGravityMultiplierUntilGrounded = 1.0f;
-        
-        [Header("to Launch all players with the same speed")]
-        public bool bOverrideKartVelocity = false;
-
-
-        public override void AwakeInit()
-        {
-
-        }
-        // !!! CHANGE ME TO CORRECT ONE
-        public override EEffectType GetEffectType()
-        {
-            return EEffectType.E10_CATAPULT; // change me to correct one!
+            return EEffectType.E09_CATAPULT; // change me to correct one!
         }
     }
 
@@ -427,8 +417,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E7_FrozenWheelsEffect FrozenWheels = new CPlayerEffect_E7_FrozenWheelsEffect();// !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E8_BoostPad BoostPad = new CPlayerEffect_E8_BoostPad();// !! add item to list inside AddAllEffectsToList !!
  //   public CPlayerEffect_E9_FlatTire FlatTire = new CPlayerEffect_E9_FlatTire();// !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E9_Wind WindForce = new CPlayerEffect_E9_Wind();// !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E10_Catapult Catapult = new CPlayerEffect_E10_Catapult();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E09_Catapult Catapult = new CPlayerEffect_E09_Catapult();// !! add item to list inside AddAllEffectsToList !!
 
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
     void AddAllEffectsToList()
@@ -448,7 +437,6 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         playerEffects.Add(FrozenWheels);
         playerEffects.Add(BoostPad);
         // playerEffects.Add(FlatTire); // unused no VFX effect
-        playerEffects.Add(WindForce);
         playerEffects.Add(Catapult);
 
         playerEffects.Add(MoreComingSoon);

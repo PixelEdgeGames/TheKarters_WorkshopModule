@@ -210,7 +210,7 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
                 if (GUILayout.Button("Create Teleport Target", GUILayout.Width(300)))
                 {
                     // Create the main teleport target (quad)
-                    GameObject teleportTarget = CreateTeleportTargetTransformVisuals(parentScript);
+                    GameObject teleportTarget = CreateTargetTransformDirectionVisuals(parentScript, "QuickDash Teleport Target");
 
                     effectType.targetTransform = teleportTarget.transform;
                 }
@@ -410,13 +410,78 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
             }
         }
 
+
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E09_Catapult)
+        {
+            PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E09_Catapult effectType = effect as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E09_Catapult;
+            if (effectType == null)
+                return;
+
+            GUILayout.BeginHorizontal();
+
+            if (effectType.catapultDirectionPreview == null)
+            {
+                Color original = GUI.backgroundColor;
+                GUI.backgroundColor = Color.green;
+                GUILayout.BeginHorizontal();
+
+                var boldLabelStyle = new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold };
+                GUI.color = Color.red;
+                GUILayout.Label("Assign or create catapult direction transform", boldLabelStyle);
+                GUI.color = Color.white;
+
+                if (GUILayout.Button("Create Catapult Direction Transform", GUILayout.Width(300)))
+                {
+                    // Create the main teleport target (quad)
+                    GameObject targetTransform = CreateTargetTransformDirectionVisuals(parentScript,"Catapult Direction Transform");
+
+                    effectType.catapultDirectionPreview = targetTransform.transform;
+                }
+                GUILayout.FlexibleSpace();
+
+                GUILayout.EndHorizontal();
+                GUI.backgroundColor = original;
+            }
+            else
+            {
+                Color original = GUI.backgroundColor;
+                GUI.backgroundColor = Color.red;
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("Delete Catapult Direction Transform", GUILayout.Width(300)))
+                {
+                    if (EditorUtility.DisplayDialog("Delete", "Are you sure?", "ok", "cancel"))
+                    {
+                        // Add undo functionality for object deletion
+                        Undo.DestroyObjectImmediate(effectType.catapultDirectionPreview.gameObject); effectType.catapultDirectionPreview = null;
+                        Undo.RecordObject(parentScript, "Delete Catapult Direction Transform");
+                        EditorUtility.SetDirty(parentScript);
+                        return;
+                    }
+                }
+
+                GUI.backgroundColor = original;
+
+                if (GUILayout.Button("Remove Catapult Direction Transform", GUILayout.Width(300)))
+                {
+                    effectType.catapultDirectionPreview = null;
+                    Undo.RecordObject(parentScript, "");
+                    EditorUtility.SetDirty(parentScript);
+                    return;
+                }
+
+                GUILayout.EndHorizontal();
+            }
+
+            GUILayout.EndHorizontal();
+        }
     }
 
-    private static GameObject CreateTeleportTargetTransformVisuals(PTK_Command_05_PlayerLogicEffects parentScript)
+    private static GameObject CreateTargetTransformDirectionVisuals(PTK_Command_05_PlayerLogicEffects parentScript,string strName)
     {
         GameObject teleportTarget = GameObject.CreatePrimitive(PrimitiveType.Quad);
         GameObject.DestroyImmediate(teleportTarget.GetComponent<Collider>());
-        teleportTarget.name = "QuickDash Teleport Target";
+        teleportTarget.name = strName ;
         teleportTarget.transform.parent = parentScript.transform;
         teleportTarget.transform.localPosition = Vector3.zero;
         teleportTarget.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
