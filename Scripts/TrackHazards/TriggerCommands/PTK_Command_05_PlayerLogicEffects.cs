@@ -20,22 +20,27 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     {
         public enum EEffectType
         {
-            E0_NONE,
+            E00_NONE,
 
-            E1_BOUNCE,
+            E01_BOUNCE,
 
-            E2_KILL_PLAYER,
-            E3_DAMAGE_PLAYER,
-            E4_CONTINOUS_DAMAGE,
+            E02_KILL_PLAYER,
+            E03_DAMAGE_PLAYER,
+            E04_CONTINOUS_DAMAGE,
 
-            E5_HEAL_PLAYER,
+            E05_HEAL_PLAYER,
 
-            E6_QUICK_DASH_MOVEMENT_WAYPOINTS,
-            E6_QUICK_DASH_MOVEMENT_BEZIER,
-            E6_QUICK_DASH_MOVEMENT_TELEPORT,
+            E06_QUICK_DASH_MOVEMENT_WAYPOINTS,
+            E06_QUICK_DASH_MOVEMENT_BEZIER,
+            E06_QUICK_DASH_MOVEMENT_TELEPORT,
 
-            E7_FROZEN_WHEELS,
+            E07_FROZEN_WHEELS,
+            E08_BOOST_PAD,
+            E09_WIND_FORCE,
+            E10_CATAPULT,
 
+
+            E99_FLAT_TIRE_UNUSED,
             MORE_COMING_SOON = 9999
         }
 
@@ -56,7 +61,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
 
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E1_BOUNCE;
+            return EEffectType.E01_BOUNCE;
         }
     }
 
@@ -75,7 +80,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E2_KILL_PLAYER; // change me to correct one!
+            return EEffectType.E02_KILL_PLAYER; // change me to correct one!
         }
     }
 
@@ -95,7 +100,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E3_DAMAGE_PLAYER; // change me to correct one! 
+            return EEffectType.E03_DAMAGE_PLAYER; // change me to correct one! 
         }
 
         //!! \/ create instance below and add to AddAllEffectsToList
@@ -164,7 +169,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E4_CONTINOUS_DAMAGE; // change me to correct one! 
+            return EEffectType.E04_CONTINOUS_DAMAGE; // change me to correct one! 
         }
 
         //!! \/ create instance below and add to AddAllEffectsToList
@@ -191,7 +196,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E5_HEAL_PLAYER; // change me to correct one! 
+            return EEffectType.E05_HEAL_PLAYER; // change me to correct one! 
         }
 
         //!! \/ create instance below and add to AddAllEffectsToList
@@ -237,7 +242,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E6_QUICK_DASH_MOVEMENT_WAYPOINTS; // change me to correct one!
+            return EEffectType.E06_QUICK_DASH_MOVEMENT_WAYPOINTS; // change me to correct one!
         }
     }
 
@@ -256,7 +261,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E6_QUICK_DASH_MOVEMENT_BEZIER; // change me to correct one!
+            return EEffectType.E06_QUICK_DASH_MOVEMENT_BEZIER; // change me to correct one!
         }
 
         [EasyButtons.Button]
@@ -293,7 +298,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E6_QUICK_DASH_MOVEMENT_TELEPORT; // change me to correct one!
+            return EEffectType.E06_QUICK_DASH_MOVEMENT_TELEPORT; // change me to correct one!
         }
     }
 
@@ -309,9 +314,89 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         // !!! CHANGE ME TO CORRECT ONE
         public override EEffectType GetEffectType()
         {
-            return EEffectType.E7_FROZEN_WHEELS; // change me to correct one!
+            return EEffectType.E07_FROZEN_WHEELS; // change me to correct one!
         }
     }
+
+    [System.Serializable]
+    public class CPlayerEffect_E8_BoostPad : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+        public float fStrength = 1.0f;
+
+        public override void AwakeInit()
+        {
+
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E08_BOOST_PAD; // change me to correct one!
+        }
+    }
+
+    
+    [System.Serializable]
+    public class CPlayerEffect_EX_FlatTire : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+        public float fDuration = 5.0f;
+
+        public override void AwakeInit()
+        {
+
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E99_FLAT_TIRE_UNUSED; // change me to correct one!
+        }
+    }
+
+    [System.Serializable]
+    public class CPlayerEffect_E9_Wind : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+        public Vector3 vWindDirection = Vector3.forward;
+        public float fWindStrength = 20.0f;
+        public EWindMode eWindMode = EWindMode.E0_DISABLED_STOP;
+        public enum EWindMode
+        {
+            E0_DISABLED_STOP,
+            E1_ENABLED_START_ADDING_WIND_FORCE
+        }
+
+        public override void AwakeInit()
+        {
+
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E09_WIND_FORCE; // change me to correct one!
+        }
+    }
+
+    [System.Serializable]
+    public class CPlayerEffect_E10_Catapult : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
+    {
+        public Vector3 vCatapultDirection = Vector3.forward;
+        public float fCatapultForce = 40.0f;
+        [Header("Allows for very long catapult effect")]
+        public float fGravityMultiplierUntilGrounded = 1.0f;
+        
+        [Header("to Launch all players with the same speed")]
+        public bool bOverrideKartVelocity = false;
+
+
+        public override void AwakeInit()
+        {
+
+        }
+        // !!! CHANGE ME TO CORRECT ONE
+        public override EEffectType GetEffectType()
+        {
+            return EEffectType.E10_CATAPULT; // change me to correct one!
+        }
+    }
+
 
     [System.Serializable]
     public class CPlayerEffect_MoreComingSoon : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
@@ -339,7 +424,11 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E6_QuickDashMovement_Waypoints QuickDashMovement_Waypoints = new CPlayerEffect_E6_QuickDashMovement_Waypoints();// !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E6_QuickDashMovement_BezierSpline QuickDashMovement_Spline = new CPlayerEffect_E6_QuickDashMovement_BezierSpline();// !! add item to list inside AddAllEffectsToList !!
     public CPlayerEffect_E6_QuickDashMovement_InstantTeleport QuickDashMovement_InstantTeleport = new CPlayerEffect_E6_QuickDashMovement_InstantTeleport();// !! add item to list inside AddAllEffectsToList !!
-    public CPlayerEffect_E7_FrozenWheelsEffect FrozenWheels = new CPlayerEffect_E7_FrozenWheelsEffect();
+    public CPlayerEffect_E7_FrozenWheelsEffect FrozenWheels = new CPlayerEffect_E7_FrozenWheelsEffect();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E8_BoostPad BoostPad = new CPlayerEffect_E8_BoostPad();// !! add item to list inside AddAllEffectsToList !!
+ //   public CPlayerEffect_E9_FlatTire FlatTire = new CPlayerEffect_E9_FlatTire();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E9_Wind WindForce = new CPlayerEffect_E9_Wind();// !! add item to list inside AddAllEffectsToList !!
+    public CPlayerEffect_E10_Catapult Catapult = new CPlayerEffect_E10_Catapult();// !! add item to list inside AddAllEffectsToList !!
 
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
     void AddAllEffectsToList()
@@ -357,6 +446,10 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         playerEffects.Add(QuickDashMovement_InstantTeleport);
 
         playerEffects.Add(FrozenWheels);
+        playerEffects.Add(BoostPad);
+        // playerEffects.Add(FlatTire); // unused no VFX effect
+        playerEffects.Add(WindForce);
+        playerEffects.Add(Catapult);
 
         playerEffects.Add(MoreComingSoon);
 
@@ -409,7 +502,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             if (playerEffects[i].bExecute == false)
                 continue;
 
-            if(playerEffects[i].GetEffectType() == CPlayerEffectBase.EEffectType.E3_DAMAGE_PLAYER )
+            if(playerEffects[i].GetEffectType() == CPlayerEffectBase.EEffectType.E03_DAMAGE_PLAYER )
             {
                 var effectDamage = playerEffects[i] as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E3_Damage;
 
@@ -426,7 +519,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
             if (playerEffects[i].bExecute == false)
                 continue;
 
-            if (playerEffects[i].GetEffectType() == CPlayerEffectBase.EEffectType.E4_CONTINOUS_DAMAGE)
+            if (playerEffects[i].GetEffectType() == CPlayerEffectBase.EEffectType.E04_CONTINOUS_DAMAGE)
             {
                 var effectDamageContinous = playerEffects[i] as PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage;
 

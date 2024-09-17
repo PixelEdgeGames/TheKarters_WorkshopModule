@@ -45,10 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bIsTriggerEnabled: 1
-  automationSettings:
+  autoEnableDisableSettings:
     bAutoDisableAfterTriggerEvent: 0
     bAutoEnableWhenTriggerIsDisabled: 0
-    fAutoEnableIfIsDisabledForTime: 5
+    fAutoEnableAfterTime: 5
     fTimeSinceTriggerIsDisabled: 0
   onTriggerEnabledDisabledCommands:
     onTriggerEnabledCommands:
@@ -62,6 +62,12 @@ MonoBehaviour:
       CommandsToCall:
       - {fileID: 55563813369424733}
   eventTypesConditionsToCheck: 
+  bTriggerWithPlayerEvents: 0
+  triggerTargetPlayersSettings:
+    eTriggerOnPlayers: 0
+    ePlayerRacingState: 0
+    ePlayerRacePosMode: 0
+    iRacePosNr: 1
 --- !u!1 &8697687234762053264
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,7 +78,7 @@ GameObject:
   m_Component:
   - component: {fileID: 195695861191308611}
   m_Layer: 0
-  m_Name: TriggerOnEnableDisable_CommandBehaviours
+  m_Name: OnEnableDisableCommands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

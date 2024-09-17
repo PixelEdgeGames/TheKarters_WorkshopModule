@@ -66,6 +66,12 @@ MonoBehaviour:
   - strConditionName: 
     bIgnoreConditions: 0
     gameTypeConditionsToCheck: []
+  bTriggerWithPlayerEvents: 0
+  triggerTargetPlayersSettings:
+    eTriggerOnPlayers: 0
+    ePlayerRacingState: 0
+    ePlayerRacePosMode: 0
+    iRacePosNr: 1
 --- !u!1 &3561543266395844470
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +82,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1483298963999686821}
   m_Layer: 0
-  m_Name: TriggerOnEnableDisable_CommandBehaviours
+  m_Name: OnEnableDisableCommands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

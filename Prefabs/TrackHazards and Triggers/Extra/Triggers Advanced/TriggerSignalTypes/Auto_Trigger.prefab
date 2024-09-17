@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7919118300647967233}
   m_Layer: 0
-  m_Name: TriggerOnEnableDisable_CommandBehaviours
+  m_Name: OnEnableDisableCommands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,10 +77,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bIsTriggerEnabled: 1
-  automationSettings:
+  autoEnableDisableSettings:
     bAutoDisableAfterTriggerEvent: 0
     bAutoEnableWhenTriggerIsDisabled: 0
-    fAutoEnableIfIsDisabledForTime: 5
+    fAutoEnableAfterTime: 5
     fTimeSinceTriggerIsDisabled: 0
   onTriggerEnabledDisabledCommands:
     onTriggerEnabledCommands:
@@ -95,8 +95,8 @@ MonoBehaviour:
       - {fileID: 1022895245300381596}
   fMinimumRaceTimeToTrigger: 0
   fDelayAfterGameObjectEnabled: 0
-  bResetTriggerOnEnabledEvent: 0
-  iTriggerRepeatCount: 1
+  iRepeatCount: -1
+  eRepeatCounterResetMode: 0
   bUseRandomRepeatWaitTime: 0
   fRepeatWaitTime: 1
   v2RandomWaitRange: {x: 1, y: 1}

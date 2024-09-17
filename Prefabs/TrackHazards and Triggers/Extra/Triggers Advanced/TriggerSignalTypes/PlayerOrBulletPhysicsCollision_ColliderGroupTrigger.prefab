@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bIsTriggerEnabled: 1
-  automationSettings:
+  autoEnableDisableSettings:
     bAutoDisableAfterTriggerEvent: 0
     bAutoEnableWhenTriggerIsDisabled: 0
-    fAutoEnableIfIsDisabledForTime: 5
+    fAutoEnableAfterTime: 5
     fTimeSinceTriggerIsDisabled: 0
   onTriggerEnabledDisabledCommands:
     onTriggerEnabledCommands:
@@ -72,7 +72,6 @@ MonoBehaviour:
   bTriggerFromEachBulletDamageHit: 0
   iUniquePhysicsTriggerID: 1880001072
   extraCollidersParent: {fileID: 7442902696956098444}
-  iUniquePhysicsTriggerIDCratedForObjectInstance: -714184
 --- !u!1 &6535228113766188298
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6704680834941445083}
   m_Layer: 0
-  m_Name: TriggerOnEnableDisable_CommandBehaviours
+  m_Name: OnEnableDisableCommands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
