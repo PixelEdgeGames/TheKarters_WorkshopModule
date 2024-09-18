@@ -356,11 +356,10 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public class CPlayerEffect_E09_Catapult : CPlayerEffectBase // make sure to add instance to playerEffects in Awake() !
     {
         public Transform catapultDirectionPreview = null;
-        [Range(0.2f,2.0f)]
-        public float fCatapultLaunchVerticalStrength = 0.5f;
-        public float fCatapultForce = 100.0f;
+        public float fCatapultUpForce = 50.0f;
+        public float fCatapultForwardForce = 100.0f;
 
-        [Header("If true, player will be rotated to face catapult dir")]
+        [Header("Optional - Do not use if not required")]
         public bool bForceOrientPlayerToCatapultDirection = false;
 
         public override void AwakeInit()
