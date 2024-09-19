@@ -44,6 +44,7 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
         }
 
         public bool bExecute = false;
+
         public abstract EEffectType GetEffectType();
         public abstract void AwakeInit();
     }
@@ -419,6 +420,44 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
     public CPlayerEffect_E09_Catapult Catapult = new CPlayerEffect_E09_Catapult();// !! add item to list inside AddAllEffectsToList !!
 
     public CPlayerEffect_MoreComingSoon MoreComingSoon = new CPlayerEffect_MoreComingSoon(); // !! add item to list inside AddAllEffectsToList !!
+
+    //AnimationClip Support
+    // Bounce effect
+    public bool bUseBounceAnimProxyValues = false;
+    public float fBounceStrengthProxy = 50.0f; // Proxy for fBounceStrength
+
+    // Kill effect
+    public bool bUseKillAnimProxyValues = false;
+    public float fSquishDurationProxy = 5.0f; // Proxy for fSquishDuration
+
+    // Damage effect
+    public bool bUseDamageAnimProxyValues = false;
+    public int iDamageProxy = 80; // Proxy for iDamage
+    public float fSquishDurationDamageProxy = 5.0f; // Proxy for fSquishDuration (Damage)
+
+    // Continuous Damage effect
+    public bool bUseContinuousDamageAnimProxyValues = false;
+    public float fContinuousDamageDurationProxy = 5.0f; // Proxy for fContinuousDamageDuration
+    public float fDamageTickEverySecProxy = 1.0f; // Proxy for fDamageTickEverySec
+    public int iDamagePerTickProxy = 20; // Proxy for iDamagePerTick
+
+    // Heal effect
+    public bool bUseHealAnimProxyValues = false;
+    public int iHealHPProxy = 100; // Proxy for iHealHP
+    public float fHealthToRefillProxy = 50.0f; // Proxy for fHealthToRefill
+    public float fRefillHealthInTimeProxy = 2.0f; // Proxy for fRefillHealthInTime
+
+    // Catapult effect
+    public bool bUseCatapultAnimProxyValues = false;
+    public float fCatapultUpForceProxy = 50.0f; // Proxy for fCatapultUpForce
+    public float fCatapultForwardForceProxy = 100.0f; // Proxy for fCatapultForwardForce
+
+    public bool bUseFrozenWheelsAnimProxyValues = false; // Animation proxy toggle
+    public float fFrozenDurationProxy = 5.0f; // Proxy variable for animation
+
+    public bool bUseBoostPadAnimProxyValues = false; // Animation proxy toggle
+    public float fBoostpadStrengthProxy = 1.0f; // Proxy variable for animation
+
     void AddAllEffectsToList()
     {
         playerEffects.Add(BounceEffect);
@@ -462,6 +501,63 @@ public class PTK_Command_05_PlayerLogicEffects : PTK_TriggerCommandBase
 
     public override void OnDestroy()
     {
+    }
+
+    public override void Update()
+    { 
+        // Bounce effect
+        if (bUseBounceAnimProxyValues && BounceEffect != null)
+        {
+            BounceEffect.fBounceStrength = fBounceStrengthProxy;
+        }
+
+        // Kill effect
+        if (bUseKillAnimProxyValues && KillPlayer != null)
+        {
+            KillPlayer.fSquishDuration = fSquishDurationProxy;
+        }
+
+        // Damage effect
+        if (bUseDamageAnimProxyValues && DamagePlayer != null)
+        {
+            DamagePlayer.iDamage = iDamageProxy;
+            DamagePlayer.fSquishDuration = fSquishDurationDamageProxy;
+        }
+
+        // Continuous Damage effect
+        if (bUseContinuousDamageAnimProxyValues && DamagePlayer_Continous != null)
+        {
+            DamagePlayer_Continous.fContinuousDamageDuration = fContinuousDamageDurationProxy;
+            DamagePlayer_Continous.fDamageTickEverySec = fDamageTickEverySecProxy;
+            DamagePlayer_Continous.iDamagePerTick = iDamagePerTickProxy;
+        }
+
+        // Heal effect
+        if (bUseHealAnimProxyValues && HealPlayer != null)
+        {
+            HealPlayer.iHealHP = iHealHPProxy;
+            HealPlayer.fHealhToRefill = fHealthToRefillProxy;
+            HealPlayer.fRefillHealthInTime = fRefillHealthInTimeProxy;
+        }
+
+        // Catapult effect
+        if (bUseCatapultAnimProxyValues && Catapult != null)
+        {
+            Catapult.fCatapultUpForce = fCatapultUpForceProxy;
+            Catapult.fCatapultForwardForce = fCatapultForwardForceProxy;
+        }
+
+        // FrozenWheels effect
+        if (bUseFrozenWheelsAnimProxyValues && FrozenWheels != null)
+        {
+            FrozenWheels.fDuration = fFrozenDurationProxy;
+        }
+
+        // BoostPad effect
+        if (bUseBoostPadAnimProxyValues && BoostPad != null)
+        {
+            BoostPad.fStrength = fBoostpadStrengthProxy;
+        }
     }
 
     protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)

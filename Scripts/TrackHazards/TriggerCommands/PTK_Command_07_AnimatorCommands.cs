@@ -111,7 +111,7 @@ public class PTK_Command_07_AnimatorCommands : PTK_TriggerCommandBase
     {
     }
 
-    public  void Update()
+    public override void Update()
     {
         for(int i=0;i< currentAnimatorsFloatValsInterp.Count;i++)
         {

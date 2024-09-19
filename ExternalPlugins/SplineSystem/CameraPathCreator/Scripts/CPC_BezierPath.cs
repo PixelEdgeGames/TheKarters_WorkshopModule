@@ -202,7 +202,7 @@ public class CPC_Follower
         E_BEZIER,
         E_BEZIER_WORLD_Y,
         E_POINT_ORIENTATION,
-        E_IGNORE,
+        E_IGNORE_ROTATION_NOT_USED,
         E_LOOK_AT
     }
 
@@ -338,9 +338,7 @@ public class CPC_BezierPath : MonoBehaviour
     [HideInInspector]
     public bool bIsRuntimeEditingPath = false;
 
-
-
-    void Start()
+    private void Awake()
     {
         bIsObjectSelectedOnGizmos = false;
         foreach (var point in points)
@@ -352,7 +350,10 @@ public class CPC_BezierPath : MonoBehaviour
         }
 
         GenerateVertexPath();
+    }
 
+    void Start()
+    {
         if (playOnAwake)
             PlayPath(fBezierSpeed,false,false);
     }
@@ -429,7 +430,7 @@ public class CPC_BezierPath : MonoBehaviour
                     Debug.LogWarning("Look At target is not set for " + follower.gameObject.name);
                 }
                 break;
-            case CPC_Follower.ERotationMode.E_IGNORE:
+            case CPC_Follower.ERotationMode.E_IGNORE_ROTATION_NOT_USED:
             default:
                 rotation = follower.gameObject.transform.rotation;
                 break;

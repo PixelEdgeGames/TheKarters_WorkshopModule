@@ -70,7 +70,6 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
                         SerializedProperty property = effectProperty.Copy();
                         SerializedProperty endProperty = property.GetEndProperty();
 
-
                         // Iterate over all properties of the effect
                         if (property.NextVisible(true))
                         {
@@ -84,10 +83,15 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
                                 EditorGUILayout.PropertyField(property, true);
                             }
                             while (property.NextVisible(false));
+
                         }
 
 
                         DrawPerEffectGUI(script,effect);
+
+                        // Add Animation Clip Support toggle and display proxy values if enabled
+                        DisplayAnimationClipSupport(effectSerializedObject,script, effect);
+
 
                         effectSerializedObject.ApplyModifiedProperties();
 
@@ -110,6 +114,176 @@ public class PTK_Command_05_PlayerLogicEffectsEditor : Editor
         {
             EditorUtility.SetDirty(target);
         }
+    }
+
+    void DisplayAnimationClipSupport(SerializedObject so, PTK_Command_05_PlayerLogicEffects parentScript, PTK_Command_05_PlayerLogicEffects.CPlayerEffectBase effect)
+    {
+        GUILayout.Space(5);
+        int iOriginalIntent = EditorGUI.indentLevel;
+
+        // Bounce effect
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E1_Bounce)
+        {
+            SerializedProperty bUseBounceAnimProxyValues = so.FindProperty("bUseBounceAnimProxyValues");
+            SerializedProperty fBounceStrengthProxy = so.FindProperty("fBounceStrengthProxy");
+
+            EditorGUILayout.PropertyField(bUseBounceAnimProxyValues, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseBounceAnimProxyValues.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.PropertyField(fBounceStrengthProxy, new GUIContent("Bounce Strength Proxy"));
+            }
+        }
+
+        // Kill effect
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E2_Kill)
+        {
+            SerializedProperty bUseKillAnimProxyValues = so.FindProperty("bUseKillAnimProxyValues");
+            SerializedProperty fSquishDurationProxy = so.FindProperty("fSquishDurationProxy");
+
+            EditorGUILayout.PropertyField(bUseKillAnimProxyValues, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseKillAnimProxyValues.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(fSquishDurationProxy, new GUIContent("Squish Duration Proxy"));
+            }
+        }
+
+        // Damage effect
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E3_Damage)
+        {
+            SerializedProperty bUseDamageAnimProxyValues = so.FindProperty("bUseDamageAnimProxyValues");
+            SerializedProperty iDamageProxy = so.FindProperty("iDamageProxy");
+            SerializedProperty fSquishDurationDamageProxy = so.FindProperty("fSquishDurationDamageProxy");
+
+            EditorGUILayout.PropertyField(bUseDamageAnimProxyValues, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseDamageAnimProxyValues.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(iDamageProxy, new GUIContent("Damage Proxy"));
+                EditorGUILayout.PropertyField(fSquishDurationDamageProxy, new GUIContent("Squish Duration Proxy (Damage)"));
+            }
+        }
+
+        // Continuous Damage effect
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E4_ContinuousDamage)
+        {
+            SerializedProperty bUseContinuousDamageAnimProxyValues = so.FindProperty("bUseContinuousDamageAnimProxyValues");
+            SerializedProperty fContinuousDamageDurationProxy = so.FindProperty("fContinuousDamageDurationProxy");
+            SerializedProperty fDamageTickEverySecProxy = so.FindProperty("fDamageTickEverySecProxy");
+            SerializedProperty iDamagePerTickProxy = so.FindProperty("iDamagePerTickProxy");
+
+            EditorGUILayout.PropertyField(bUseContinuousDamageAnimProxyValues, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseContinuousDamageAnimProxyValues.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(fContinuousDamageDurationProxy, new GUIContent("Continuous Damage Duration Proxy"));
+                EditorGUILayout.PropertyField(fDamageTickEverySecProxy, new GUIContent("Damage Tick Every Sec Proxy"));
+                EditorGUILayout.PropertyField(iDamagePerTickProxy, new GUIContent("Damage Per Tick Proxy"));
+            }
+        }
+
+        // Heal effect
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E5_HealPlayer)
+        {
+            SerializedProperty bUseHealAnimProxyValues = so.FindProperty("bUseHealAnimProxyValues");
+            SerializedProperty iHealHPProxy = so.FindProperty("iHealHPProxy");
+            SerializedProperty fHealthToRefillProxy = so.FindProperty("fHealthToRefillProxy");
+            SerializedProperty fRefillHealthInTimeProxy = so.FindProperty("fRefillHealthInTimeProxy");
+
+            EditorGUILayout.PropertyField(bUseHealAnimProxyValues, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseHealAnimProxyValues.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(iHealHPProxy, new GUIContent("Heal HP Proxy"));
+                EditorGUILayout.PropertyField(fHealthToRefillProxy, new GUIContent("Health to Refill Proxy"));
+                EditorGUILayout.PropertyField(fRefillHealthInTimeProxy, new GUIContent("Refill Health In Time Proxy"));
+            }
+        }
+
+        // Catapult effect
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E09_Catapult)
+        {
+            SerializedProperty bUseCatapultAnimProxyValues = so.FindProperty("bUseCatapultAnimProxyValues");
+            SerializedProperty fCatapultUpForceProxy = so.FindProperty("fCatapultUpForceProxy");
+            SerializedProperty fCatapultForwardForceProxy = so.FindProperty("fCatapultForwardForceProxy");
+
+            EditorGUILayout.PropertyField(bUseCatapultAnimProxyValues, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseCatapultAnimProxyValues.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(fCatapultUpForceProxy, new GUIContent("Catapult Up Force Proxy"));
+                EditorGUILayout.PropertyField(fCatapultForwardForceProxy, new GUIContent("Catapult Forward Force Proxy"));
+            }
+        }
+
+        // Frozen
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E7_FrozenWheelsEffect)
+        {
+            SerializedProperty bUseProxy = so.FindProperty("bUseFrozenWheelsAnimProxyValues");
+            SerializedProperty fFrozenDurationProxy = so.FindProperty("fFrozenDurationProxy");
+
+            EditorGUILayout.PropertyField(bUseProxy, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseProxy.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.PropertyField(fFrozenDurationProxy, new GUIContent("Frozen Duration Proxy"));
+            }
+        }
+
+        // boostpad
+        if (effect is PTK_Command_05_PlayerLogicEffects.CPlayerEffect_E8_BoostPad) // ensure you changed class name when adding new
+        {
+            SerializedProperty bUseProxy = so.FindProperty("bUseBoostPadAnimProxyValues");
+            SerializedProperty fBoostpadStrengthProxy = so.FindProperty("fBoostpadStrengthProxy");
+
+            EditorGUILayout.PropertyField(bUseProxy, new GUIContent("Enable Variables Animation"));
+
+
+            if (bUseProxy.boolValue)
+            {
+                EditorGUILayout.HelpBox("The values below will override the originals to support animation. They will be used with or without animation. You can Animate these variables in the Animation window", MessageType.Info);
+                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.PropertyField(fBoostpadStrengthProxy, new GUIContent("Boostpad Strength Proxy"));
+            }
+        }
+
+        // Apply changes to the serialized object
+        so.ApplyModifiedProperties();
+
+        EditorGUI.indentLevel = iOriginalIntent;
     }
 
     void DrawPerEffectGUI(PTK_Command_05_PlayerLogicEffects parentScript, PTK_Command_05_PlayerLogicEffects.CPlayerEffectBase effect)

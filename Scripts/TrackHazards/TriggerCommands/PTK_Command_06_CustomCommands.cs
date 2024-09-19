@@ -26,6 +26,10 @@ public class PTK_Command_06_CustomCommands : PTK_TriggerCommandBase
     {
     }
 
+    public override void Update()
+    {
+    }
+
     protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         CommandExecuted();

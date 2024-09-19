@@ -25,9 +25,10 @@ public class PTK_Command_08_RunCommandBehaviour : PTK_TriggerCommandBase
     {
     }
 
-    public void Update()
+    public override void Update()
     {
     }
+
 
     // to avoid infinite loop
     float fTimeSinceLastTimeCalled = 0.0f;

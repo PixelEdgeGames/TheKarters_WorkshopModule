@@ -23,6 +23,10 @@ public class PTK_Command_02_ModTriggerCommandExecutor_ManualReset : PTK_TriggerC
     public override void OnDestroy()
     {
     }
+    public override void Update()
+    {
+    }
+
     protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         CommandExecuted();

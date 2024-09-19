@@ -41,6 +41,10 @@ public class PTK_Command_01_GameObjects_EnableDisable : PTK_TriggerCommandBase
     public override void OnDestroy()
     {
     }
+    public override void Update()
+    {
+    }
+
     protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
     {
         CommandExecuted();

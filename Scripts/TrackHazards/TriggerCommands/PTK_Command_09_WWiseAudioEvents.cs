@@ -156,9 +156,10 @@ public class PTK_Command_09_WWiseAudioEvents : PTK_TriggerCommandBase
     {
     }
 
-    public void Update()
+    public override void Update()
     {
     }
+
 
 
     protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)

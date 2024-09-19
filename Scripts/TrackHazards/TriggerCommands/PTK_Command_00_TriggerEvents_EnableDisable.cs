@@ -100,23 +100,10 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
     {
     }
 
+    float fTimeSinceExecuted = 0.0f;
     public override void OnDestroy()
     {
-    }
-    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
-    {
-        CommandExecuted();
-    }
-
-    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
-    {
-        CommandExecuted();
-    }
-
-    float fTimeSinceExecuted = 0.0f;
-    private void Update()
-    {
-        if(bPostExecute_RevertToDefaultStateWithDelay == true)
+        if (bPostExecute_RevertToDefaultStateWithDelay == true)
         {
             if (fTimeSinceExecuted != 0.0f)
             {
@@ -127,6 +114,22 @@ public class PTK_Command_00_TriggerEvents_EnableDisable : PTK_TriggerCommandBase
             }
         }
     }
+
+    public override void Update()
+    {
+    }
+
+    protected override void ExecuteImpl(List<PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData> recivedTriggerSignals, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
+    {
+        CommandExecuted();
+    }
+
+    protected override void ExecuteImpl(PTK_TriggerArrayCommandsExecutor.CRecivedTriggerWithData recivedTriggerSignal, PTK_TriggerCommandsBehaviour _parentCommandBehaviour)
+    {
+        CommandExecuted();
+    }
+
+  
     void CommandExecuted()
     {
         foreach (PTK_ModBaseTrigger trigger in triggersToEnableAllPriv)

@@ -182,4 +182,13 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+#if PROJECT_MODDING_WORKSHOP_OFFICIAL
+        // we are not inside runtime tk2 game - we want to see the animations running in scene
+        gameEvents.OnGameEvent_RaceRestarted?.Invoke();
+        gameEvents.OnGameEvent_RaceTimerStart?.Invoke();
+#endif
+    }
+
 }

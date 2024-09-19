@@ -388,7 +388,7 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
     public void TK2_RunAnimationEventID(string strEventNameID)
     {
-        Debug.LogError("Show log");
+      //  Debug.LogError("Show log");
         for (int i = 0; i < events.Count; i++)
         {
             if(events[i].strEventNameID == strEventNameID)

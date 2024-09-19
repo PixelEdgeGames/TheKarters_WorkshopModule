@@ -28,7 +28,10 @@ public abstract class PTK_TriggerCommandBase : MonoBehaviour
     public abstract void Awake();
     public abstract void Start();
     public abstract void OnDestroy();
-   // public abstract void Update(); // we will use it only in commands that need it
+
+    public abstract void Update();
+
+    // public abstract void Update(); // we will use it only in commands that need it
 
     protected abstract void RaceResetted_RevertToDefault();
     protected abstract void OnRaceTimerJustStarted_SyncAndRunAnimsImpl();
