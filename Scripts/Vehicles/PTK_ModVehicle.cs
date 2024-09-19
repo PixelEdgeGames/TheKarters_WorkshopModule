@@ -18,6 +18,11 @@ public class PTK_ModVehicle : MonoBehaviour
     [Tooltip("sideways angle multiplier on landing / during drift .")]
     public float fDriftingLeanAngleMultiplier = 1.0f;
 
+    [Header("Optional - for vehicles that want to hide character")]
+    public bool bHideCharacterInVehicle = false;
+    [Header("Optional - for vehicles that want to hide wheels")]
+    public bool bHideWheels = false;
+
     public enum EVehicleType
     {
         E_FOUR_WHEELS,
