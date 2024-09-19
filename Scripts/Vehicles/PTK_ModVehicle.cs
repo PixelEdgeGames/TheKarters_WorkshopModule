@@ -18,10 +18,6 @@ public class PTK_ModVehicle : MonoBehaviour
     [Tooltip("sideways angle multiplier on landing / during drift .")]
     public float fDriftingLeanAngleMultiplier = 1.0f;
 
-    [Header("Optional - for vehicles that want to hide character")]
-    public bool bHideCharacterInVehicle = false;
-    [Header("Optional - for vehicles that want to hide wheels")]
-    public bool bHideWheels = false;
 
     public enum EVehicleType
     {
@@ -81,9 +77,12 @@ public class PTK_ModVehicle : MonoBehaviour
     public AnimationClip strongHitFront;
 
     public PTK_SuspensionSetupParent suspensionParent;
+
+
     // Start is called before the first frame update
     void Awake()
     {
+
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
@@ -106,14 +105,10 @@ public class PTK_ModVehicle : MonoBehaviour
             br_Bone.localPosition -= new Vector3(0.0F, 0.0F, 2.0F);// BR
         }
 
-        PTK_SuspensionPreviewMesh [] previewMeshes = this.GetComponentsInChildren<PTK_SuspensionPreviewMesh>();
-
-        for(int iPreview = 0; iPreview < previewMeshes.Length;iPreview++)
-        {
-            for (int iMesh = 0; iMesh < previewMeshes[iPreview].previewMeshes.Length; iMesh++)
-                previewMeshes[iPreview].previewMeshes[iMesh].enabled = false;
-        }
     }
+
+
+
 
     public int GetAvailableStickersCountFrontAndBack()
     {

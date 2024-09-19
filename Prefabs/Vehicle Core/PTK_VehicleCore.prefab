@@ -389,6 +389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2205870156402123998}
+  - component: {fileID: 755049005051239022}
   - component: {fileID: 6702656813285457312}
   - component: {fileID: 4817976735990964684}
   m_Layer: 0
@@ -415,6 +416,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &755049005051239022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4253190368965510417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87744ad7f3469fc4ebbc4df4080ae333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6702656813285457312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,6 +442,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bShowDebugMeshes: 1
   fBoostTiltIncreaseAngle: 5
+  fDriftingLeanAngleMultiplier: 1
+  bHideCharacterInVehicle: 0
+  bHideWheels: 0
   eVehicleType: 0
   fl_WheelSize: 1
   fr_WheelSize: 1
@@ -469,6 +485,7 @@ MonoBehaviour:
   strongHitBack: {fileID: 0}
   strongHitFront: {fileID: 0}
   suspensionParent: {fileID: 235046551865381338}
+  childRenderers: []
   strBodyBone: Body
   strRootBone: Root_SCRIPT
   strEngineBone: Engine
@@ -1115,6 +1132,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d613def101973ed40bddcad13ff3953b, type: 3}
+--- !u!4 &8658549425900294023 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1050887516158048499, guid: d613def101973ed40bddcad13ff3953b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8555951381529048948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &235046551865381338 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8502749800185259694, guid: d613def101973ed40bddcad13ff3953b,
@@ -1127,9 +1150,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbb3cbf263e27e48a034b42d74184cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &8658549425900294023 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1050887516158048499, guid: d613def101973ed40bddcad13ff3953b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8555951381529048948}
-  m_PrefabAsset: {fileID: 0}
