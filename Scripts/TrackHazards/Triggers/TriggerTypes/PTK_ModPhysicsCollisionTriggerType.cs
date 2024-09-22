@@ -88,12 +88,13 @@ public class PTK_ModPhysicsCollisionTriggerType : PTK_ModBaseTrigger
 
         this.tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
 
-        var childObjects = extraCollidersParent.GetComponentsInChildren<Collider>();
+        if(extraCollidersParent != null)
+        {
+            var childObjects = extraCollidersParent.GetComponentsInChildren<Collider>();
 
-        for(int i=0;i< childObjects.Length;i++)
-            childObjects[i].tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
-
-
+            for (int i = 0; i < childObjects.Length; i++)
+                childObjects[i].tag = PTK_ModPhysicsCollisionTriggerType.strPhysicsTriggerTagName;
+        }
 
     }
     public override void OnEnable()

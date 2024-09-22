@@ -298,6 +298,9 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
         private void CheckWWiseTriggerEvents(float fCurrentTimeSinceTriggered)
         {
+            if (wwiseAudioEvents == null)
+                return;
+
             foreach(var wwiseAudioGO in wwiseAudioEvents)
             {
                 if (wwiseAudioGO.playInTargetGameObjectPosition == null)
@@ -349,20 +352,30 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
         private void TriggerAnimatorEvents()
         {
-            foreach (var animEvent in animatorEvents)
+            if(animatorEvents != null)
             {
-                animEvent.Execute();
+                foreach (var animEvent in animatorEvents)
+                {
+                    animEvent.Execute();
+                }
             }
 
-            foreach (var animEvent in animatorPlayAnimations)
+            if(animatorPlayAnimations != null)
             {
-                animEvent.Execute();
+                foreach (var animEvent in animatorPlayAnimations)
+                {
+                    animEvent.Execute();
+                }
             }
+
             
         }
 
         private void TriggerParticleSystemEvents()
         {
+            if (particleSystemEvents == null)
+                return;
+
             foreach (var psEvent in particleSystemEvents)
             {
                 psEvent.Execute();
@@ -371,6 +384,9 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
         private void TriggerTimelineEvents()
         {
+            if (timelineEvents == null)
+                return;
+
             foreach (var timelineEvent in timelineEvents)
             {
                 timelineEvent.Execute();
@@ -379,6 +395,9 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
         private void TriggerGameObjectEvents()
         {
+            if (gameObjectEvents == null)
+                return;
+
             foreach (var goEvent in gameObjectEvents)
             {
                 goEvent.Execute();
@@ -388,6 +407,9 @@ public class PTK_AnimationEventsHelper : MonoBehaviour
 
     public void TK2_RunAnimationEventID(string strEventNameID)
     {
+        if (events == null)
+            return;
+
       //  Debug.LogError("Show log");
         for (int i = 0; i < events.Count; i++)
         {
