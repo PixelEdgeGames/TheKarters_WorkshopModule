@@ -70,13 +70,15 @@ namespace PathCreation {
  IsClosed = isClosed;
         }
 
+        bool bUseNewAutoSetControlPointsAlgo = false;
         /// <summary> Creates a path from the supplied 3D points </summary>
         ///<param name="points"> List or array of points to create the path from. </param>
         ///<param name="isClosed"> Should the end point connect back to the start point? </param>
         ///<param name="space"> Determines if the path is in 3d space, or clamped to the xy/xz plane </param>
-        public BezierPath (IEnumerable<Vector3> points, bool isClosed = false, PathSpace space = PathSpace.xyz) {
+        public BezierPath (IEnumerable<Vector3> points, bool isClosed = false, PathSpace space = PathSpace.xyz,float _fAutoControlLength = 0.3f, bool _bUseNewAutoSetControlPointsAlgo = false) {
             Vector3[] pointsArray = points.ToArray ();
-
+            bUseNewAutoSetControlPointsAlgo = _bUseNewAutoSetControlPointsAlgo;
+            autoControlLength = _fAutoControlLength;
             if (pointsArray.Length < 2) {
                 Debug.LogError ("Path requires at least 2 anchor points.");
             } else {
@@ -87,6 +89,16 @@ namespace PathCreation {
                 for (int i = 2; i < pointsArray.Length; i++) {
                     AddSegmentToEnd (pointsArray[i]);
                     perAnchorNormalsAngle.Add (0);
+                }
+
+                if(pointsArray.Length == 2)
+                {
+                    if (controlMode == ControlMode.Automatic)
+                    {
+                        AutoSetAllAffectedControlPoints(this.points.Count - 1);
+                    }
+
+                    NotifyPathModified();
                 }
             }
 
@@ -563,6 +575,12 @@ namespace PathCreation {
 
         /// Calculates good positions (to result in smooth path) for the controls around specified anchor
         void AutoSetAnchorControlPoints (int anchorIndex) {
+
+            if(bUseNewAutoSetControlPointsAlgo == true)
+            {
+                AutoSetAnchorControlPoints2(anchorIndex);
+                return;
+            }
             // Calculate a vector that is perpendicular to the vector bisecting the angle between this anchor and its two immediate neighbours
             // The control points will be placed along that vector
             Vector3 anchorPos = points[anchorIndex];
@@ -589,6 +607,160 @@ namespace PathCreation {
                     points[LoopIndex (controlIndex)] = anchorPos + dir * neighbourDistances[i] * autoControlLength;
                 }
             }
+        }
+
+        void AutoSetAnchorControlPoints2(int anchorIndex)
+        {
+            // Determine indices of affected anchors
+            int startAnchor = Mathf.Max(0, anchorIndex - 1);
+            int endAnchor = Mathf.Min(NumAnchorPoints - 1, anchorIndex + 1);
+            int numAnchors = endAnchor - startAnchor + 1;
+
+            if (numAnchors < 2)
+                return; // Not enough anchors to adjust
+
+            // Extract positions of affected anchors
+            Vector3[] anchorPos = new Vector3[numAnchors];
+            for (int i = 0; i < numAnchors; i++)
+            {
+                anchorPos[i] = points[(startAnchor + i) * 3];
+            }
+
+            // Compute RHS for local system
+            int n = numAnchors - 1;
+            Vector3[] rhs = new Vector3[n];
+            rhs[0] = anchorPos[0] + 2 * anchorPos[1];
+            for (int i = 1; i < n - 1; i++)
+            {
+                rhs[i] = 4 * anchorPos[i] + 2 * anchorPos[i + 1];
+            }
+            rhs[n - 1] = (8 * anchorPos[n - 1] + anchorPos[n]) / 2f;
+
+            // Solve for control points
+            Vector3[] controlPoints = GetFirstControlPoints(rhs);
+
+            // Update control points in the main points array
+            for (int i = 0; i < n; i++)
+            {
+                int anchorIdx = startAnchor + i;
+                int pointIdx = anchorIdx * 3;
+
+                // Following control point of anchor i
+                points[pointIdx + 1] = controlPoints[i];
+
+                // Preceding control point of anchor i+1
+                if (i < n - 1)
+                {
+                    points[pointIdx + 2] = 2 * anchorPos[i + 1] - controlPoints[i + 1];
+                }
+                else
+                {
+                    points[pointIdx + 2] = (anchorPos[i + 1] + controlPoints[i]) / 2f;
+                }
+            }
+
+            NotifyPathModified();
+        }
+
+        public void AutoConstructSpline()
+        {
+            if (bUseNewAutoSetControlPointsAlgo == false)
+                return;
+
+            if (points == null || points.Count < 2)
+                return;
+
+            // Set control mode to Mirrored
+            ControlPointMode = ControlMode.Mirrored;
+
+            int numAnchors = NumAnchorPoints;
+            int n = numAnchors - 1;
+
+            if (n == 1)
+            {
+                // Special case for two anchors
+                Vector3 p0 = points[0];
+                Vector3 p1 = points[3];
+
+                Vector3 cp0 = (2 * p0 + p1) / 3f;
+                Vector3 cp1 = (2 * p1 + p0) / 3f;
+
+                points[1] = cp0;
+                points[2] = cp1;
+
+                NotifyPathModified();
+                return;
+            }
+
+            Vector3[] rhs = new Vector3[n];
+
+            // Get anchor positions
+            Vector3[] anchorPos = new Vector3[numAnchors];
+            for (int i = 0; i < numAnchors; i++)
+            {
+                anchorPos[i] = points[i * 3];
+            }
+
+            // Compute rhs
+            for (int i = 1; i < n - 1; i++)
+            {
+                rhs[i] = 4 * anchorPos[i] + 2 * anchorPos[i + 1];
+            }
+
+            rhs[0] = anchorPos[0] + 2 * anchorPos[1];
+            rhs[n - 1] = (8 * anchorPos[n - 1] + anchorPos[n]) / 2f;
+
+            // Get first control points
+            Vector3[] controlPoints = GetFirstControlPoints(rhs);
+
+            // Set control points
+            for (int i = 0; i < n; i++)
+            {
+                int anchorIndex = i;
+                int nextAnchorIndex = i + 1;
+                int pointIndex = anchorIndex * 3;
+
+                // First control point (following control point of anchor i)
+                points[pointIndex + 1] = controlPoints[i];
+
+                // Second control point (preceding control point of anchor i+1)
+                if (i < n - 1)
+                {
+                    points[pointIndex + 2] = 2 * anchorPos[nextAnchorIndex] - controlPoints[i + 1];
+                }
+                else
+                {
+                    // Handle the last segment
+                    points[pointIndex + 2] = (anchorPos[nextAnchorIndex] + controlPoints[i]) / 2f;
+                }
+            }
+
+            NotifyPathModified();
+        }
+
+        // Add this helper method to solve the tridiagonal system
+        private static Vector3[] GetFirstControlPoints(Vector3[] rhs)
+        {
+            int n = rhs.Length;
+            Vector3[] x = new Vector3[n];
+            float[] tmp = new float[n];
+
+            float b = 2.0f;
+            x[0] = rhs[0] / b;
+
+            for (int i = 1; i < n; i++)
+            {
+                tmp[i] = 1 / b;
+                b = (i < n - 1 ? 4.0f : 3.5f) - tmp[i];
+                x[i] = (rhs[i] - x[i - 1]) / b;
+            }
+
+            for (int i = n - 2; i >= 0; i--)
+            {
+                x[i] -= tmp[i + 1] * x[i + 1];
+            }
+
+            return x;
         }
 
         /// Determines good positions (for a smooth path) for the control points at the start and end of a path
@@ -618,6 +790,9 @@ namespace PathCreation {
                     points[points.Count - 2] = (points[points.Count - 1] + points[points.Count - 3]) * .5f;
                 }
             }
+
+            if (bUseNewAutoSetControlPointsAlgo)
+                AutoConstructSpline();
         }
 
         /// Update point positions for new path space
