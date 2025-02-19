@@ -61,11 +61,12 @@ public class PTK_TrackReplayCamerasSetup : MonoBehaviour
             return;
 
         bool bIsTrackReplayCamObjSelected = false;
-
+#if UNITY_EDITOR
         if (UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponentInParent<PTK_TrackReplayCamerasSetup>() != null)
         {
             bIsTrackReplayCamObjSelected = true;
         }
+#endif
 
         if(bWasTrackReplayObjSelected != bIsTrackReplayCamObjSelected)
         {

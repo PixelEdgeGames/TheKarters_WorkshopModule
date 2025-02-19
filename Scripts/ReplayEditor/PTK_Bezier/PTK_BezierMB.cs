@@ -36,7 +36,9 @@ public class PTK_BezierMB : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        if(UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponentInParent<PTK_BezierMB>() != null)
+#if UNITY_EDITOR
+        if (UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponentInParent<PTK_BezierMB>() != null)
             ptkBezier.DrawGizmos();
+#endif
     }
 }
