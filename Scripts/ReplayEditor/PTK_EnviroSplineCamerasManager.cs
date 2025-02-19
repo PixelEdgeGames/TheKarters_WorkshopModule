@@ -21,7 +21,7 @@ public class PTK_EnviroSplineCamerasManager : MonoBehaviour
         ResetAndPlayCamera();
     }
 
-    int iCurrentCamIndex = -1;
+    int iCurrentCamIndex = 0;
     public void ResetAndPlayCamera()
     {
         iCurrentCamIndex = 0;
