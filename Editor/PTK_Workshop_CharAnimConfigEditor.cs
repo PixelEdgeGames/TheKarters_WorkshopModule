@@ -27,44 +27,66 @@ public class PTK_Workshop_CharAnimConfigEditor : Editor
 
     static void MakeAnimationLooping(AnimationClip clip)
     {
-        if (clip != null)
+        if (clip == null)
+            return;
+
+        string clipPath = AssetDatabase.GetAssetPath(clip);
+
+        // Check if this is part of a model import
+        ModelImporter importer = AssetImporter.GetAtPath(clipPath) as ModelImporter;
+        if (importer != null)
         {
-            string strClipPath = AssetDatabase.GetAssetPath(clip); ;
+            // Get the name of this specific clip
+            string clipName = clip.name;
 
-            // Get the current animation clip settings
-            AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
-
-            // already set
-            if (settings.loopTime == true)
-                return;
-
-            // Set the loop time to true
-            settings.loopTime = true;
-
-            // Apply the modified settings to the clip
-            ModelImporter importer = AssetImporter.GetAtPath(strClipPath) as ModelImporter;
-            if (importer != null)
+            // Get all clip animations from the importer
+            ModelImporterClipAnimation[] clipAnimations = importer.clipAnimations;
+            if (clipAnimations == null || clipAnimations.Length == 0)
             {
-                AnimationUtility.SetAnimationClipSettings(clip, settings);
-                EditorUtility.SetDirty(clip);
+                // If no clipAnimations defined yet, get from default clips
+                clipAnimations = importer.defaultClipAnimations;
             }
-            else // animation clip was extracted
+
+            bool foundClip = false;
+            bool alreadyLooping = false;
+
+            // Find our specific clip and check if it's already looping
+            for (int i = 0; i < clipAnimations.Length; i++)
             {
-                // Retrieve the current settings of the clip
+                if (clipAnimations[i].name == clipName)
+                {
+                    foundClip = true;
+                    alreadyLooping = clipAnimations[i].loopTime;
 
-                // Modify settings
-                settings.loopTime = true;
+                    // Skip if already looping
+                    if (alreadyLooping)
+                        return;
 
-                // Apply modified settings back to the clip
-                AnimationUtility.SetAnimationClipSettings(clip, settings);
+                    clipAnimations[i].loopTime = true;
+                    break;
+                }
+            }
 
-                // Mark clip as dirty to ensure changes are saved
-                EditorUtility.SetDirty(clip);
-
+            if (foundClip && !alreadyLooping)
+            {
+                // Apply changes back to the importer
+                importer.clipAnimations = clipAnimations;
+                importer.SaveAndReimport();
             }
         }
         else
         {
+            // This is a directly editable animation asset
+            AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
+
+            // Skip if already looping
+            if (settings.loopTime)
+                return;
+
+            settings.loopTime = true;
+            AnimationUtility.SetAnimationClipSettings(clip, settings);
+            EditorUtility.SetDirty(clip);
+            AssetDatabase.SaveAssets();
         }
     }
     public static void InitializeFromDirectory(PTK_Workshop_CharAnimConfig config)
