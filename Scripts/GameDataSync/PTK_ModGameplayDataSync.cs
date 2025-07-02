@@ -13,7 +13,6 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
         {
             E_WAITING_FOR_RACE_START,
             E_RACE_IS_RUNNING_COUNTDOWN_COMPLETE,
-            E_AT_LEAST_ONE_PLAYER_FINISHED_RACE_WAITING_FOR_END,
             E_RACE_FINISHED_PRESENTING_SUMMARY
         }
 

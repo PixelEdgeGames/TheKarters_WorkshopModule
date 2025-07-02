@@ -69,12 +69,12 @@ Shader "Standard-DoubleSidedSuspension"
 			
 			// -------------------------------------
 					
-// Disabled by Shader Control: #pragma shader_feature _NORMALMAP
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-#pragma shader_feature __ _EMISSION
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
-// Disabled by Shader Control: #pragma shader_feature __ _PARALLAXMAP
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _EMISSION
+			#pragma shader_feature _METALLICGLOSSMAP 
+			#pragma shader_feature ___ _DETAIL_MULX2
+			#pragma shader_feature _PARALLAXMAP
 			
 			#pragma multi_compile_fwdbase
 			#pragma multi_compile_fog
@@ -107,11 +107,11 @@ Shader "Standard-DoubleSidedSuspension"
 			// -------------------------------------
 
 			
-// Disabled by Shader Control: #pragma shader_feature __ _NORMALMAP
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
-// Disabled by Shader Control: #pragma shader_feature __ _PARALLAXMAP
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _METALLICGLOSSMAP
+			#pragma shader_feature ___ _DETAIL_MULX2
+			#pragma shader_feature _PARALLAXMAP
 			
 			#pragma multi_compile_fwdadd_fullshadows
 			#pragma multi_compile_fog
@@ -138,7 +138,7 @@ Shader "Standard-DoubleSidedSuspension"
 			// -------------------------------------
 
 
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
 			#pragma multi_compile_shadowcaster
 
 			#pragma vertex vertShadowCaster
@@ -166,17 +166,17 @@ Shader "Standard-DoubleSidedSuspension"
 
 			// -------------------------------------
 
-// Disabled by Shader Control: #pragma shader_feature __ _NORMALMAP
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-#pragma shader_feature __ _EMISSION
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
-// Disabled by Shader Control: #pragma shader_feature __ _PARALLAXMAP
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _EMISSION
+			#pragma shader_feature _METALLICGLOSSMAP
+			#pragma shader_feature ___ _DETAIL_MULX2
+			#pragma shader_feature _PARALLAXMAP
 
-// Disabled by Shader Control: #pragma multi_compile __ UNITY_HDR_ON
-// Disabled by Shader Control: #pragma multi_compile __ LIGHTMAP_OFF LIGHTMAP_ON
-// Disabled by Shader Control: #pragma multi_compile __ DIRLIGHTMAP_OFF DIRLIGHTMAP_COMBINED DIRLIGHTMAP_SEPARATE
-// Disabled by Shader Control: #pragma multi_compile __ DYNAMICLIGHTMAP_OFF DYNAMICLIGHTMAP_ON
+			#pragma multi_compile ___ UNITY_HDR_ON
+			#pragma multi_compile LIGHTMAP_OFF LIGHTMAP_ON
+			#pragma multi_compile DIRLIGHTMAP_OFF DIRLIGHTMAP_COMBINED DIRLIGHTMAP_SEPARATE
+			#pragma multi_compile DYNAMICLIGHTMAP_OFF DYNAMICLIGHTMAP_ON
 			
 			#pragma vertex vertDeferred
 			#pragma fragment fragDeferred
@@ -200,9 +200,9 @@ Shader "Standard-DoubleSidedSuspension"
 			#pragma vertex vert_meta
 			#pragma fragment frag_meta
 
-#pragma shader_feature __ _EMISSION
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
+			#pragma shader_feature _EMISSION
+			#pragma shader_feature _METALLICGLOSSMAP
+			#pragma shader_feature ___ _DETAIL_MULX2
 
 			#include "UnityStandardMeta.cginc"
 			ENDCG
@@ -230,11 +230,11 @@ Shader "Standard-DoubleSidedSuspension"
 			CGPROGRAM
 			#pragma target 2.0
 			
-// Disabled by Shader Control: #pragma shader_feature __ _NORMALMAP
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-#pragma shader_feature __ _EMISSION
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _EMISSION 
+			#pragma shader_feature _METALLICGLOSSMAP 
+			#pragma shader_feature ___ _DETAIL_MULX2
 			// SM2.0: NOT SUPPORTED shader_feature _PARALLAXMAP
 
 			#pragma skip_variants SHADOWS_SOFT DIRLIGHTMAP_COMBINED DIRLIGHTMAP_SEPARATE
@@ -265,10 +265,10 @@ Shader "Standard-DoubleSidedSuspension"
 			CGPROGRAM
 			#pragma target 2.0
 
-// Disabled by Shader Control: #pragma shader_feature __ _NORMALMAP
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _METALLICGLOSSMAP
+			#pragma shader_feature ___ _DETAIL_MULX2
 			// SM2.0: NOT SUPPORTED shader_feature _PARALLAXMAP
 			#pragma skip_variants SHADOWS_SOFT
 			
@@ -292,7 +292,7 @@ Shader "Standard-DoubleSidedSuspension"
 			CGPROGRAM
 			#pragma target 2.0
 
-// Disabled by Shader Control: #pragma shader_feature __ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+			#pragma shader_feature _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
 			#pragma skip_variants SHADOWS_SOFT
 			#pragma multi_compile_shadowcaster
 
@@ -318,9 +318,9 @@ Shader "Standard-DoubleSidedSuspension"
 			#pragma vertex vert_meta
 			#pragma fragment frag_meta
 
-#pragma shader_feature __ _EMISSION
-// Disabled by Shader Control: #pragma shader_feature __ _METALLICGLOSSMAP
-// Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
+			#pragma shader_feature _EMISSION
+			#pragma shader_feature _METALLICGLOSSMAP
+			#pragma shader_feature ___ _DETAIL_MULX2
 
 			#include "UnityStandardMeta.cginc"
 			ENDCG
