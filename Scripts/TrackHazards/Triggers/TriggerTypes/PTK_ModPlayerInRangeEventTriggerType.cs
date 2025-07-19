@@ -150,6 +150,9 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_JustJumped(int iGlobalPlayerIndex)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
@@ -162,6 +165,9 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_JustLanded(int iGlobalPlayerIndex, float fTimeInAir)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
@@ -174,6 +180,10 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_JustDied(int iGlobalPlayerIndex)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
@@ -186,6 +196,12 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     private void OnPlayerEvent_JustKilledSomeone(int iGlobalPlayerIndexWhoKilled, int iGlobalPlayerIndexWhoDied)
     {
+        if (iGlobalPlayerIndexWhoKilled < 0 || iGlobalPlayerIndexWhoKilled >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+        if (iGlobalPlayerIndexWhoDied < 0 || iGlobalPlayerIndexWhoDied >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndexWhoKilled] == false)
             return;
@@ -198,6 +214,10 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_JustReceivedWeapon(int iGlobalPlayerIndex, int iWeaponType)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
@@ -213,6 +233,10 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_UsedWeapon(int iGlobalPlayerIndex, int iWeaponType)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
@@ -228,6 +252,9 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_MadeTrick(int iGlobalPlayerIndex)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
@@ -240,6 +267,9 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
 
     internal void OnPlayerEvent_BoostFired(int iGlobalPlayerIndex, int iBoostType, float fBoostStrength, float fBoostDuration)
     {
+        if (iGlobalPlayerIndex < 0 || iGlobalPlayerIndex >= bAreGlobalPlayersWithinVolumesRange.Length)
+            return; // probably ghost - it waas a reason of player physics to stuck in air
+
         // in range
         if (bAreGlobalPlayersWithinVolumesRange[iGlobalPlayerIndex] == false)
             return;
