@@ -60,7 +60,7 @@ public class PTK_MinimapRenderAndSave : MonoBehaviour
             var currentStage = UnityEditor.SceneManagement.StageUtility.GetCurrentStage();
 
             // Check if the current stage is a Prefab Stage, which indicates Prefab Editing Mode.
-            bool isInPrefabMode = currentStage is UnityEditor.Experimental.SceneManagement.PrefabStage;
+            bool isInPrefabMode = currentStage is UnityEditor.SceneManagement.PrefabStage;
 
             if (isInPrefabMode == false && UnityEditor.Selection.activeGameObject != null && (UnityEditor.Selection.activeGameObject == this.gameObject || UnityEditor.Selection.activeGameObject.GetComponentInParent<PTK_MinimapRenderAndSave>() == this))
             {
