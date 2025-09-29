@@ -1103,7 +1103,7 @@ public class CPC_CameraPathInspector : Editor
             if (handlePositionMode == CPC_EManipulationModes.Free)
             {
 #if UNITY_5_5_OR_NEWER
-                posNext = Handles.FreeMoveHandle(t.points[i].positionWorld + t.points[i].handleNextWorld, Quaternion.identity, size, Vector3.zero, Handles.SphereHandleCap);
+                var fmh_1106_107_638947406667325234 = Quaternion.identity; posNext = Handles.FreeMoveHandle(t.points[i].positionWorld + t.points[i].handleNextWorld, size, Vector3.zero, Handles.SphereHandleCap);
 #else
                 posNext = Handles.FreeMoveHandle(t.points[i].position + t.points[i].handlenext, Quaternion.identity, size, Vector3.zero, Handles.SphereCap);
 #endif
@@ -1158,7 +1158,7 @@ public class CPC_CameraPathInspector : Editor
             if (handlePositionMode == CPC_EManipulationModes.Free)
             {
 #if UNITY_5_5_OR_NEWER
-                posPrev = Handles.FreeMoveHandle(t.points[i].positionWorld + t.points[i].handlePrevWorld, Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(t.points[i].positionWorld + t.points[i].handlePrevWorld), Vector3.zero, Handles.SphereHandleCap);
+                var fmh_1161_107_638947406667335872 = Quaternion.identity; posPrev = Handles.FreeMoveHandle(t.points[i].positionWorld + t.points[i].handlePrevWorld, 0.1f * HandleUtility.GetHandleSize(t.points[i].positionWorld + t.points[i].handlePrevWorld), Vector3.zero, Handles.SphereHandleCap);
 #else
                 posPrev = Handles.FreeMoveHandle(t.points[i].position + t.points[i].handleprev, Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(t.points[i].position + t.points[i].handleprev), Vector3.zero, Handles.SphereCap);
 #endif
@@ -1247,8 +1247,7 @@ public class CPC_CameraPathInspector : Editor
             else
             {
                 // Use a different handle shape with offset
-                pos = Handles.FreeMoveHandle(t.points[i].positionWorld + positionOffset,
-                    (Tools.pivotRotation == PivotRotation.Local) ? t.points[i].rotation : Quaternion.identity,
+                var fmh_1251_21_638947406667352850 = (Tools.pivotRotation == PivotRotation.Local) ? t.points[i].rotation : Quaternion.identity; pos = Handles.FreeMoveHandle(t.points[i].positionWorld + positionOffset,
                     HandleUtility.GetHandleSize(t.points[i].positionWorld) * 0.2f, Vector3.zero, Handles.SphereHandleCap) - positionOffset;
             }
 
