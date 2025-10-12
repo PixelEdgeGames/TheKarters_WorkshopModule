@@ -51,6 +51,8 @@ public class PTK_CheckpointLogic : MonoBehaviour
 
     public GameObject forwardParentDebugMesh;
 
+    [PixelSDK.ReadOnly]
+    public PTK_RacePositionCalc_Point closestRacePositionPoint; // The closest race point to this checkpoint plane
     // Start is called before the first frame update
     void Start()
     {
