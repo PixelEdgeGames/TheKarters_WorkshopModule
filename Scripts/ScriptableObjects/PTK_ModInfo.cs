@@ -17,6 +17,8 @@ public class PTK_ModInfo : ScriptableObject
     public string strModDescription = "";
     public string strModTag = ""; // update!
     public string strVisibility = ""; //  "Public", "FriendsOnly", "Unlisted", "Private"
+    [HideInInspector]
+    public bool bIsInaccessibleOnline_RUNTIME = false; // True if item was deleted, banned, or has restricted visibility (Friends/Unlisted/Private)
     public string strUniqueModServerUpdateKEY = ""; // update! // used to detect if we need to upload it as new mod or update our current mod
     public string strUploadHashedKey = "";
 
