@@ -24,36 +24,48 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
         Dictionary<string, AnimationClip> nameToClip = new Dictionary<string, AnimationClip>();
 
+        void TryAddClipToDictionary(AnimationClip clip, string listName)
+        {
+            string key = Remove_ABC_Prefix(clip.name);
+            if (nameToClip.ContainsKey(key))
+            {
+                Debug.LogError($"Duplicate anim clip key '{key}' in list '{listName}'. " +
+                    $"New clip: '{clip.name}', Existing clip: '{nameToClip[key].name}'");
+                return;
+            }
+            nameToClip.Add(key, clip);
+        }
+
         public AnimationClip GetClipByNameFull(string namePart,string alternative = "")
         {
             if(nameToClip.Count == 0)
             {
                 foreach (var clip in Driving)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "Driving");
 
                 foreach (var clip in Events)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "Events");
 
                 foreach (var clip in Menu)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "Menu");
 
                 foreach (var clip in ItemsModelAnim)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "ItemsModelAnim");
 
                 foreach (var clip in ItemsModelAnim_Common)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "ItemsModelAnim_Common");
 
                 foreach (var clip in JumpTricks_SuperLong)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "JumpTricks_SuperLong");
 
                 foreach (var clip in JumpTricks_NormalShort)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "JumpTricks_NormalShort");
 
                 foreach (var clip in ItemUsage)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "ItemUsage");
 
                 foreach (var clip in WeaponTargeting)
-                    nameToClip.Add(Remove_ABC_Prefix(clip.name), clip);
+                    TryAddClipToDictionary(clip, "WeaponTargeting");
             }
 
             namePart = namePart.ToLower();
@@ -62,8 +74,14 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
             if (nameToClip.ContainsKey(namePart))
                 return nameToClip[namePart];
 
+            if (nameToClip.ContainsKey(Remove_ABC_Prefix(namePart)))
+                return nameToClip[Remove_ABC_Prefix(namePart)];
+
             if (nameToClip.ContainsKey(alternative))
                 return nameToClip[alternative];
+
+            if (nameToClip.ContainsKey(Remove_ABC_Prefix(alternative)))
+                return nameToClip[Remove_ABC_Prefix(alternative)];
 
             Debug.LogError("Clip not found: " + namePart);
 
