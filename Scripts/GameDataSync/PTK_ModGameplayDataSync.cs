@@ -190,4 +190,10 @@ public class PTK_ModGameplayDataSync : MonoBehaviour
 #endif
     }
 
+    public void RestartData()
+    {
+        Instance.gameInfo = new PTK_ModGameplayDataSync.CGameInfo();
+        Instance.playersInfo = new PTK_ModGameplayDataSync.CPlayerInfo[] { new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo(), new PTK_ModGameplayDataSync.CPlayerInfo() };
+        Instance.localCamsInfo = new CCameraInfo[] { new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo(), new CCameraInfo() };
+    }
 }
