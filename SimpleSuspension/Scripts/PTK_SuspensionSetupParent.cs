@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,9 +35,59 @@ public class PTK_SuspensionSetupParent : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
 
+        CheckAndInitParentKart();
+
+       
+
+        InstancedMaterialConverter.Instance.Initialize(this.transform); // repalce materials with one shared material + colors
 
         for (int i = 0; i < suspensions.Count; i++)
             suspensions[i].bodyFixedTransfom.transform.parent = vehicleBodyTiltBone.transform;
+    }
+
+    private void OnDestroy()
+    {
+        if(parentKartVisual != null)
+            parentKartVisual.OnKartLoaded -= OnKartInitialized;
+    }
+
+    void CheckAndInitParentKart()
+    {
+        if (parentKartVisual == null)
+        {
+            parentKartVisual = this.GetComponentInParent<Ant_VisualKart>();
+            if (parentKartVisual != null)
+            {
+                this.GetComponentInParent<Ant_VisualKart>().OnKartLoaded += OnKartInitialized;
+
+                if (parentKartVisual.IsKartLoaded)
+                    OnKartInitialized();
+            }
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        CheckAndInitParentKart();
+    }
+
+    private void OnKartInitialized()
+    {
+        StartCoroutine(InitScaleDelayed());
+    }
+
+
+    Ant_VisualKart parentKartVisual;
+
+    IEnumerator InitScaleDelayed()
+    {
+        yield return new WaitForSeconds(1.0f);
+        // lets force all to use once scale, so no mirror because that breaks gpu instancing
+        suspensionParent_BL.localScale = Vector3.one;
+        suspensionParent_BR.localScale = Vector3.one;
+        suspensionParent_FL.localScale = Vector3.one;
+        suspensionParent_FR.localScale = Vector3.one;
     }
 
     void InitSuspensionList()
@@ -129,8 +180,4 @@ public class PTK_SuspensionSetupParent : MonoBehaviour
 
 
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
 }
