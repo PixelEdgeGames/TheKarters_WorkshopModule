@@ -14,12 +14,38 @@ public class PTK_ModVehicleWheelsSetupPreview : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        previewParent.SetActive(parentModVehicle.bShowDebugMeshes == true);
+        if (Application.isPlaying == true)
+        {
+            if (parentModVehicle != null)
+                parentModVehicle.bShowDebugMeshes = false;
+
+            if (previewParent != null)
+                previewParent.SetActive(false);
+
+            return;
+        }
+
+        if (previewParent != null && parentModVehicle != null)
+            previewParent.SetActive(parentModVehicle.bShowDebugMeshes == true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Application.isPlaying == true)
+        {
+            if (parentModVehicle != null)
+                parentModVehicle.bShowDebugMeshes = false;
+
+            if (previewParent != null && previewParent.activeSelf == true)
+                previewParent.SetActive(false);
+
+            return;
+        }
+
+        if (parentModVehicle == null || previewParent == null)
+            return;
+
         if(parentModVehicle.bShowDebugMeshes == false)
         {
             if (previewParent.activeInHierarchy == true)
