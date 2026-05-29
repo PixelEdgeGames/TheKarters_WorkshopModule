@@ -173,10 +173,10 @@ Shader "Standard-DoubleSidedSuspension"
 // Disabled by Shader Control: #pragma shader_feature __ _DETAIL_MULX2
 // Disabled by Shader Control: #pragma shader_feature __ _PARALLAXMAP
 
-// Disabled by Shader Control: #pragma multi_compile __ UNITY_HDR_ON
-// Disabled by Shader Control: #pragma multi_compile __ LIGHTMAP_OFF LIGHTMAP_ON
-// Disabled by Shader Control: #pragma multi_compile __ DIRLIGHTMAP_OFF DIRLIGHTMAP_COMBINED DIRLIGHTMAP_SEPARATE
-// Disabled by Shader Control: #pragma multi_compile __ DYNAMICLIGHTMAP_OFF DYNAMICLIGHTMAP_ON
+#pragma multi_compile __ UNITY_HDR_ON
+#pragma multi_compile __ LIGHTMAP_OFF LIGHTMAP_ON
+#pragma multi_compile __ DIRLIGHTMAP_OFF DIRLIGHTMAP_COMBINED DIRLIGHTMAP_SEPARATE
+#pragma multi_compile __ DYNAMICLIGHTMAP_OFF DYNAMICLIGHTMAP_ON
 			
 			#pragma vertex vertDeferred
 			#pragma fragment fragDeferred
