@@ -28,10 +28,16 @@ public class PTK_SimpleSuspension : MonoBehaviour
         for (int i = 0; i < colliders.Length; i++)
             colliders[i].enabled = false;
 
-        for(int i=0;i< helperMeshesToHide.Length;i++)
+        if (helperMeshesToHide != null)
         {
-            helperMeshesToHide[i].SetActive(false);
+            for(int i=0;i< helperMeshesToHide.Length;i++)
+            {
+                if (helperMeshesToHide[i] != null)
+                    helperMeshesToHide[i].SetActive(false);
+            }
         }
+
+        PTK_ModVehicleInfo.HideSuspensionDebugVisuals(transform);
     }
 
     // Update is called once per frame
