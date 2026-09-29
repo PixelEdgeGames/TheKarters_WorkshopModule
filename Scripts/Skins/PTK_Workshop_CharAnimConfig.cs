@@ -38,6 +38,15 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
         public AnimationClip GetClipByNameFull(string namePart,string alternative = "")
         {
+            AnimationClip clip = GetClipByNameFullOrNull(namePart, alternative);
+            if (clip == null)
+                Debug.LogError("Clip not found: " + namePart.ToLower());
+
+            return clip;
+        }
+
+        public AnimationClip GetClipByNameFullOrNull(string namePart, string alternative = "")
+        {
             if(nameToClip.Count == 0)
             {
                 foreach (var clip in Driving)
@@ -82,8 +91,6 @@ public class PTK_Workshop_CharAnimConfig : ScriptableObject
 
             if (nameToClip.ContainsKey(Remove_ABC_Prefix(alternative)))
                 return nameToClip[Remove_ABC_Prefix(alternative)];
-
-            Debug.LogError("Clip not found: " + namePart);
 
             return null;
         }
@@ -151,6 +158,9 @@ Items
 - Hammer_ThrowAway
 - HomingMissile_catch
 - HomingMissile_ThrowAway
+- mine_catch
+- mine_shot            (holding pose - the name is kept for compatibility with existing characters)
+- mine_Throw_back
 - Minigun_catch
 - Minigun_idle
 - Minigun_shot
@@ -207,6 +217,8 @@ Weapons
 - Item_HomingMissile_catch
 - Item_HomingMissile_default
 - Item_HomingMissile_ThrowAway
+- Item_mine_catch
+- Item_mine_Idle       (optional)
 - Item_Minigun_catch
 - Item_Minigun_default
 - Item_Minigun_ThrowAway
