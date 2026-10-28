@@ -83,7 +83,7 @@ public class PTK_ModPlayerInRangeEventTriggerType : PTK_ModBaseTrigger
         var playerEvents = PTK_ModGameplayDataSync.Instance.playerEvents;
 
         playerEvents.OnPlayerEvent_JustJumped -= OnPlayerEvent_JustJumped;
-        playerEvents.OnPlayerEvent_JustLanded += OnPlayerEvent_JustLanded;
+        playerEvents.OnPlayerEvent_JustLanded -= OnPlayerEvent_JustLanded;
         playerEvents.OnPlayerEvent_JustDied -= OnPlayerEvent_JustDied;
         playerEvents.OnPlayerEvent_JustKilledSomeone -= OnPlayerEvent_JustKilledSomeone;
         playerEvents.OnPlayerUsedWeapon -= OnPlayerEvent_UsedWeapon;

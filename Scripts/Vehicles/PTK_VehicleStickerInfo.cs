@@ -31,6 +31,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
 
     private Material material_FirstLayer_Back;
     private Material material_SecondLayer_Front;
+    private readonly List<Material> createdMaterials = new List<Material>();
 
     public Vector3 GetStickerMeshesWorldPosAvg()
     {
@@ -126,6 +127,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             MeshRenderer firstLayerMeshREnderer_FirstLayerBack = stickerMeshRenderers_FirstLayer_Back[i].GetComponent<MeshRenderer>();
 
             material_FirstLayer_Back = new Material(stickerMaterialReference);
+            createdMaterials.Add(material_FirstLayer_Back);
             material_FirstLayer_Back.mainTexture = null;
             material_FirstLayer_Back.renderQueue = 3000;
             firstLayerMeshREnderer_FirstLayerBack.material = material_FirstLayer_Back;
@@ -145,6 +147,7 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
             // we need seperate material to set material params
             MeshRenderer secondLayerMeshREnderer = stickerMeshRenderers_SecondLayer_Front[i].GetComponent<MeshRenderer>();
             material_SecondLayer_Front = new Material(stickerMaterialReference);
+            createdMaterials.Add(material_SecondLayer_Front);
             material_SecondLayer_Front.mainTexture = null;
             material_SecondLayer_Front.renderQueue = 3005;
             secondLayerMeshREnderer.material = material_SecondLayer_Front;
@@ -156,6 +159,20 @@ public class PTK_VehicleStickerInfo : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void OnDestroy()
+    {
+        for (int i = 0; i < createdMaterials.Count; i++)
+        {
+            if (createdMaterials[i] == null)
+                continue;
+            if (Application.isPlaying)
+                Destroy(createdMaterials[i]);
+            else
+                DestroyImmediate(createdMaterials[i]);
+        }
+        createdMaterials.Clear();
     }
     internal void SetStickerData(Texture2D tex, int _iStickerSettingPaacked,bool bIsFirstLayer)
     {
