@@ -161,6 +161,7 @@ Items
 - mine_catch
 - mine_shot            (holding pose - the name is kept for compatibility with existing characters)
 - mine_Throw_back
+- mine_Throw_front      (optional - without it the forward throw uses mine_Throw_back)
 - Minigun_catch
 - Minigun_idle
 - Minigun_shot
